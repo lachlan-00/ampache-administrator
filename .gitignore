@@ -1,0 +1,4 @@
+
+ampache-*_all*.zip
+music/*
+docker/log/ampache.log

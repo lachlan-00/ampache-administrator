@@ -1,0 +1,87 @@
+version: '3'
+
+services:
+  ampache74:
+    build:
+      context: .
+      dockerfile: docker/Dockerfilephp74
+    restart: on-failure
+    ports:
+      - "8074:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./php74:/var/www/html
+      - ./docker/log:/var/log/ampache
+      - ./docker/media:/media
+      - ./ampache-test:/mnt/files-music/ampache-test
+  ampache74_squashed:
+    build:
+      context: .
+      dockerfile: docker/Dockerfilephp74
+    restart: on-failure
+    ports:
+      - "8075:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./php74_squashed:/var/www/html/public
+      - ./docker/log:/var/log/ampache
+      - ./docker/media:/media
+      - ./ampache-test:/mnt/files-music/ampache-test
+  ampache80:
+    build:
+      context: .
+      dockerfile: docker/Dockerfilephp80
+    restart: on-failure
+    ports:
+      - "8084:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./php80:/var/www/html
+      - ./docker/log:/var/log/ampache
+      - ./docker/media:/media
+      - ./ampache-test:/mnt/files-music/ampache-test
+  ampache80_squashed:
+    build:
+      context: .
+      dockerfile: docker/Dockerfilephp80
+    restart: on-failure
+    ports:
+      - "8085:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./php80_squashed:/var/www/html/public
+      - ./docker/log:/var/log/ampache
+      - ./docker/media:/media
+      - ./ampache-test:/mnt/files-music/ampache-test
+  ampache81:
+    build:
+      context: .
+      dockerfile: docker/Dockerfilephp81
+    restart: on-failure
+    ports:
+      - "8086:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./php81:/var/www/html
+      - ./docker/log:/var/log/ampache
+      - ./docker/media:/media
+      - ./ampache-test:/mnt/files-music/ampache-test
+  ampache81_squashed:
+    build:
+      context: .
+      dockerfile: docker/Dockerfilephp81
+    restart: on-failure
+    ports:
+      - "8087:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./php81_squashed:/var/www/html/public
+      - ./docker/log:/var/log/ampache
+      - ./docker/media:/media
+      - ./ampache-test:/mnt/files-music/ampache-test
