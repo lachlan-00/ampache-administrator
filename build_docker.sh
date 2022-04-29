@@ -30,9 +30,9 @@ if [ ! -f $AMPACHEDIR/docker/ampache-docker-develop/Dockerfile ]; then
   git clone -b develop https://github.com/ampache/ampache-docker.git ampache-docker-develop
 fi
 # build everything
-cd $AMPACHEDIR/docker/ampache-docker/ && git reset --hard origin/master && git pull && nohup docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 -t ampache/ampache:5 -t ampache/ampache:${a_version} -t ampache/ampache:latest --push . &
-cd $AMPACHEDIR/docker/ampache-docker-nosql/ && git reset --hard origin/nosql && git pull && nohup docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 -t ampache/ampache:nosql5 -t ampache/ampache:nosql${a_version} -t ampache/ampache:nosql --push . &
-cd $AMPACHEDIR/docker/ampache-docker-develop/ && git reset --hard origin/develop && git pull && nohup docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 -t ampache/ampache:develop -t ampache/ampache:preview --push . &
+cd $AMPACHEDIR/docker/ampache-docker/ && git reset --hard origin/master && git pull && nohup docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${a_version} -t ampache/ampache:5 -t ampache/ampache:${a_version} -t ampache/ampache:latest --push . &
+cd $AMPACHEDIR/docker/ampache-docker-nosql/ && git reset --hard origin/nosql && git pull && nohup docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${a_version} -t ampache/ampache:nosql5 -t ampache/ampache:nosql${a_version} -t ampache/ampache:nosql --push . &
+cd $AMPACHEDIR/docker/ampache-docker-develop/ && git reset --hard origin/develop && git pull && nohup docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${a_version} -t ampache/ampache:develop -t ampache/ampache:preview --push . &
 
 # go home
 cd $AMPACHEDIR/ampache-docker/
