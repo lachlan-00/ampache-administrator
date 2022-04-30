@@ -3,6 +3,8 @@
 AMPACHEDIR=$PWD
 COMPOSERPATH="/usr/local/bin/composer"
 
+read -p "Enter Ampache Version: " a_version
+
 if [ ! -d $AMPACHEDIR/releases ]; then
   mkdir $AMPACHEDIR/releases
 fi
@@ -12,8 +14,6 @@ if [ ! -f $COMPOSERPATH ]; then
   wget -q -O $COMPOSERPATH https://getcomposer.org/download/latest-stable/composer.phar
   chmod +x $COMPOSERPATH
 fi
-
-read -p "Enter Ampache Version: " a_version
 
 if [ ! -d $AMPACHEDIR/php74 ]; then
   git clone -b master https://github.com/ampache/ampache.git php74
