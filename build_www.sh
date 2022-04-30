@@ -17,18 +17,18 @@ if [ ! -f $AMPACHEDIR/ampache-master/index.php ]; then
   git clone -b master https://github.com/ampache/ampache.git ampache-master
 fi
 if [ ! -d $AMPACHEDIR/www/ampache.org-api ]; then
-  git clone -b master https://github.com/ampache/ampache.github.io.git ampache.github.io
+  cd $AMPACHEDIR/www && git clone -b master https://github.com/ampache/ampache.github.io.git ampache.github.io
 fi
 if [ ! -f $AMPACHEDIR/www/ampache.github.io/index.html ]; then
   rm -rf ./ampache.github.io
-  git clone -b master https://github.com/ampache/ampache.github.io.git ampache.github.io
+  cd $AMPACHEDIR/www && git clone -b master https://github.com/ampache/ampache.github.io.git ampache.github.io
 fi
 if [ ! -d $AMPACHEDIR/www/ampache.github.io ]; then
-  git clone -b master https://github.com/ampache/ampache.github.io.git ampache.github.io
+  cd $AMPACHEDIR/www && git clone -b master https://github.com/ampache/ampache.github.io.git ampache.github.io
 fi
 if [ ! -f $AMPACHEDIR/www/ampache.github.io/index.html ]; then
   rm -rf $AMPACHEDIR/ampache.github.io
-  git clone -b master https://github.com/ampache/ampache.github.io.git ampache.github.io
+  cd $AMPACHEDIR/www && git clone -b master https://github.com/ampache/ampache.github.io.git ampache.github.io
 fi
 
 cd $AMPACHEDIR/www/ampache.org-api && git reset --hard origin/master && git pull
