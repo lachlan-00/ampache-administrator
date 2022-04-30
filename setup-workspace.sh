@@ -1,0 +1,36 @@
+#!/bin/sh
+
+AMPACHEDIR=$PWD
+COMPOSERPATH="/usr/local/bin/composer"
+
+if [ ! -f $COMPOSERPATH ]; then
+  COMPOSERPATH="$AMPACHEDIR/docker/composer"
+  wget -q -O $COMPOSERPATH https://getcomposer.org/download/latest-stable/composer.phar
+  chmod +x $COMPOSERPATH
+fi
+
+if [ ! -d $AMPACHEDIR/ampache-develop ]; then
+  git clone -b develop https://github.com/ampache/ampache.git ampache-develop
+fi
+if [ ! -f $AMPACHEDIR/ampache-develop/index.php ]; then
+  rm -rf $AMPACHEDIR/ampache-develop
+  git clone -b develop https://github.com/ampache/ampache.git ampache-develop
+fi
+if [ ! -d $AMPACHEDIR/ampache-master ]; then
+  git clone -b master https://github.com/ampache/ampache.git ampache-master
+fi
+if [ ! -f $AMPACHEDIR/ampache-master/index.php ]; then
+  rm -rf $AMPACHEDIR/ampache-master
+  git clone -b master https://github.com/ampache/ampache.git ampache-master
+fi
+
+if [ -f $AMPACHEDIR/ampache-master/composer.lock ]; then
+  rm $AMPACHEDIR/ampache-master/composer.lock
+fi
+cd $AMPACHEDIR/ampache-master && php $COMPOSERPATH install && cd $AMPACHEDIR
+
+if [ -f $AMPACHEDIR/ampache-develop/composer.lock ]; then
+  rm $AMPACHEDIR/ampache-develop/composer.lock
+fi
+cd $AMPACHEDIR/ampache-develop && php $COMPOSERPATH install && cd $AMPACHEDIR
+

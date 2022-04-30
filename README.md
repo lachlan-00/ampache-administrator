@@ -45,6 +45,14 @@ Build the api website using npm. Then copy the markdown files into the Ampache f
 
 ## Files for Ampache Users
 
+### setup-workspace.sh
+
+Just want to pull down ampache code repos and start patching?
+
+If you don't have composer installed to `/usr/local/bin/composer` then it will be saved to `./docker/composer`
+
+Clone Ampache develop to `./ampache-develop` and then clone Ampache master to `./ampache-master`
+
 ### setup-docker.sh
 
 Docker-compose setup allowing you locally run Ampache on php 7.4, 8.0 and 8.1
@@ -55,6 +63,8 @@ You can launch a container for php7.4, 8.0 and 8.1 by issuing the following comm
 ```
 docker-compose up
 ```
+
+If you don't have composer installed to `/usr/local/bin/composer` then it will be saved to `./docker/composer`
 
 Sites are then using the php* folders and creates the following container images:
 
