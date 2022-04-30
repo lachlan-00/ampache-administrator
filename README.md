@@ -2,7 +2,7 @@
 
 I'm trying to formalize my Ampache tools into one repo to allow other to use them
 
-## Files
+## Files for Ampache Administrators
 
 ### build_release.sh
 
@@ -43,11 +43,13 @@ Build the api website using npm. Then copy the markdown files into the Ampache f
 * Build the api docs for api4
 * Build the api docs for api5
 
+## Files for Ampache Users
+
 ### setup-docker.sh
 
 Docker-compose setup allowing you locally run Ampache on php 7.4, 8.0 and 8.1
 
-Used for testing releases on each release type.
+Used for testing releases on each release type but an easy way for anyone to just get up and running
 
 You can launch a container for php7.4, 8.0 and 8.1 by issuing the following command
 ```
