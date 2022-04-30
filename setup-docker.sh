@@ -1,6 +1,13 @@
 #!/bin/sh
 
 AMPACHEDIR=$PWD
+COMPOSERPATH="/usr/local/bin/composer"
+
+if [ ! -f $COMPOSERPATH ]; then
+  COMPOSERPATH="$AMPACHEDIR/docker/composer"
+  wget -q -O $COMPOSERPATH https://getcomposer.org/download/latest-stable/composer.phar
+  chmod +x $COMPOSERPATH
+fi
 
 # create the htaccess files
 if [ ! -f $AMPACHEDIR/php74/public/channel/.htaccess ]; then
@@ -126,22 +133,32 @@ chown -R $UID:33 $AMPACHEDIR/php81_squashed/vendor/
 chmod -R 775 $AMPACHEDIR/php81_squashed/vendor/
 chown -R $UID:33 $AMPACHEDIR/php81_squashed/
 chmod -R 775 $AMPACHEDIR/php81_squashed/
-# remove the lock
-#if [ -f $AMPACHEDIR/php74/composer.lock ]; then
-#  rm $AMPACHEDIR/php74/composer.lock
-#fi
-#if [ -f $AMPACHEDIR/php74_squashed/composer.lock ]; then
-#  rm $AMPACHEDIR/php74_squashed/composer.lock
-#fi
-#if [ -f $AMPACHEDIR/php80/composer.lock ]; then
-#  rm $AMPACHEDIR/php80/composer.lock
-#fi
-#if [ -f $AMPACHEDIR/php80_squashed/composer.lock ]; then
-#  rm $AMPACHEDIR/php80_squashed/composer.lock
-#fi
-#if [ -f $AMPACHEDIR/php81_squashed/composer.lock ]; then
-#  rm $AMPACHEDIR/php81_squashed/composer.lock
-#fi
+
+# remove the lock and install composer packages
+if [ -f $AMPACHEDIR/php74/composer.lock ]; then
+  rm $AMPACHEDIR/php74/composer.lock
+  cd $AMPACHEDIR/php74 && php7.4 $COMPOSERPATH install && cd $AMPACHEDIR
+fi
+if [ -f $AMPACHEDIR/php74_squashed/composer.lock ]; then
+  rm $AMPACHEDIR/php74_squashed/composer.lock
+  cd $AMPACHEDIR/php74_squashed && php7.4 $COMPOSERPATH install && cd $AMPACHEDIR
+fi
+if [ -f $AMPACHEDIR/php80/composer.lock ]; then
+  rm $AMPACHEDIR/php80/composer.lock
+  cd $AMPACHEDIR/php80 && php8.0 $COMPOSERPATH install && cd $AMPACHEDIR
+fi
+if [ -f $AMPACHEDIR/php80_squashed/composer.lock ]; then
+  rm $AMPACHEDIR/php80_squashed/composer.lock
+  cd $AMPACHEDIR/php80 && php8.0 $COMPOSERPATH install && cd $AMPACHEDIR
+fi
+if [ -f $AMPACHEDIR/php81/composer.lock ]; then
+  rm $AMPACHEDIR/php81/composer.lock
+  cd $AMPACHEDIR/php80 && php8.1 $COMPOSERPATH install && cd $AMPACHEDIR
+fi
+if [ -f $AMPACHEDIR/php81_squashed/composer.lock ]; then
+  rm $AMPACHEDIR/php81_squashed/composer.lock
+  cd $AMPACHEDIR/php80 && php8.1 $COMPOSERPATH install && cd $AMPACHEDIR
+fi
 
 
 chown $UID:33 $AMPACHEDIR/docker/log
