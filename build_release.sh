@@ -68,7 +68,7 @@ find . -xtype l -exec rm {} \;
 wget -P ./public/lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.js.map
 wget -P ./public/lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.css.map
 find . -name "*.map.1" -exec rm {} \;
-rm $AMPACHEDIR/releases/ampache-${a_version}_all_php7.4.zip & zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess $AMPACHEDIR/releases/ampache-${a_version}_all_php7.4.zip ./
+rm $AMPACHEDIR/releases/ampache-${a_version}_all_php7.4.zip & zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess $AMPACHEDIR/releases/ampache-${a_version}_all_php7.4.zip $AMPACHEDIR/php74/
 
 cd $AMPACHEDIR/php74_squashed && git reset --hard origin/squashed && git pull
 rm -rf ./composer.lock vendor/* public/lib/components/* && php7.4 $COMPOSERPATH install
@@ -77,7 +77,7 @@ find . -xtype l -exec rm {} \;
 wget -P ./lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.js.map
 wget -P ./lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.css.map
 find . -name "*.map.1" -exec rm {} \;
-rm $AMPACHEDIR/releases/ampache-${a_version}_all_squashed_php7.4.zip & zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess $AMPACHEDIR/releases/ampache-${a_version}_all_squashed_php7.4.zip ./
+rm $AMPACHEDIR/releases/ampache-${a_version}_all_squashed_php7.4.zip & zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess $AMPACHEDIR/releases/ampache-${a_version}_all_squashed_php7.4.zip $AMPACHEDIR/php74_squashed/
 
 # php 8.0
 cd $AMPACHEDIR/php80 && git reset --hard origin/master && git pull
@@ -87,7 +87,7 @@ find . -xtype l -exec rm {} \;
 wget -P ./public/lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.js.map
 wget -P ./public/lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.css.map
 find . -name "*.map.1" -exec rm {} \;
-rm $AMPACHEDIR/ampache-${a_version}_all_php8.0.zip & zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess $AMPACHEDIR/releases/ampache-${a_version}_all_php8.0.zip ./
+rm $AMPACHEDIR/ampache-${a_version}_all_php8.0.zip & zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess $AMPACHEDIR/releases/ampache-${a_version}_all_php8.0.zip $AMPACHEDIR/php80/
 
 cd $AMPACHEDIR/php80_squashed && git reset --hard origin/squashed && git pull
 rm -rf ./composer.lock vendor/* public/lib/components/* && php8.0 $COMPOSERPATH install
@@ -96,7 +96,7 @@ find . -xtype l -exec rm {} \;
 wget -P ./lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.js.map
 wget -P ./lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.css.map
 find . -name "*.map.1" -exec rm {} \;
-rm $AMPACHEDIR/releases/ampache-${a_version}_all_squashed_php8.0.zip & zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess $AMPACHEDIR/releases/ampache-${a_version}_all_squashed_php8.0.zip ./
+rm $AMPACHEDIR/releases/ampache-${a_version}_all_squashed_php8.0.zip & zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess $AMPACHEDIR/releases/ampache-${a_version}_all_squashed_php8.0.zip $AMPACHEDIR/php80_squashed/
 
 
 # php 8.1
@@ -107,7 +107,7 @@ find . -xtype l -exec rm {} \;
 wget -P ./public/lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.js.map
 wget -P ./public/lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.css.map
 find . -name "*.map.1" -exec rm {} \;
-rm $AMPACHEDIR/releases/ampache-${a_version}_all_php8.1.zip & zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess $AMPACHEDIR/releases/ampache-${a_version}_all_php8.1.zip ./
+rm $AMPACHEDIR/releases/ampache-${a_version}_all_php8.1.zip & zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess $AMPACHEDIR/releases/ampache-${a_version}_all_php8.1.zip $AMPACHEDIR/php81/
 
 cd $AMPACHEDIR/php81_squashed && git reset --hard origin/squashed && git pull
 rm -rf ./composer.lock vendor/* public/lib/components/* && php8.1 $COMPOSERPATH install
@@ -116,7 +116,7 @@ find . -xtype l -exec rm {} \;
 wget -P ./lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.js.map
 wget -P ./lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.css.map
 find . -name "*.map.1" -exec rm {} \;
-rm $AMPACHEDIR/releases/ampache-${a_version}_all_squashed_php8.1.zip & zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess $AMPACHEDIR/releases/ampache-${a_version}_all_squashed_php8.1.zip ./
+rm $AMPACHEDIR/releases/ampache-${a_version}_all_squashed_php8.1.zip & zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess $AMPACHEDIR/releases/ampache-${a_version}_all_squashed_php8.1.zip cd $AMPACHEDIR/php81_squashed/
 
 # go back
 cd $AMPACHEDIR
