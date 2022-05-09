@@ -79,3 +79,16 @@ services:
       - ./php81_squashed:/var/www/html/public
       - ./docker/log:/var/log/ampache
       - ./docker/media:/media
+  mariadb:
+    image: mariadb:10
+    restart: 'always'
+    ports:
+      - "3306:3306"
+    volumes: 
+      - ./docker/mysql/data:/var/lib/mysql/data
+      - ./docker/mysql/logs:/var/lib/mysql/logs
+    environment:
+      MYSQL_ROOT_PASSWORD: ampache-release
+      MYSQL_DATABASE: ampache-release
+      MYSQL_USER: ampache-release
+      MYSQL_PASSWORD: ampache-release

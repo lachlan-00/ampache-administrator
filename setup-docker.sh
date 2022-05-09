@@ -9,6 +9,102 @@ if [ ! -f $COMPOSERPATH ]; then
   chmod +x $COMPOSERPATH
 fi
 
+if [ ! -d $AMPACHEDIR/php74 ]; then
+  git clone -b master https://github.com/ampache/ampache.git php74
+fi
+if [ ! -f $AMPACHEDIR/php74/index.php ]; then
+  rm -rf $AMPACHEDIR/php74
+  git clone -b master https://github.com/ampache/ampache.git php74
+fi
+if [ ! -d $AMPACHEDIR/php74_squashed ]; then
+  git clone -b squashed https://github.com/ampache/ampache.git php74_squashed
+fi
+if [ ! -f $AMPACHEDIR/php74_squashed/index.php ]; then
+  rm -rf $AMPACHEDIR/php74_squashed
+  git clone -b squashed https://github.com/ampache/ampache.git php74_squashed
+fi
+
+if [ ! -d $AMPACHEDIR/php80 ]; then
+  git clone -b master https://github.com/ampache/ampache.git php80
+fi
+if [ ! -f $AMPACHEDIR/php80/index.php ]; then
+  rm -rf $AMPACHEDIR/php80
+  git clone -b master https://github.com/ampache/ampache.git php80
+fi
+if [ ! -d $AMPACHEDIR/php80_squashed ]; then
+  git clone -b squashed https://github.com/ampache/ampache.git php80_squashed
+fi
+if [ ! -f $AMPACHEDIR/php80_squashed/index.php ]; then
+  rm -rf $AMPACHEDIR/php80_squashed
+  git clone -b squashed https://github.com/ampache/ampache.git php80_squashed
+fi
+
+if [ ! -d $AMPACHEDIR/php81 ]; then
+  git clone -b master https://github.com/ampache/ampache.git php81
+fi
+if [ ! -f $AMPACHEDIR/php81/index.php ]; then
+  rm -rf $AMPACHEDIR/php81
+  git clone -b master https://github.com/ampache/ampache.git php81
+fi
+if [ ! -d $AMPACHEDIR/php81_squashed ]; then
+  git clone -b squashed https://github.com/ampache/ampache.git php81_squashed
+fi
+if [ ! -f $AMPACHEDIR/php81_squashed/index.php ]; then
+  rm -rf $AMPACHEDIR/php81_squashed
+  git clone -b squashed https://github.com/ampache/ampache.git php81_squashed
+fi
+
+# php 7.4
+cd $AMPACHEDIR/php74 && git reset --hard origin/master && git pull
+rm -rf ./composer.lock vendor/* public/lib/components/* && php7.4 $COMPOSERPATH install
+php7.4 $COMPOSERPATH install
+find . -xtype l -exec rm {} \;
+wget -P ./public/lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.js.map
+wget -P ./public/lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.css.map
+find . -name "*.map.1" -exec rm {} \;
+
+cd $AMPACHEDIR/php74_squashed && git reset --hard origin/squashed && git pull
+rm -rf ./composer.lock vendor/* public/lib/components/* && php7.4 $COMPOSERPATH install
+php7.4 $COMPOSERPATH install
+find . -xtype l -exec rm {} \;
+wget -P ./lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.js.map
+wget -P ./lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.css.map
+find . -name "*.map.1" -exec rm {} \;
+
+# php 8.0
+cd $AMPACHEDIR/php80 && git reset --hard origin/master && git pull
+rm -rf ./composer.lock vendor/* public/lib/components/* && php8.0 $COMPOSERPATH install
+php8.0 $COMPOSERPATH install
+find . -xtype l -exec rm {} \;
+wget -P ./public/lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.js.map
+wget -P ./public/lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.css.map
+find . -name "*.map.1" -exec rm {} \;
+
+cd $AMPACHEDIR/php80_squashed && git reset --hard origin/squashed && git pull
+rm -rf ./composer.lock vendor/* public/lib/components/* && php8.0 $COMPOSERPATH install
+php8.0 $COMPOSERPATH install
+find . -xtype l -exec rm {} \;
+wget -P ./lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.js.map
+wget -P ./lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.css.map
+find . -name "*.map.1" -exec rm {} \;
+
+# php 8.1
+cd $AMPACHEDIR/php81 && git reset --hard origin/master && git pull
+rm -rf ./composer.lock vendor/* public/lib/components/* && php8.1 $COMPOSERPATH install
+php8.1 $COMPOSERPATH install
+find . -xtype l -exec rm {} \;
+wget -P ./public/lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.js.map
+wget -P ./public/lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.css.map
+find . -name "*.map.1" -exec rm {} \;
+
+cd $AMPACHEDIR/php81_squashed && git reset --hard origin/squashed && git pull
+rm -rf ./composer.lock vendor/* public/lib/components/* && php8.1 $COMPOSERPATH install
+php8.1 $COMPOSERPATH install
+find . -xtype l -exec rm {} \;
+wget -P ./lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.js.map
+wget -P ./lib/components/jQuery-contextMenu/dist/ https://raw.githubusercontent.com/swisnl/jQuery-contextMenu/a7a1b9f3b9cd789d6eb733ee5e7cbc6c91b3f0f8/dist/jquery.contextMenu.min.css.map
+find . -name "*.map.1" -exec rm {} \;
+
 # create the htaccess files
 if [ ! -f $AMPACHEDIR/php74/public/channel/.htaccess ]; then
   cp $AMPACHEDIR/php74/public/channel/.htaccess.dist $AMPACHEDIR/php74/public/channel/.htaccess
@@ -71,6 +167,9 @@ if [ ! -d $AMPACHEDIR/docker/log ]; then
 fi
 if [ ! -d $AMPACHEDIR/docker/media ]; then
   mkdir $AMPACHEDIR/docker/media
+fi
+if [ ! -d $AMPACHEDIR/docker/mysql ]; then
+  mkdir $AMPACHEDIR/docker/mysql
 fi
 
 # reset perms
@@ -165,6 +264,8 @@ chown $UID:33 $AMPACHEDIR/docker/log
 chmod 775 $AMPACHEDIR/docker/log
 chown $UID:33 $AMPACHEDIR/docker/media
 chmod 775 $AMPACHEDIR/docker/media
+chown $UID:112 $AMPACHEDIR/docker/mysql
+chmod 775 $AMPACHEDIR/docker/mysql
 
 chown $UID:33 $AMPACHEDIR/php74
 chmod 775 $AMPACHEDIR/php74

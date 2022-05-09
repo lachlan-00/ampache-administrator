@@ -1,7 +1,8 @@
 
 ampache-*_all*.zip
 music/*
-docker/log/ampache.log
+docker/log/*
+docker/media/*
 www/ampache.org-api/
 www/ampache.github.io/
 python/python3-ampache5/
@@ -18,3 +19,4 @@ docker/ampache-docker-nosql/
 docker/ampache-docker-develop/
 ampache-master/
 ampache-develop/
+ampache-test/
