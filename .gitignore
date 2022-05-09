@@ -1,10 +1,15 @@
 
 ampache-*_all*.zip
-music/*
+ampache-develop/
+ampache-master/
+ampache-squashed/
+ampache-test/
+docker/ampache-docker/
+docker/ampache-docker-nosql/
+docker/ampache-docker-develop/
 docker/log/*
 docker/media/*
-www/ampache.org-api/
-www/ampache.github.io/
+music/*
 python/python3-ampache5/
 python/python3-ampache4/
 python/python3-ampache3/
@@ -14,9 +19,5 @@ php80_squashed/
 php80/
 php74_squashed/
 php74/
-docker/ampache-docker/
-docker/ampache-docker-nosql/
-docker/ampache-docker-develop/
-ampache-master/
-ampache-develop/
-ampache-test/
+www/ampache.org-api/
+www/ampache.github.io/
