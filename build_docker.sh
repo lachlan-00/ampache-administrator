@@ -51,5 +51,5 @@ if [ $BRANCH = "develop" ] || [ $BRANCH = "all" ]; then
 fi
 
 # go home
-cd $AMPACHEDIR/ampache-docker/
+cd $AMPACHEDIR
 

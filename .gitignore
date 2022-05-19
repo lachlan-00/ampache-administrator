@@ -1,9 +1,6 @@
 
 ampache-*_all*.zip
-ampache-develop/
-ampache-master/
-ampache-squashed/
-ampache-test/
+ampache-*/
 docker/ampache-docker/
 docker/ampache-docker-nosql/
 docker/ampache-docker-develop/

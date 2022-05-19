@@ -39,7 +39,10 @@ if [ ! -f $AMPACHEDIR/python/python3-ampache5/setup.py ]; then
   cd $AMPACHEDIR/python && git clone -b api5 https://github.com/ampache/python3-ampache.git python3-ampache5
 fi
 
-#cd $AMPACHEDIR/ampache-test && docker-compose up
+cd $AMPACHEDIR/ampache-test && docker-compose up -d
+
+echo "wake up ampache-test!"
+sleep 7
 
 cd $AMPACHEDIR/python/python3-ampache3/
 python3 ./build_docs.py

@@ -1,6 +1,16 @@
 # Ampache Administrator Tools
 
-I'm trying to formalize my Ampache tools into one repo to allow other to use them
+This repo containse the scripts used to build Ampache resources including:
+
+* Release zip files
+* Official Docker images
+* API example documentation
+* The ampache.org site
+* Generate the static html for ampache.org/api
+
+I'm trying to formalize my Ampache tools into one repo to allow others to use them.
+Obviously not everyone has write access to do some of these things but by documenting
+this process it should be easier for anyone else to pick this up by doing it all in the open
 
 ## Files for Ampache Administrators
 
@@ -27,7 +37,8 @@ sh ./build_docker.sh master
 
 ### build_www.sh
 
-Build the api website using npm. Then copy the markdown files into the Ampache folders and the Ampache website
+Build the api website using npm.
+ Then copy the markdown files into the Ampache folders and the Ampache website
 
 * Compile the api content repo
   * `./www/ampache.org-api/content/`
@@ -42,6 +53,9 @@ Build the api website using npm. Then copy the markdown files into the Ampache f
 * Build the api docs for api3
 * Build the api docs for api4
 * Build the api docs for api5
+
+This script will load up [ampache-test](https://github.com/lachlan-00/ampache-test) in the `/ampache-test` folder
+and then generate the xml and json example documents against that server.
 
 ## Files for Ampache Users
 
@@ -87,4 +101,17 @@ Sites are then using the php* folders and creates the following container images
   * Website root `./php81_squashed`
   * Accessible on http://localhost:8087
 
+## Reference Repos
+
+Official repos
+
+[ampache](https://github.com/ampache/ampache)
+[ampache-docker](https://github.com/ampache/ampache-docker)
+[python3-ampache](https://github.com/ampache/python3-ampache)
+[ampache.github.io](https://github.com/ampache/ampache.github.io)
+[ampache.org-api](https://github.com/ampache/ampache.org-api)
+
+Personal repos
+
+[ampache-test](https://github.com/lachlan-00/ampache-test)
 
