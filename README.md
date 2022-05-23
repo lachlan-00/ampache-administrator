@@ -105,13 +105,13 @@ Sites are then using the php* folders and creates the following container images
 
 Official repos
 
-[ampache](https://github.com/ampache/ampache)
-[ampache-docker](https://github.com/ampache/ampache-docker)
-[python3-ampache](https://github.com/ampache/python3-ampache)
-[ampache.github.io](https://github.com/ampache/ampache.github.io)
-[ampache.org-api](https://github.com/ampache/ampache.org-api)
+* [ampache](https://github.com/ampache/ampache)
+* [ampache-docker](https://github.com/ampache/ampache-docker)
+* [python3-ampache](https://github.com/ampache/python3-ampache)
+* [ampache.github.io](https://github.com/ampache/ampache.github.io)
+* [ampache.org-api](https://github.com/ampache/ampache.org-api)
 
 Personal repos
 
-[ampache-test](https://github.com/lachlan-00/ampache-test)
+* [ampache-test](https://github.com/lachlan-00/ampache-test)
 
