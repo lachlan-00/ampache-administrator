@@ -34,7 +34,7 @@ fi
 cd $AMPACHEDIR/ampache-master && git reset --hard origin/master && git pull
 cd $AMPACHEDIR/ampache-develop && git reset --hard origin/develop && git pull
 cd $AMPACHEDIR/www/ampache.github.io && git reset --hard origin/master && git pull
-cd $AMPACHEDIR/www/ampache.org-api && git reset --hard origin/master && git pull
+cd $AMPACHEDIR/www/ampache.org-api && git pull
 
 cd $AMPACHEDIR/www/ampache.org-api && npm run build && cp -rfv ./build/* $AMPACHEDIR/www/ampache.github.io/api/
 
