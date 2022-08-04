@@ -36,18 +36,18 @@ cd $AMPACHEDIR/ampache-develop && git reset --hard origin/develop && git pull
 cd $AMPACHEDIR/www/ampache.github.io && git reset --hard origin/master && git pull
 cd $AMPACHEDIR/www/ampache.org-api && git reset --hard origin/master && git pull
 
-npm run-script build && cp -rfv ./public/* $AMPACHEDIR/www/ampache.github.io/api/
+cd $AMPACHEDIR/www/ampache.org-api && npm run build && cp -rfv ./build/* $AMPACHEDIR/www/ampache.github.io/api/
 
-cp $AMPACHEDIR/www/ampache.org-api/content/index.md $AMPACHEDIR/ampache-develop/docs/API.md
-cp $AMPACHEDIR/www/ampache.org-api/content/api-json-methods.md $AMPACHEDIR/ampache-develop/docs/API-JSON-methods.md
-cp $AMPACHEDIR/www/ampache.org-api/content/api-xml-methods.md $AMPACHEDIR/ampache-develop/docs/API-XML-methods.md
-cp $AMPACHEDIR/www/ampache.org-api/content/api-advanced-search.md $AMPACHEDIR/ampache-develop/docs/API-advanced-search.md
-cp $AMPACHEDIR/www/ampache.org-api/content/api-errors.md $AMPACHEDIR/ampache-develop/docs/API-Errors.md
-cp $AMPACHEDIR/www/ampache.org-api/content/api-acls.md $AMPACHEDIR/ampache-develop/docs/API-acls.md
+cp $AMPACHEDIR/www/ampache.org-api/docs/index.md $AMPACHEDIR/ampache-develop/docs/API.md
+cp $AMPACHEDIR/www/ampache.org-api/docs/api-json-methods.md $AMPACHEDIR/ampache-develop/docs/API-JSON-methods.md
+cp $AMPACHEDIR/www/ampache.org-api/docs/api-xml-methods.md $AMPACHEDIR/ampache-develop/docs/API-XML-methods.md
+cp $AMPACHEDIR/www/ampache.org-api/docs/api-advanced-search.md $AMPACHEDIR/ampache-develop/docs/API-advanced-search.md
+cp $AMPACHEDIR/www/ampache.org-api/docs/api-errors.md $AMPACHEDIR/ampache-develop/docs/API-Errors.md
+cp $AMPACHEDIR/www/ampache.org-api/docs/api-acls.md $AMPACHEDIR/ampache-develop/docs/API-acls.md
 
-cp $AMPACHEDIR/www/ampache.org-api/content/index.md $AMPACHEDIR/ampache-master/docs/API.md
-cp $AMPACHEDIR/www/ampache.org-api/content/api-json-methods.md $AMPACHEDIR/ampache-master/docs/API-JSON-methods.md
-cp $AMPACHEDIR/www/ampache.org-api/content/api-xml-methods.md $AMPACHEDIR/ampache-master/docs/API-XML-methods.md
-cp $AMPACHEDIR/www/ampache.org-api/content/api-advanced-search.md $AMPACHEDIR/ampache-master/docs/API-advanced-search.md
-cp $AMPACHEDIR/www/ampache.org-api/content/api-errors.md $AMPACHEDIR/ampache-master/docs/API-Errors.md
-cp $AMPACHEDIR/www/ampache.org-api/content/api-acls.md $AMPACHEDIR/ampache-master/docs/API-acls.md
+cp $AMPACHEDIR/www/ampache.org-api/docs/index.md $AMPACHEDIR/ampache-master/docs/API.md
+cp $AMPACHEDIR/www/ampache.org-api/docs/api-json-methods.md $AMPACHEDIR/ampache-master/docs/API-JSON-methods.md
+cp $AMPACHEDIR/www/ampache.org-api/docs/api-xml-methods.md $AMPACHEDIR/ampache-master/docs/API-XML-methods.md
+cp $AMPACHEDIR/www/ampache.org-api/docs/api-advanced-search.md $AMPACHEDIR/ampache-master/docs/API-advanced-search.md
+cp $AMPACHEDIR/www/ampache.org-api/docs/api-errors.md $AMPACHEDIR/ampache-master/docs/API-Errors.md
+cp $AMPACHEDIR/www/ampache.org-api/docs/api-acls.md $AMPACHEDIR/ampache-master/docs/API-acls.md
