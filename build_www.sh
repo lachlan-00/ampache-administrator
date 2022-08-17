@@ -31,9 +31,9 @@ if [ ! -f $AMPACHEDIR/www/ampache.github.io/index.html ]; then
   cd $AMPACHEDIR/www && git clone -b master https://github.com/ampache/ampache.github.io.git ampache.github.io
 fi
 
-cd $AMPACHEDIR/ampache-master && git reset --hard origin/master && git pull
-cd $AMPACHEDIR/ampache-develop && git reset --hard origin/develop && git pull
-cd $AMPACHEDIR/www/ampache.github.io && git reset --hard origin/master && git pull
+cd $AMPACHEDIR/ampache-master && git pull
+cd $AMPACHEDIR/ampache-develop && git pull
+cd $AMPACHEDIR/www/ampache.github.io && git pull
 cd $AMPACHEDIR/www/ampache.org-api && git pull
 
 cd $AMPACHEDIR/www/ampache.org-api && npm run build && cp -rfv ./build/* $AMPACHEDIR/www/ampache.github.io/api/
