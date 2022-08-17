@@ -18,3 +18,4 @@ php74_squashed/
 php74/
 www/ampache.org-api/
 www/ampache.github.io/
+*.pyc
