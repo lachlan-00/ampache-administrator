@@ -1,94 +1,22 @@
 version: '3'
 
 services:
-  ampache74:
+  ampachetest:
     build:
       context: .
       dockerfile: docker/Dockerfilephp74
     restart: on-failure
     ports:
-      - "8074:80"
+      - "8989:80"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ./php74:/var/www/html
+      - ./ampache:/var/www/html
       - ./docker/log:/var/log/ampache
       - ./docker/media:/media
-  ampache74_squashed:
-    build:
-      context: .
-      dockerfile: docker/Dockerfilephp74
-    restart: on-failure
-    ports:
-      - "8075:80"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ./php74_squashed:/var/www/html/public
-      - ./docker/log:/var/log/ampache
-      - ./docker/media:/media
-  ampache80:
-    build:
-      context: .
-      dockerfile: docker/Dockerfilephp80
-    restart: on-failure
-    ports:
-      - "8084:80"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ./php80:/var/www/html
-      - ./docker/log:/var/log/ampache
-      - ./docker/media:/media
-  ampache80_squashed:
-    build:
-      context: .
-      dockerfile: docker/Dockerfilephp80
-    restart: on-failure
-    ports:
-      - "8085:80"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ./php80_squashed:/var/www/html/public
-      - ./docker/log:/var/log/ampache
-      - ./docker/media:/media
-  ampache81:
-    build:
-      context: .
-      dockerfile: docker/Dockerfilephp81
-    restart: on-failure
-    ports:
-      - "8086:80"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ./php81:/var/www/html
-      - ./docker/log:/var/log/ampache
-      - ./docker/media:/media
-  ampache81_squashed:
-    build:
-      context: .
-      dockerfile: docker/Dockerfilephp81
-    restart: on-failure
-    ports:
-      - "8087:80"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ./php81_squashed:/var/www/html/public
-      - ./docker/log:/var/log/ampache
-      - ./docker/media:/media
-  mariadb:
-    image: mariadb:10
-    restart: 'always'
-    ports:
-      - "3306:3306"
-    volumes: 
-      - ./docker/mysql/data:/var/lib/mysql/data
-      - ./docker/mysql/logs:/var/lib/mysql/logs
-    environment:
-      MYSQL_ROOT_PASSWORD: ampache-release
-      MYSQL_DATABASE: ampache-release
-      MYSQL_USER: ampache-release
-      MYSQL_PASSWORD: ampache-release
+      - ./docker/art:/mnt/art
+      - ./docker/music:/mnt/music
+      - ./docker/podcast:/mnt/podcast
+      - ./docker/upload:/mnt/upload
+      - ./docker/video:/mnt/video
+

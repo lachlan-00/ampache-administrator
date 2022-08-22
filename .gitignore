@@ -1,12 +1,13 @@
 
 ampache-*_all*.zip
+ampache/
 ampache-*/
 docker/ampache-docker/
 docker/ampache-docker-nosql/
 docker/ampache-docker-develop/
 docker/log/*
 docker/media/*
-music/*
+docker/music/*
 python/python3-ampache5/
 python/python3-ampache4/
 python/python3-ampache3/
