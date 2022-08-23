@@ -44,14 +44,8 @@ cd $AMPACHEDIR/ampache-test && docker-compose up -d
 echo "wake up ampache-test!"
 sleep 7
 
-cd $AMPACHEDIR/python/python3-ampache3/
-python3 ./build_docs.py
-
-cd $AMPACHEDIR/python/python3-ampache4/
-python3 ./build_docs.py
-
-cd $AMPACHEDIR/python/python3-ampache5/
-python3 ./build_docs.py
+cd $AMPACHEDIR/python/
+python3 ./build_all.py
 
 # go home
 cd $AMPACHEDIR
