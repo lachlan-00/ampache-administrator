@@ -454,7 +454,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         user_id = myuser['user']['id']
 
     single_song = 54
-    single_album = 12
+    single_album = 24
     single_video = 1
     single_playlist = 2
     single_artist = 2
@@ -639,7 +639,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                 print(child.tag, child.attrib)
     else:
         single_artist = stats[0]['id']
-    single_artist = 19
+    single_artist = 38
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/stats%20\(album\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/stats%20\(album\).xml)
@@ -1222,7 +1222,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (album with include)." + api_format)
     single_album = ampacheConnection.get_id_list(albums, 'album')[0]
-    single_album = 12
+    single_album = 24
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/get_indexes%20\(artist\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/get_indexes%20\(artist\).xml)
