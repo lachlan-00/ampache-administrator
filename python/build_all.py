@@ -20,6 +20,7 @@ api4_version = '443000'
 api5_version = '5.5.0'
 docpath = "docs/"
 song_url = 'https://music.com.au/play/index.php?ssid=eeb9f1b6056246a7d563f479f518bb34&type=song&oid=60&uid=4&player=api&name=Synthetic%20-%20BrownSmoke.wma'
+APIVERSION = 0
 try:
     if sys.argv[1]:
         url = sys.argv[1]
@@ -49,6 +50,11 @@ except IndexError:
     else:
         print()
         sys.exit('Error: docs/examples/ampyche.conf not found and no arguments set')
+    try:
+        if sys.argv[1]:
+            APIVERSION = int(sys.argv[1])
+    except IndexError:
+        APIVERSION = 0
 
 
 def build_docs(ampache_url, ampache_api, ampache_user, api_format):
@@ -60,7 +66,6 @@ def build_docs(ampache_url, ampache_api, ampache_user, api_format):
     ampacheConnection.set_debug(True)
     #ampacheConnection.set_debug(False)
     ampacheConnection.set_format(api_format)
-    print(ampacheConnection.AMPACHE_API)
 
     if (api_version == api3_version):
         ampacheConnection.set_debug_path("python3-ampache3/docs/" + api_format + "-responses/")
@@ -142,9 +147,8 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     if api_format == 'xml':
         song_id = search_song[1].attrib['id']
     else:
-        print(search_song['song'][0]['title'])
         song_id = search_song['song'][0]['id']
-    song_title = "Fasten Your Seatbelt"
+    song_title = "Dance with the Devil"
 
     search_rules = [['artist', 0, 'Synthetic']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/advanced_search%20\(album\).xml)
@@ -168,10 +172,10 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                     docpath + "advanced_search (artist)." + api_format)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/album.xml)
-    album = ampacheConnection.album(9, False)
+    album = ampacheConnection.album(2, False)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/album_songs.xml)
-    ampacheConnection.album_songs(9, offset, limit)
+    ampacheConnection.album_songs(12, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/albums%20\(with include\).xml)
     ampacheConnection.albums(album_title, 1, False, False, 0, 2, True)
@@ -202,25 +206,25 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                     docpath + "stats (album)." + api_format)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/artist%20\(with include songs,albums\).xml)
-    ampacheConnection.artist(2, True)
+    ampacheConnection.artist(16, True)
     if os.path.isfile(docpath + "artist." + api_format):
         shutil.move(docpath + "artist." + api_format,
                     docpath + "artist (with include songs,albums)." + api_format)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/artist%20\(with include songs\).xml)
-    ampacheConnection.artist(2, 'songs')
+    ampacheConnection.artist(16, 'songs')
     if os.path.isfile(docpath + "artist." + api_format):
         shutil.move(docpath + "artist." + api_format,
                     docpath + "artist (with include songs)." + api_format)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/artist%20\(with include albums\).xml)
-    ampacheConnection.artist(2, 'albums')
+    ampacheConnection.artist(16, 'albums')
     if os.path.isfile(docpath + "artist." + api_format):
         shutil.move(docpath + "artist." + api_format,
                     docpath + "artist (with include albums)." + api_format)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/artist.xml)
-    ampacheConnection.artist(2, False)
+    ampacheConnection.artist(19, False)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/artist_albums.xml)
     ampacheConnection.artist_albums(2, offset, limit)
@@ -347,7 +351,7 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                     docpath + "user (error)." + api_format)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/user.xml)
-    ampacheConnection.user('generic')
+    ampacheConnection.user('user')
 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/videos.xml)
@@ -438,13 +442,15 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/user_delete.xml)
     ampacheConnection.user_delete(tempusername)
 
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/user.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/user.xml)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/user%20\(error\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/user%20\(error\).xml)
     ampacheConnection.user('missing_user')
     if os.path.isfile(docpath + "user." + api_format):
         shutil.move(docpath + "user." + api_format,
                     docpath + "user (error)." + api_format)
 
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/user.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/user.xml)
     myuser = ampacheConnection.user('demo')
     if api_format == 'xml':
         for child in myuser:
@@ -454,10 +460,10 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         user_id = myuser['user']['id']
 
     single_song = 54
-    single_album = 24
+    single_album = 12
     single_video = 1
     single_playlist = 2
-    single_artist = 2
+    single_artist = 19
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/get_indexes%20\(song\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/get_indexes%20\(song\).xml)
@@ -556,7 +562,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         song_id = search_song[1].attrib['id']
     else:
         song_id = search_song[0]['id']
-    song_title = "Fasten Your Seatbelt"
+    song_title = "Dance with the Devil"
 
     search_rules = [['artist', 0, 'Synthetic']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/advanced_search%20\(album\).json)
@@ -590,12 +596,12 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/album.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/album.xml)
-    ampacheConnection.album(single_album, True)
+    ampacheConnection.album(2, True)
     if os.path.isfile(docpath + "album." + api_format):
         shutil.move(docpath + "album." + api_format,
                     docpath + "album (with include)." + api_format)
 
-    album = ampacheConnection.album(single_album, False)
+    album = ampacheConnection.album(2, False)
 
     if api_format == 'xml':
         for child in album:
@@ -631,15 +637,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "stats." + api_format,
                     docpath + "stats (artist)." + api_format)
 
-    if api_format == 'xml':
-        for child in stats:
-            if child.tag == 'artist':
-                print('\ngetting a random artist using the stats method and found', child.find('name').text)
-                single_artist = child.attrib['id']
-                print(child.tag, child.attrib)
-    else:
-        single_artist = stats[0]['id']
-    single_artist = 38
+    single_artist = 19
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/stats%20\(album\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/stats%20\(album\).xml)
@@ -651,7 +649,6 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     if api_format == 'xml':
         for child in stats:
             if child.tag == 'album':
-                print('\ngetting a random album using the stats method and found', child.find('name').text)
                 single_album = child.attrib['id']
                 album_title = child.find('name').text
     else:
@@ -659,30 +656,26 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/artist%20\(with include songs,albums\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/artist%20\(with include songs,albums\).xml)
-    ampacheConnection.artist(single_artist, True)
+    ampacheConnection.artist(16, True)
     if os.path.isfile(docpath + "artist." + api_format):
         shutil.move(docpath + "artist." + api_format,
                     docpath + "artist (with include songs,albums)." + api_format)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/artist%20\(with include songs\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/artist%20\(with include songs\).xml)
-    ampacheConnection.artist(single_artist, 'songs')
+    ampacheConnection.artist(16, 'songs')
     if os.path.isfile(docpath + "artist." + api_format):
         shutil.move(docpath + "artist." + api_format,
                     docpath + "artist (with include songs)." + api_format)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/artist%20\(with include albums\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/artist%20\(with include albums\).xml)
-    ampacheConnection.artist(single_artist, 'albums')
+    ampacheConnection.artist(16, 'albums')
     if os.path.isfile(docpath + "artist." + api_format):
         shutil.move(docpath + "artist." + api_format,
                     docpath + "artist (with include albums)." + api_format)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/artist.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/artist.xml)
-    artist = ampacheConnection.artist(single_artist, False)
+    artist = ampacheConnection.artist(19, False)
 
-    if api_format == 'xml':
-        for child in artist:
-            if child.tag == 'artist':
-                print('\nsearching for an artist with this id', single_artist)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/artist_albums.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/artist_albums.xml)
@@ -839,32 +832,15 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/search_songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/search_songs.xml)
-    search_songs = ampacheConnection.search_songs(song_title, offset, limit)
-
-    if api_format == 'xml':
-        for child in search_songs:
-            print(child.tag, child.attrib)
-            for subchildren in child:
-                print(str(subchildren.tag) + ': ' + str(subchildren.text))
+    ampacheConnection.search_songs(song_title, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/song.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/song.xml)
-    song = ampacheConnection.song(single_song)
-
-    if api_format == 'xml':
-        for child in song:
-            print(child.tag, child.attrib)
-            for subchildren in child:
-                print(str(subchildren.tag) + ': ' + str(subchildren.text))
+    ampacheConnection.song(single_song)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/songs.xml)
-    songs = ampacheConnection.songs(False, False, False, False, offset, limit)
-    if api_format == 'xml':
-        for child in songs:
-            print(child.tag, child.attrib)
-            for subchildren in child:
-                print(str(subchildren.tag) + ': ' + str(subchildren.text))
+    ampacheConnection.songs(False, False, False, False, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/tags.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/tags.xml)
@@ -876,7 +852,6 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                 genre = child.attrib['id']
     else:
         for tag in tags[0]['tag']:
-            print(tag)
             tmp_genre = tag['id']
         genre = tmp_genre
 
@@ -886,21 +861,11 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/tag_albums.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/tag_albums.xml)
-    genre_albums = ampacheConnection.tag_albums(genre, 0, 2)
-    if api_format == 'xml':
-        for child in genre_albums:
-            print(child.tag, child.attrib)
-            for subchildren in child:
-                print(str(subchildren.tag) + ': ' + str(subchildren.text))
+    ampacheConnection.tag_albums(genre, 0, 2)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/tag_artists.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/tag_artists.xml)
-    genre_artists = ampacheConnection.tag_artists(genre, 0, 1)
-    if api_format == 'xml':
-        for child in genre_artists:
-            print(child.tag, child.attrib)
-            for subchildren in child:
-                print(str(subchildren.tag) + ': ' + str(subchildren.text))
+    ampacheConnection.tag_artists(genre, 0, 1)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/tag_songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/tag_songs.xml)
@@ -1012,7 +977,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/update_from_tags.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/update_from_tags.xml)
-    ampacheConnection.update_from_tags('album', 12)
+    ampacheConnection.update_from_tags('album', 10)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/update_artist_info.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/update_artist_info.xml)
@@ -1177,13 +1142,15 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/user_delete.xml)
     ampacheConnection.user_delete(tempusername)
 
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/user.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/user.xml)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/user%20\(error\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/user%20\(error\).xml)
     ampacheConnection.user('missing_user')
     if os.path.isfile(docpath + "user." + api_format):
         shutil.move(docpath + "user." + api_format,
                     docpath + "user (error)." + api_format)
-                    
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/user.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/user.xml)
     myuser = ampacheConnection.user(ampache_user)
     if api_format == 'xml':
         for child in myuser:
@@ -1222,7 +1189,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (album with include)." + api_format)
     single_album = ampacheConnection.get_id_list(albums, 'album')[0]
-    single_album = 24
+    single_album = 12
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/get_indexes%20\(artist\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/get_indexes%20\(artist\).xml)
@@ -1296,9 +1263,8 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     if api_format == 'xml':
         song_id = search_song[1].attrib['id']
     else:
-        print(search_song['song'][0]['title'])
         song_id = search_song['song'][0]['id']
-    song_title = "Fasten Your Seatbelt"
+    song_title = "Dance with the Devil"
 
     search_rules = [['artist', 0, 'Synthetic']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/advanced_search%20\(album\).json)
@@ -1332,14 +1298,14 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/album%20\(with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/album%20\(with include\).xml)
-    ampacheConnection.album(single_album, True)
+    ampacheConnection.album(2, True)
     if os.path.isfile(docpath + "album." + api_format):
         shutil.move(docpath + "album." + api_format,
                     docpath + "album (with include)." + api_format)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/album.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/album.xml)
-    album = ampacheConnection.album(single_album, False)
+    album = ampacheConnection.album(2, False)
 
     if api_format == 'xml':
         for child in album:
@@ -1377,15 +1343,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "stats." + api_format,
                     docpath + "stats (artist)." + api_format)
 
-    if api_format == 'xml':
-        for child in stats:
-            if child.tag == 'artist':
-                print('\ngetting a random artist using the stats method and found', child.find('name').text)
-                single_artist = child.attrib['id']
-                print(child.tag, child.attrib)
-    else:
-        single_artist = stats['artist'][0]['id']
-    single_artist = 2
+    single_artist = 19
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/stats%20\(album\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/stats%20\(album\).xml)
@@ -1397,7 +1355,6 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     if api_format == 'xml':
         for child in stats:
             if child.tag == 'album':
-                print('\ngetting a random album using the stats method and found', child.find('name').text)
                 single_album = child.attrib['id']
                 album_title = child.find('name').text
     else:
@@ -1405,30 +1362,25 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/artist%20\(with include songs,albums\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/artist%20\(with include songs,albums\).xml)
-    ampacheConnection.artist(single_artist, True)
+    ampacheConnection.artist(16, True)
     if os.path.isfile(docpath + "artist." + api_format):
         shutil.move(docpath + "artist." + api_format,
                     docpath + "artist (with include songs,albums)." + api_format)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/artist%20\(with include songs\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/artist%20\(with include songs\).xml)
-    ampacheConnection.artist(single_artist, 'songs')
+    ampacheConnection.artist(16, 'songs')
     if os.path.isfile(docpath + "artist." + api_format):
         shutil.move(docpath + "artist." + api_format,
                     docpath + "artist (with include songs)." + api_format)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/artist%20\(with include albums\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/artist%20\(with include albums\).xml)
-    ampacheConnection.artist(single_artist, 'albums')
+    ampacheConnection.artist(16, 'albums')
     if os.path.isfile(docpath + "artist." + api_format):
         shutil.move(docpath + "artist." + api_format,
                     docpath + "artist (with include albums)." + api_format)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/artist.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/artist.xml)
-    artist = ampacheConnection.artist(single_artist, False)
-
-    if api_format == 'xml':
-        for child in artist:
-            if child.tag == 'artist':
-                print('\nsearching for an artist with this id', single_artist)
+    ampacheConnection.artist(16, False)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/artist_albums.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/artist_albums.xml)
@@ -1588,32 +1540,15 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/search_songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/search_songs.xml)
-    search_songs = ampacheConnection.search_songs(song_title, offset, limit)
-
-    if api_format == 'xml':
-        for child in search_songs:
-            print(child.tag, child.attrib)
-            for subchildren in child:
-                print(str(subchildren.tag) + ': ' + str(subchildren.text))
+    ampacheConnection.search_songs(song_title, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/song.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/song.xml)
-    song = ampacheConnection.song(single_song)
-
-    if api_format == 'xml':
-        for child in song:
-            print(child.tag, child.attrib)
-            for subchildren in child:
-                print(str(subchildren.tag) + ': ' + str(subchildren.text))
+    ampacheConnection.song(single_song)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/songs.xml)
-    songs = ampacheConnection.songs(False, False, False, False, offset, limit)
-    if api_format == 'xml':
-        for child in songs:
-            print(child.tag, child.attrib)
-            for subchildren in child:
-                print(str(subchildren.tag) + ': ' + str(subchildren.text))
+    ampacheConnection.songs(False, False, False, False, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/genres.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/genres.xml)
@@ -1625,7 +1560,6 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                 genre = child.attrib['id']
     else:
         for tag in tags['genre']:
-            print(tag)
             tmp_genre = tag['id']
         genre = tmp_genre
 
@@ -1635,21 +1569,11 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/genre_albums.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/genre_albums.xml)
-    genre_albums = ampacheConnection.genre_albums(genre, 0, 2)
-    if api_format == 'xml':
-        for child in genre_albums:
-            print(child.tag, child.attrib)
-            for subchildren in child:
-                print(str(subchildren.tag) + ': ' + str(subchildren.text))
+    ampacheConnection.genre_albums(genre, 0, 2)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/genre_artists.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/genre_artists.xml)
-    genre_artists = ampacheConnection.genre_artists(genre, 0, 1)
-    if api_format == 'xml':
-        for child in genre_artists:
-            print(child.tag, child.attrib)
-            for subchildren in child:
-                print(str(subchildren.tag) + ': ' + str(subchildren.text))
+    ampacheConnection.genre_artists(genre, 0, 1)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/genre_songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/genre_songs.xml)
@@ -1760,7 +1684,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/update_from_tags.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/update_from_tags.xml)
-    ampacheConnection.update_from_tags('album', 6)
+    ampacheConnection.update_from_tags('album', 10)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/update_artist_info.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/update_artist_info.xml)
@@ -1768,7 +1692,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/update_art.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/update_art.xml)
-    ampacheConnection.update_art('artist', 26, True)
+    ampacheConnection.update_art('artist', 20, True)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/localplay%20\(status\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/localplay%20\(status\).xml)
@@ -1804,15 +1728,24 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # Clean the files
     self_check(api_format, ampache_url, ampache_api, ampache_session, docpath)
 
-api_version = api5_version
-build_docs(url, api, user, 'json')
-build_docs(url, api, user, 'xml')
-
-api_version = api4_version
-build_docs(url, api, user, 'json')
-build_docs(url, api, user, 'xml')
-
-api_version = api3_version
-build_docs(url, api, user, 'xml')
-
+if APIVERSION == 5:
+    api_version = api5_version
+    build_docs(url, api, user, 'json')
+    build_docs(url, api, user, 'xml')
+elif APIVERSION == 4:
+    api_version = api4_version
+    build_docs(url, api, user, 'json')
+    build_docs(url, api, user, 'xml')
+elif APIVERSION == 3:
+    api_version = api3_version
+    build_docs(url, api, user, 'xml')
+else:
+    api_version = api5_version
+    build_docs(url, api, user, 'json')
+    build_docs(url, api, user, 'xml')
+    api_version = api4_version
+    build_docs(url, api, user, 'json')
+    build_docs(url, api, user, 'xml')
+    api_version = api3_version
+    build_docs(url, api, user, 'xml')
 
