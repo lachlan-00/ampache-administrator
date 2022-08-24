@@ -683,7 +683,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/artist_songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/artist_songs.xml)
-    ampacheConnection.artist_songs(single_artist, offset, limit)
+    ampacheConnection.artist_songs(2, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/artists%20\(with include songs,albums\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/artists%20\(with include songs,albums\).xml)
@@ -1388,7 +1388,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/album_songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/album_songs.xml)
-    ampacheConnection.artist_songs(single_artist, offset, limit)
+    ampacheConnection.artist_songs(2, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/artists%20\(with include songs,albums\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/artists%20\(with include songs,albums\).xml)

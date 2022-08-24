@@ -23,14 +23,26 @@ if [ ! -f $AMPACHEDIR/ampache-master/index.php ]; then
   rm -rf $AMPACHEDIR/ampache-master
   git clone -b master https://github.com/ampache/ampache.git ampache-master
 fi
+if [ ! -d $AMPACHEDIR/ampache-squashed ]; then
+  git clone -b squashed https://github.com/ampache/ampache.git ampache-squashed
+fi
+if [ ! -f $AMPACHEDIR/ampache-squashed/index.php ]; then
+  rm -rf $AMPACHEDIR/ampache-squashed
+  git clone -b squashed https://github.com/ampache/ampache.git ampache-squashed
+fi
+
+if [ -f $AMPACHEDIR/ampache-develop/composer.lock ]; then
+  rm $AMPACHEDIR/ampache-develop/composer.lock
+fi
+cd $AMPACHEDIR/ampache-develop && php $COMPOSERPATH install && cd $AMPACHEDIR
 
 if [ -f $AMPACHEDIR/ampache-master/composer.lock ]; then
   rm $AMPACHEDIR/ampache-master/composer.lock
 fi
 cd $AMPACHEDIR/ampache-master && php $COMPOSERPATH install && cd $AMPACHEDIR
 
-if [ -f $AMPACHEDIR/ampache-develop/composer.lock ]; then
-  rm $AMPACHEDIR/ampache-develop/composer.lock
+if [ -f $AMPACHEDIR/ampache-squashed/composer.lock ]; then
+  rm $AMPACHEDIR/ampache-squashed/composer.lock
 fi
-cd $AMPACHEDIR/ampache-develop && php $COMPOSERPATH install && cd $AMPACHEDIR
+cd $AMPACHEDIR/ampache-squashed && php $COMPOSERPATH install && cd $AMPACHEDIR
 
