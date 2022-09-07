@@ -22,6 +22,13 @@ Release files are built from the php dirs and will create a zip file in the rele
 
 e.g. `releases/ampache-${a_version}_all_php7.4.zip`
 
+### build_ampache-squashed.sh
+
+This script will update the squashed repo so you don't have to manually edit the files for updating that branch
+
+* Copy the files from `./ampache-master` to `./ampache-squashed`
+* Run `./squash-ampache.py` to regex the strings to match the squashed structure
+
 ### build_docker.sh
 
 Build all the docker images and upload to docker hub

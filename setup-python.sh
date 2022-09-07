@@ -20,8 +20,6 @@ fi
 if [ ! -f $AMPACHEDIR/ampache-test/ampache.cfg.php ]; then
   rm -rf $AMPACHEDIR/ampache-test
   git clone https://github.com/lachlan-00/ampache-test.git ampache-test
-  cd $AMPACHEDIR/ampache-test && sh ./setup-ampache-test.sh
-  cd $AMPACHEDIR/ampache-test/ampache && php7.4 $COMPOSERPATH install
 fi
 
 if [ ! -d $AMPACHEDIR/python/python3-ampache3 ]; then
