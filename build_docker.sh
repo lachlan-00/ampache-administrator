@@ -2,10 +2,10 @@
 
 AMPACHEDIR=$PWD
 BRANCH="all"
-RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-master/src/Config/Init/InitializationHandlerConfig.php`
 if [ ! $# -eq 0 ]; then
   BRANCH=$1
 fi
+RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-master/src/Config/Init/InitializationHandlerConfig.php`
 
 if [ ! -d $AMPACHEDIR/docker ]; then
   mkdir $AMPACHEDIR/docker

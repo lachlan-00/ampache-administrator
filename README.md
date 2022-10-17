@@ -22,6 +22,10 @@ Release files are built from the php dirs and will create a zip file in the rele
 
 e.g. `releases/ampache-${a_version}_all_php7.4.zip`
 
+**note** you can rebuild the zip files without rebuilding the repos by adding an argument to the command
+
+e.g. `sh build_release.sh zips`
+
 ### build_ampache-squashed.sh
 
 This script will update the squashed repo so you don't have to manually edit the files for updating that branch
@@ -73,6 +77,10 @@ Just want to pull down ampache code repos and start patching?
 If you don't have composer installed to `/usr/local/bin/composer` then it will be saved to `./docker/composer`
 
 Clone Ampache develop to `./ampache-develop` and then clone Ampache master to `./ampache-master`
+
+### setup-python.sh
+
+This file sets up all the api folders for building python documentation
 
 ### setup-docker.sh
 
