@@ -9,6 +9,7 @@ docker/ampache-docker-develop/
 docker/log/*
 docker/media/*
 docker/music/*
+python/python3-ampache6/
 python/python3-ampache5/
 python/python3-ampache4/
 python/python3-ampache3/
