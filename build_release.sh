@@ -100,7 +100,7 @@ cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/php80_squashed
-rm -rf ./composer.lock vendor/* ./ib/components/* ./docker/ && php8.0 $COMPOSERPATH install
+rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php8.0 $COMPOSERPATH install
 php8.0 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jQuery-contextMenu/dist/
