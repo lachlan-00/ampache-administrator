@@ -26,26 +26,31 @@ cd $AMPACHEDIR/python/
 if [ ! $BRANCH -eq 0 ]; then
   echo "RESET THE DATABASE"
   docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /var/lib/mysql/ampache-test.sql"
+  docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
   python3 ./build_all.py $BRANCH
   echo "DONE $BRANCH"
 else
   echo "RESET THE DATABASE"
   docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /var/lib/mysql/ampache-test.sql"
+  docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
   python3 ./build_all.py 6
   echo "DONE 6"
 
   echo "RESET THE DATABASE"
   docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /var/lib/mysql/ampache-test.sql"
+  docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
   python3 ./build_all.py 5
   echo "DONE 5"
 
   echo "RESET THE DATABASE"
   docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /var/lib/mysql/ampache-test.sql"
+  docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
   python3 ./build_all.py 4
   echo "DONE 4"
 
   echo "RESET THE DATABASE"
   docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /var/lib/mysql/ampache-test.sql"
+  docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
   python3 ./build_all.py 3
   echo "DONE 3"
 fi
