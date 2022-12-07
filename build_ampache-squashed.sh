@@ -10,11 +10,11 @@ if [ ! -f $COMPOSERPATH ]; then
 fi
 
 if [ ! -d $AMPACHEDIR/ampache-master ]; then
-  git clone -b master https://github.com/ampache/ampache.git ampache-master
+  git clone -b patch5 https://github.com/ampache/ampache.git ampache-master
 fi
 if [ ! -f $AMPACHEDIR/ampache-master/index.php ]; then
   rm -rf $AMPACHEDIR/ampache-master
-  git clone -b master https://github.com/ampache/ampache.git ampache-master
+  git clone -b patch5 https://github.com/ampache/ampache.git ampache-master
 fi
 if [ ! -d $AMPACHEDIR/ampache-squashed ]; then
   git clone -b squashed https://github.com/ampache/ampache.git ampache-squashed

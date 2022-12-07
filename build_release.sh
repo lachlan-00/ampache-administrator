@@ -18,11 +18,11 @@ if [ ! -f $COMPOSERPATH ]; then
 fi
 
 if [ ! -d $AMPACHEDIR/php74 ]; then
-  git clone -b master https://github.com/ampache/ampache.git php74
+  git clone -b patch5 https://github.com/ampache/ampache.git php74
 fi
 if [ ! -f $AMPACHEDIR/php74/index.php ]; then
   rm -rf $AMPACHEDIR/php74
-  git clone -b master https://github.com/ampache/ampache.git php74
+  git clone -b patch5 https://github.com/ampache/ampache.git php74
 fi
 if [ ! -d $AMPACHEDIR/php74_squashed ]; then
   git clone -b squashed https://github.com/ampache/ampache.git php74_squashed
@@ -33,11 +33,11 @@ if [ ! -f $AMPACHEDIR/php74_squashed/index.php ]; then
 fi
 
 if [ ! -d $AMPACHEDIR/php80 ]; then
-  git clone -b master https://github.com/ampache/ampache.git php80
+  git clone -b patch5 https://github.com/ampache/ampache.git php80
 fi
 if [ ! -f $AMPACHEDIR/php80/index.php ]; then
   rm -rf $AMPACHEDIR/php80
-  git clone -b master https://github.com/ampache/ampache.git php80
+  git clone -b patch5 https://github.com/ampache/ampache.git php80
 fi
 if [ ! -d $AMPACHEDIR/php80_squashed ]; then
   git clone -b squashed https://github.com/ampache/ampache.git php80_squashed
@@ -48,11 +48,11 @@ if [ ! -f $AMPACHEDIR/php80_squashed/index.php ]; then
 fi
 
 if [ ! -d $AMPACHEDIR/php81 ]; then
-  git clone -b master https://github.com/ampache/ampache.git php81
+  git clone -b patch5 https://github.com/ampache/ampache.git php81
 fi
 if [ ! -f $AMPACHEDIR/php81/index.php ]; then
   rm -rf $AMPACHEDIR/php81
-  git clone -b master https://github.com/ampache/ampache.git php81
+  git clone -b patch5 https://github.com/ampache/ampache.git php81
 fi
 if [ ! -d $AMPACHEDIR/php81_squashed ]; then
   git clone -b squashed https://github.com/ampache/ampache.git php81_squashed
@@ -63,11 +63,11 @@ if [ ! -f $AMPACHEDIR/php81_squashed/index.php ]; then
 fi
 
 # force reset everything
-cd $AMPACHEDIR/php74 && git fetch origin release5 && git checkout release5 && git reset --hard origin/release5 && git pull
+cd $AMPACHEDIR/php74 && git fetch origin patch5 && git checkout patch5 && git reset --hard origin/patch5 && git pull
 cd $AMPACHEDIR/php74_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
-cd $AMPACHEDIR/php80 && git fetch origin release5 && git checkout release5 && git reset --hard origin/release5 && git pull
+cd $AMPACHEDIR/php80 && git fetch origin patch5 && git checkout patch5 && git reset --hard origin/patch5 && git pull
 cd $AMPACHEDIR/php80_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
-cd $AMPACHEDIR/php81 && git fetch origin release5 && git checkout release5 && git reset --hard origin/release5 && git pull
+cd $AMPACHEDIR/php81 && git fetch origin patch5 && git checkout patch5 && git reset --hard origin/patch5 && git pull
 cd $AMPACHEDIR/php81_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
 
 # php 7.4
