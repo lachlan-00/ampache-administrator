@@ -197,19 +197,6 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/albums.xml)
     ampacheConnection.albums(album_title, 1, False, False, 0, 10, False)
 
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/stats%20\(song\).xml)
-    ampacheConnection.stats('song', 'random', ampache_user, None, 0, 2)
-    if os.path.isfile(docpath + "stats." + api_format):
-        shutil.move(docpath + "stats." + api_format,
-                    docpath + "stats (song)." + api_format)
-
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/stats%20\(artist\).xml)
-    ampacheConnection.stats('artist', 'random', ampache_user, False, 0, 2)
-    if os.path.isfile(docpath + "stats." + api_format):
-        shutil.move(docpath + "stats." + api_format,
-                    docpath + "stats (artist)." + api_format)
-
-
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/stats%20\(album\).xml)
     ampacheConnection.stats('album', 'random', ampache_user, None, 0, 2)
     if os.path.isfile(docpath + "stats." + api_format):
