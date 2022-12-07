@@ -75,8 +75,8 @@ cd $AMPACHEDIR/php74
 rm -rf ./composer.lock vendor/* public/lib/components/* && php7.4 $COMPOSERPATH install
 php7.4 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jQuery-contextMenu/dist/
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jQuery-contextMenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
@@ -85,8 +85,8 @@ cd $AMPACHEDIR/php74_squashed
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php7.4 $COMPOSERPATH install
 php7.4 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jQuery-contextMenu/dist/
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jQuery-contextMenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
@@ -96,8 +96,8 @@ cd $AMPACHEDIR/php80
 rm -rf ./composer.lock vendor/* public/lib/components/* && php8.0 $COMPOSERPATH install
 php8.0 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jQuery-contextMenu/dist/
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jQuery-contextMenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
@@ -106,8 +106,8 @@ cd $AMPACHEDIR/php80_squashed
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php8.0 $COMPOSERPATH install
 php8.0 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jQuery-contextMenu/dist/
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jQuery-contextMenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
@@ -117,8 +117,8 @@ cd $AMPACHEDIR/php81
 rm -rf ./composer.lock vendor/* public/lib/components/* && php8.1 $COMPOSERPATH install
 php8.1 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jQuery-contextMenu/dist/
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jQuery-contextMenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
@@ -127,8 +127,8 @@ cd $AMPACHEDIR/php81_squashed
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php8.1 $COMPOSERPATH install
 php8.1 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jQuery-contextMenu/dist/
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jQuery-contextMenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
