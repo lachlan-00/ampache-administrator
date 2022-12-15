@@ -40,6 +40,7 @@ self_check("./ampache-squashed/lib/javascript/search-data.php", "\$dic = require
 
 self_check("./ampache-squashed/src", "/public/", "/")
 self_check("./ampache-squashed/templates", "/public/", "/")
+self_check("./ampache-squashed/templates", "/\.\./\.\./", "/../")
 
 self_check("./ampache-squashed/albums.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
 self_check("./ampache-squashed/logout.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")

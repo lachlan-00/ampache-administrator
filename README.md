@@ -26,6 +26,15 @@ e.g. `releases/ampache-${a_version}_all_php7.4.zip`
 
 e.g. `sh build_release.sh zips`
 
+#### Script workarounds for release builds
+
+* Make sure the jquery-context menu map files are created
+  * ./public/lib/components/jquery-contextmenu/dist/jquery.contextMenu.min.js.map
+  * ./public/lib/components/jquery-contextmenu/dist/jquery.contextMenu.min.css.map
+* Copy patched gettext StringReader.php to stop all the warning messages for translations
+  * ./vendor/gettext/gettext/src/Utils/StringReader.php
+* Copy missing prettyphoto images to ./public/lib/components/prettyphoto/images
+
 ### build_ampache-squashed.sh
 
 This script will update the squashed repo so you don't have to manually edit the files for updating that branch
@@ -42,6 +51,7 @@ Build all the docker images and upload to docker hub
 * develop
 
 Build single branches with branch name as an argument
+
 ```
 sh ./build_docker.sh master
 ```
@@ -61,12 +71,12 @@ Build the api website using npm.
 
 ### build_python.sh
 
+This script will load up [ampache-test](https://github.com/lachlan-00/ampache-test) in the `/ampache-test` folder
+and then generate the xml and json example documents against that server.
+
 * Build the api docs for api3
 * Build the api docs for api4
 * Build the api docs for api5
-
-This script will load up [ampache-test](https://github.com/lachlan-00/ampache-test) in the `/ampache-test` folder
-and then generate the xml and json example documents against that server.
 
 ## Files for Ampache Users
 
@@ -89,6 +99,7 @@ Docker-compose setup allowing you locally run Ampache on php 7.4, 8.0 and 8.1
 Used for testing releases on each release type but an easy way for anyone to just get up and running
 
 You can launch a container for php7.4, 8.0 and 8.1 by issuing the following command
+
 ```
 docker-compose up
 ```
