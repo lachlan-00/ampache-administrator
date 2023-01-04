@@ -137,8 +137,9 @@ find . -name "*.map.1" -exec rm {} \;
 
 # php 8.2
 cd $AMPACHEDIR/php82
-rm -rf ./composer.lock vendor/* public/lib/components/* && php8.1 $COMPOSERPATH install
-php8.1 $COMPOSERPATH install
+cp -f $AMPACHEDIR/extras/composer_php8.2.json ./composer.json
+rm -rf ./composer.lock vendor/* public/lib/components/* && php8.2 $COMPOSERPATH install
+php8.2 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
@@ -147,6 +148,7 @@ cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/php82_squashed
+cp -f $AMPACHEDIR/extras/composer_php8.2_squashed.json ./composer.json
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php8.2 $COMPOSERPATH install
 php8.2 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
