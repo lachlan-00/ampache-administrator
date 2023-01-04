@@ -58,6 +58,9 @@ if [ ! -f $AMPACHEDIR/php81_squashed/index.php ]; then
 fi
 
 # php8.2
+if [ ! -d $AMPACHEDIR/php82 ]; then
+  git clone -b master https://github.com/ampache/ampache.git php82
+fi
 if [ ! -f $AMPACHEDIR/php82/index.php ]; then
   rm -rf $AMPACHEDIR/php82
   git clone -b master https://github.com/ampache/ampache.git php82
