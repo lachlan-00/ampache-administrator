@@ -69,6 +69,8 @@ cd $AMPACHEDIR/php80 && git fetch origin patch5 && git checkout patch5 && git re
 cd $AMPACHEDIR/php80_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
 cd $AMPACHEDIR/php81 && git fetch origin patch5 && git checkout patch5 && git reset --hard origin/patch5 && git pull
 cd $AMPACHEDIR/php81_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
+cd $AMPACHEDIR/php82 && git fetch origin patch5 && git checkout patch5 && git reset --hard origin/patch5 && git pull
+cd $AMPACHEDIR/php82_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
 
 # php 7.4
 cd $AMPACHEDIR/php74
@@ -133,6 +135,27 @@ cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
+# php 8.2
+cd $AMPACHEDIR/php82
+rm -rf ./composer.lock vendor/* public/lib/components/* && php8.1 $COMPOSERPATH install
+php8.1 $COMPOSERPATH install
+find . -xtype l -exec rm {} \;
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
+cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
+cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
+find . -name "*.map.1" -exec rm {} \;
+
+cd $AMPACHEDIR/php82_squashed
+rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php8.2 $COMPOSERPATH install
+php8.2 $COMPOSERPATH install
+find . -xtype l -exec rm {} \;
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
+cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
+cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
+find . -name "*.map.1" -exec rm {} \;
+
 # remove possible old release files before building the new one
 if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all.zip ]; then
   rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all.zip
@@ -158,6 +181,12 @@ fi
 if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.1.zip ]; then
   rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.1.zip
 fi
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2.zip
+fi
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip
+fi
 
 # Build Releases
 
@@ -172,6 +201,10 @@ cd $AMPACHEDIR/php80_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.
 ## php 8.1
 cd $AMPACHEDIR/php81 && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../releases/ampache-${RELEASEVERSION}_all_php8.1.zip ./
 cd $AMPACHEDIR/php81_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../releases/ampache-${RELEASEVERSION}_all_squashed_php8.1.zip ./
+
+## php 8.2
+cd $AMPACHEDIR/php82 && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../releases/ampache-${RELEASEVERSION}_all_php8.1.zip ./
+cd $AMPACHEDIR/php82_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../releases/ampache-${RELEASEVERSION}_all_squashed_php8.1.zip ./
 
 # go back
 cd $AMPACHEDIR
@@ -198,6 +231,12 @@ fi
 if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.1.zip ]; then
   echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.1.zip
 fi
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2.zip
+fi
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip
+fi
 
 cd $AMPACHEDIR/releases
 # echo the version checksum
@@ -215,6 +254,11 @@ echo
 echo "php8.1"
 md5sum ./ampache-${RELEASEVERSION}_all_php8.1.zip
 md5sum ./ampache-${RELEASEVERSION}_all_squashed_php8.1.zip
+echo
+echo "php8.2"
+md5sum ./ampache-${RELEASEVERSION}_all_php8.2.zip
+md5sum ./ampache-${RELEASEVERSION}_all_squashed_php8.2.zip
+echo
 echo
 echo
 
