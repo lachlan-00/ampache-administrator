@@ -59,6 +59,7 @@ else
 fi
 
 echo "RESET THE DATABASE"
+docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /var/lib/mysql/ampache-test.sql"
 docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
 
 # go home
