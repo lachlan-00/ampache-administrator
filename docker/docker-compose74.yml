@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  ampache74:
+    build:
+      context: .
+      dockerfile: Dockerfilephp74
+    restart: on-failure
+    ports:
+      - "7480:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ../php74:/var/www/html
+      - ./log:/var/log/ampache
+      - ./media:/media
+      - ./art:/mnt/art
+      - ./music:/mnt/music
+      - ./podcast:/mnt/podcast
+      - ./upload:/mnt/upload
+      - ./video:/mnt/video
+

@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  ampache74_squashed:
+    build:
+      context: .
+      dockerfile: Dockerfilephp74
+    restart: on-failure
+    ports:
+      - "7481:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ../php74_squashed:/var/www/html/public
+      - ./log:/var/log/ampache
+      - ./media:/media
+      - ./art:/mnt/art
+      - ./music:/mnt/music
+      - ./podcast:/mnt/podcast
+      - ./upload:/mnt/upload
+      - ./video:/mnt/video
+

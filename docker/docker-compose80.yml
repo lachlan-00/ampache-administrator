@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  ampache80:
+    build:
+      context: .
+      dockerfile: Dockerfilephp80
+    restart: on-failure
+    ports:
+      - "8080:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ../php80:/var/www/html
+      - ./log:/var/log/ampache
+      - ./media:/media
+      - ./art:/mnt/art
+      - ./music:/mnt/music
+      - ./podcast:/mnt/podcast
+      - ./upload:/mnt/upload
+      - ./video:/mnt/video
+

@@ -85,9 +85,9 @@ RUN     apt-get -q -q update \
 VOLUME ["/var/log/ampache", "/var/www/html"]
 EXPOSE 80
 
-COPY docker/data/bin/apache2.sh docker/data/bin/run.sh docker/data/bin/composer.sh /usr/local/bin/
-COPY docker/data/sites-enabled/001-ampache.conf /etc/apache2/sites-available/
-COPY docker/data/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY data/bin/apache2.sh data/bin/run.sh data/bin/composer.sh /usr/local/bin/
+COPY data/sites-enabled/001-ampache.conf /etc/apache2/sites-available/
+COPY data/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 RUN  chmod +x /usr/local/bin/*.sh
 
