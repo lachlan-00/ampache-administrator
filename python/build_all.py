@@ -17,7 +17,7 @@ limit = 4
 offset = 0
 api3_version = '391000'
 api4_version = '443000'
-api5_version = '5.5.3'
+api5_version = '5.5.7'
 api6_version = '6.0.0'
 docpath = "docs/"
 song_url = 'https://music.com.au/play/index.php?ssid=eeb9f1b6056246a7d563f479f518bb34&type=song&oid=60&uid=4&player=api&name=Synthetic%20-%20BrownSmoke.wma'
@@ -132,13 +132,13 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     encrypted_key = ampacheConnection.encrypt_string(ampache_api, ampache_user)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/handshake%20\(error\).xml)
-    ampacheConnection.handshake(ampache_url, 'badkey', False, False, api_version)
+    ampacheConnection.handshake(ampache_url, 'badkey', '', 0, api_version)
     if os.path.isfile(docpath + "handshake." + api_format):
         shutil.move(docpath + "handshake." + api_format,
                     docpath + "handshake (error)." + api_format)
     # use correct details
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/handshake.xml)
-    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, False, False, api_version)
+    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, '', 0, api_version)
     if not ampache_session:
         print(encrypted_key)
         sys.exit('ERROR: Failed to connect to ' + ampache_url)
@@ -397,14 +397,14 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/handshake%20\(error\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/handshake%20\(error\).xml)
-    ampacheConnection.handshake(ampache_url, 'badkey', False, False, api_version)
+    ampacheConnection.handshake(ampache_url, 'badkey', '', 0, api_version)
     if os.path.isfile(docpath + "handshake." + api_format):
         shutil.move(docpath + "handshake." + api_format,
                     docpath + "handshake (error)." + api_format)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/handshake.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/handshake.xml)
-    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, False, False, api_version)
+    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, '', 0, api_version)
     if not ampache_session:
         print(encrypted_key)
         sys.exit('ERROR: Failed to connect to ' + ampache_url)
@@ -1073,14 +1073,14 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/handshake%20\(error\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/handshake%20\(error\).xml)
-    ampacheConnection.handshake(ampache_url, 'badkey', False, False, api_version)
+    ampacheConnection.handshake(ampache_url, 'badkey', '', 0, api_version)
     if os.path.isfile(docpath + "handshake." + api_format):
         shutil.move(docpath + "handshake." + api_format,
                     docpath + "handshake (error)." + api_format)
     # use correct details
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/handshake.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/handshake.xml)
-    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, False, False, api_version)
+    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, '', 0, api_version)
     if not ampache_session:
         print(encrypted_key)
         sys.exit('ERROR: Failed to connect to ' + ampache_url)
@@ -1618,7 +1618,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/podcast_episode.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/podcast_episode.xml)
-    ampacheConnection.podcast_episode(47)
+    ampacheConnection.podcast_episode(23)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/podcast_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/podcast_create.xml)
@@ -1792,14 +1792,14 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/handshake%20\(error\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/handshake%20\(error\).xml)
-    ampacheConnection.handshake(ampache_url, 'badkey', False, False, api_version)
+    ampacheConnection.handshake(ampache_url, 'badkey', '', 0, api_version)
     if os.path.isfile(docpath + "handshake." + api_format):
         shutil.move(docpath + "handshake." + api_format,
                     docpath + "handshake (error)." + api_format)
     # use correct details
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/handshake.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/handshake.xml)
-    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, False, False, api_version)
+    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, '', 0, api_version)
     if not ampache_session:
         print(encrypted_key)
         sys.exit('ERROR: Failed to connect to ' + ampache_url)
@@ -2337,7 +2337,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/podcast_episode.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/podcast_episode.xml)
-    ampacheConnection.podcast_episode(47)
+    ampacheConnection.podcast_episode(23)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/podcast_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/podcast_create.xml)
@@ -2462,6 +2462,9 @@ elif APIVERSION == 3:
     api_version = api3_version
     build_docs(url, api, user, 'xml')
 else:
+    api_version = api6_version
+    build_docs(url, api, user, 'json')
+    build_docs(url, api, user, 'xml')
     api_version = api5_version
     build_docs(url, api, user, 'json')
     build_docs(url, api, user, 'xml')

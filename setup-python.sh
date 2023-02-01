@@ -44,3 +44,10 @@ if [ ! -f $AMPACHEDIR/python/python3-ampache5/setup.py ]; then
   rm -rf $AMPACHEDIR/python/python3-ampache5
   cd $AMPACHEDIR/python && git clone -b api5 https://github.com/ampache/python3-ampache.git python3-ampache5
 fi
+if [ ! -d $AMPACHEDIR/python/python3-ampache6 ]; then
+  cd $AMPACHEDIR/python && git clone -b api6 https://github.com/ampache/python3-ampache.git python3-ampache6
+fi
+if [ ! -f $AMPACHEDIR/python/python3-ampache6/setup.py ]; then
+  rm -rf $AMPACHEDIR/python/python3-ampache6
+  cd $AMPACHEDIR/python && git clone -b api6 https://github.com/ampache/python3-ampache.git python3-ampache6
+fi
