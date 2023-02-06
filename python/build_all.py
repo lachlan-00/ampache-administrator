@@ -101,15 +101,18 @@ def self_check(api_format, ampache_url, ampache_api, ampache_session, docpath):
         newdata = re.sub(url_text.replace("/", "\\\/"), "music.com.au", newdata)
         newdata = re.sub("http://music.com.au", "https://music.com.au", newdata)
         newdata = re.sub("http:\\\/\\\/music.com.au", "https:\\\/\\\/music.com.au", newdata)
-        newdata = re.sub("\"session_expire\": \".*\"", "\"session_expire\": \"2022-08-17T06:21:00+00:00\"", newdata)
+        newdata = re.sub("\"session_expire\": \"*.*\"*", "\"session_expire\": \"2022-08-17T06:21:00+00:00\",", newdata)
         newdata = re.sub("<session_expire>.*</session_expire>", "<session_expire><![CDATA[2022-08-17T04:34:55+00:00]]></session_expire>", newdata)
-        newdata = re.sub("\"delete_time\": \".*\"", "\"delete_time\": \"1670202698\"", newdata)
+        newdata = re.sub("\"delete_time\": [0-9]*", "\"delete_time\": 1670202698", newdata)
         newdata = re.sub("<delete_time>.*</delete_time>", "<delete_time>1670202698</delete_time>", newdata)
-        newdata = re.sub("\"create_date\": \".*\"", "\"create_date\": \"1670202701\"", newdata)
+        newdata = re.sub("\"create_date\": [0-9]*", "\"create_date\": 1670202701", newdata)
         newdata = re.sub("<create_date>.*</create_date>", "<create_date>1670202701</create_date>", newdata)
-        newdata = re.sub("\"creation_date\": \"[0-9]*\"", "\"creation_date\": \"1670202706\"", newdata)
+        newdata = re.sub("\"creation_date\": [0-9]*", "\"creation_date\": 1670202706", newdata)
         newdata = re.sub("<creation_date>[0-9]*</creation_date>", "<creation_date>1670202706</creation_date>", newdata)
-        newdata = re.sub("\"sync_date\": \".*\"", "\"sync_date\": \"2022-08-17T05:07:11+00:00\"", newdata)
+        newdata = re.sub("&secret=.{8}", "&secret=GJ7EzBPT", newdata)
+        newdata = re.sub("\"secret\": \"*.*\"*", "\"secret\": \"GJ7EzBPT\",", newdata)
+        newdata = re.sub("<secret>.*</secret>", "<secret><![CDATA[GJ7EzBPT]]></secret>", newdata)
+        newdata = re.sub("\"sync_date\": \"*.*\"*", "\"sync_date\": \"2022-08-17T05:07:11+00:00\",", newdata)
         newdata = re.sub("<sync_date>.*</sync_date>", "<sync_date><![CDATA[2022-08-17T05:07:11+00:00]]></sync_date>", newdata)
         newdata = re.sub(ampache_api, "eeb9f1b6056246a7d563f479f518bb34", newdata)
         newdata = re.sub(ampache_session, "cfj3f237d563f479f5223k23189dbb34", newdata)
@@ -1813,10 +1816,12 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         sys.exit('ERROR: Failed to ping ' + ampache_url)
 
     # Registration should be disabled
-    ampacheConnection.register('username', 'fullname', 'password', 'test@email.com')
+    ampacheConnection.register('user', 'no', 'passwonord', 'no')
     if os.path.isfile(docpath + "register." + api_format):
         shutil.move(docpath + "register." + api_format,
                     docpath + "register (error)." + api_format)
+
+    ampacheConnection.register('username' + api_format, 'fullname', 'password', 'test' + api_format + '@email.com')
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/system_update.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/system_update.xml)
