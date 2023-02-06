@@ -1060,7 +1060,6 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # BINARY METHOD
     #ampacheConnection.get_art(93, 'song', (os.path.join(os.getcwd(), 'get_art.jpg')))
 
-
     # send a bad ping
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/ping.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/ping.xml)
@@ -1156,6 +1155,10 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                 myuser = child.attrib['id']
     else:
         user_id = myuser['id']
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/list.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/list.xml)
+    ampacheConnection.list('song', False, False, False, False, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/get_indexes%20\(song\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/get_indexes%20\(song\).xml)
@@ -1808,6 +1811,12 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     if not my_ping:
         print()
         sys.exit('ERROR: Failed to ping ' + ampache_url)
+
+    # Registration should be disabled
+    ampacheConnection.register('username', 'fullname', 'password', 'test@email.com')
+    if os.path.isfile(docpath + "register." + api_format):
+        shutil.move(docpath + "register." + api_format,
+                    docpath + "register (error)." + api_format)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/system_update.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/system_update.xml)
