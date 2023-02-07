@@ -103,6 +103,8 @@ def self_check(api_format, ampache_url, ampache_api, ampache_session, docpath):
         newdata = re.sub("http:\\\/\\\/music.com.au", "https:\\\/\\\/music.com.au", newdata)
         newdata = re.sub("\"session_expire\": \"*.*\"*", "\"session_expire\": \"2022-08-17T06:21:00+00:00\",", newdata)
         newdata = re.sub("<session_expire>.*</session_expire>", "<session_expire><![CDATA[2022-08-17T04:34:55+00:00]]></session_expire>", newdata)
+        newdata = re.sub("\"addition_time\": [0-9]*", "\"addition_time\": 1675665915", newdata)
+        newdata = re.sub("<addition_time>.*</addition_time>", "<addition_time>1675665915</addition_time>", newdata)
         newdata = re.sub("\"delete_time\": [0-9]*", "\"delete_time\": 1670202698", newdata)
         newdata = re.sub("<delete_time>.*</delete_time>", "<delete_time>1670202698</delete_time>", newdata)
         newdata = re.sub("\"create_date\": [0-9]*", "\"create_date\": 1670202701", newdata)
@@ -1827,13 +1829,37 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/system_update.xml)
     ampacheConnection.system_update()
 
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/live_streams.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/live_streams.xml)
-    ampacheConnection.live_streams(False, False, offset, limit)
-
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/live_stream.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/live_stream.xml)
     ampacheConnection.live_stream(3)
+
+    stream_name = 'HBR1.com - Tronic Lounge'
+    stream_website = 'http://www.hbr1.com/'
+    stream_url = 'http://ubuntu.hbr1.com:19800/tronic.ogg'
+    stream_codec = 'ogg'
+    catalog_id = 1
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/live_stream_create.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/live_stream_create.xml)
+    ampacheConnection.live_stream_create(stream_name, stream_url, stream_codec, catalog_id, stream_website)
+
+    single_live_stream = ampacheConnection.live_streams(stream_name)
+    if api_format == 'xml':
+        live_stream_new = single_live_stream[1].attrib['id']
+    else:
+        live_stream_new = single_live_stream["live_stream"][0]['id']
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/live_stream_edit.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/live_stream_edit.xml)
+    ampacheConnection.live_stream_edit(live_stream_new, False, False, False, False, "http://ampache.org")
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/live_stream_delete.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/live_stream_delete.xml)
+    ampacheConnection.live_stream_delete(live_stream_new)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/live_streams.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/live_streams.xml)
+    ampacheConnection.live_streams(False, False, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/labels.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/labels.xml)
