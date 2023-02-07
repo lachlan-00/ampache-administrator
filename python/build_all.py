@@ -1161,10 +1161,6 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     else:
         user_id = myuser['id']
 
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/list.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/list.xml)
-    ampacheConnection.list('song', False, False, False, False, offset, limit)
-
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/get_indexes%20\(song\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/get_indexes%20\(song\).xml)
     songs = ampacheConnection.get_indexes('song', False, False, False, False, False, offset, limit)
@@ -1915,6 +1911,10 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                 myuser = child.attrib['id']
     else:
         user_id = myuser['id']
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/list.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/list.xml)
+    ampacheConnection.list('song', False, False, False, False, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/get_indexes%20\(song\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/get_indexes%20\(song\).xml)
