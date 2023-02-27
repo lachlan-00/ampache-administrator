@@ -1883,9 +1883,9 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.user_create(tempusername, 'supoersecretpassword', 'email@gmail.com', False, False)
     ampacheConnection.user(tempusername)
 
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/user_update.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/user_update.xml)
-    ampacheConnection.user_update(tempusername, False, False, False, False, False, False, True, False)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/user_edit.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/user_edit.xml)
+    ampacheConnection.user_edit(tempusername, False, False, False, False, False, False, True, False)
     ampacheConnection.user(tempusername)
     if os.path.isfile(docpath + "user." + api_format):
         shutil.move(docpath + "user." + api_format,

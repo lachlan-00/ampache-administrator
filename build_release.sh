@@ -62,6 +62,21 @@ if [ ! -f $AMPACHEDIR/php81_squashed/index.php ]; then
   git clone -b squashed https://github.com/ampache/ampache.git php81_squashed
 fi
 
+if [ ! -d $AMPACHEDIR/php82 ]; then
+  git clone -b patch5 https://github.com/ampache/ampache.git php82
+fi
+if [ ! -f $AMPACHEDIR/php82/index.php ]; then
+  rm -rf $AMPACHEDIR/php82
+  git clone -b patch5 https://github.com/ampache/ampache.git php82
+fi
+if [ ! -d $AMPACHEDIR/php82_squashed ]; then
+  git clone -b squashed https://github.com/ampache/ampache.git php82_squashed
+fi
+if [ ! -f $AMPACHEDIR/php82_squashed/index.php ]; then
+  rm -rf $AMPACHEDIR/php82_squashed
+  git clone -b squashed https://github.com/ampache/ampache.git php82_squashed
+fi
+
 # force reset everything
 cd $AMPACHEDIR/php74 && git fetch origin patch5 && git checkout patch5 && git reset --hard origin/patch5 && git pull
 cd $AMPACHEDIR/php74_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
@@ -205,8 +220,8 @@ cd $AMPACHEDIR/php81 && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exc
 cd $AMPACHEDIR/php81_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../releases/ampache-${RELEASEVERSION}_all_squashed_php8.1.zip ./
 
 ## php 8.2
-cd $AMPACHEDIR/php82 && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../releases/ampache-${RELEASEVERSION}_all_php8.1.zip ./
-cd $AMPACHEDIR/php82_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../releases/ampache-${RELEASEVERSION}_all_squashed_php8.1.zip ./
+cd $AMPACHEDIR/php82 && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../releases/ampache-${RELEASEVERSION}_all_php8.2.zip ./
+cd $AMPACHEDIR/php82_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip ./
 
 # go back
 cd $AMPACHEDIR
