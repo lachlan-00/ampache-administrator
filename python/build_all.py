@@ -2518,6 +2518,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 if APIVERSION == 6:
     api_version = api6_version
     build_docs(url, api, user, 'xml')
+    build_docs(url, api, user, 'json')
 elif APIVERSION == 5:
     api_version = api5_version
     build_docs(url, api, user, 'json')
@@ -2531,6 +2532,7 @@ elif APIVERSION == 3:
     build_docs(url, api, user, 'xml')
 else:
     api_version = api6_version
+    build_docs(url, api, user, 'json')
     build_docs(url, api, user, 'xml')
     api_version = api5_version
     build_docs(url, api, user, 'json')
