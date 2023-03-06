@@ -1873,6 +1873,35 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/url_to_song.xml)
     ampacheConnection.url_to_song(song_url)
 
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/browse.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/browse.xml)
+    ampacheConnection.browse(1, 'catalog')
+    if os.path.isfile(docpath + "browse." + api_format):
+        shutil.move(docpath + "browse." + api_format,
+                    docpath + "browse (catalog)." + api_format)
+
+    ampacheConnection.browse(2, 'podcast', 3)
+    if os.path.isfile(docpath + "browse." + api_format):
+        shutil.move(docpath + "browse." + api_format,
+                    docpath + "browse (podcast)." + api_format)
+
+    ampacheConnection.browse(19, 'artist', 1)
+    if os.path.isfile(docpath + "browse." + api_format):
+        shutil.move(docpath + "browse." + api_format,
+                    docpath + "browse (artist)." + api_format)
+
+    ampacheConnection.browse(12, 'album', 1)
+    if os.path.isfile(docpath + "browse." + api_format):
+        shutil.move(docpath + "browse." + api_format,
+                    docpath + "browse (album)." + api_format)
+
+    ampacheConnection.browse(2, 'catalog')
+    if os.path.isfile(docpath + "browse." + api_format):
+        shutil.move(docpath + "browse." + api_format,
+                    docpath + "browse (video)." + api_format)
+    ampacheConnection.browse()
+
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/users.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/users.xml)
     ampacheConnection.users()
@@ -2488,7 +2517,6 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
 if APIVERSION == 6:
     api_version = api6_version
-    build_docs(url, api, user, 'json')
     build_docs(url, api, user, 'xml')
 elif APIVERSION == 5:
     api_version = api5_version
@@ -2503,7 +2531,6 @@ elif APIVERSION == 3:
     build_docs(url, api, user, 'xml')
 else:
     api_version = api6_version
-    build_docs(url, api, user, 'json')
     build_docs(url, api, user, 'xml')
     api_version = api5_version
     build_docs(url, api, user, 'json')

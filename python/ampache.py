@@ -26,6 +26,7 @@ import json
 import os
 import requests
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -372,9 +373,9 @@ class API(object):
         """
         try:
             result = urllib.request.urlopen(full_url)
-        except urllib.error.URLError:
-            return False
         except urllib.error.HTTPError:
+            return False
+        except urllib.error.URLError:
             return False
         except ValueError:
             return False
@@ -624,6 +625,50 @@ class API(object):
                 'limit': str(limit)}
         if not filter_str:
             data.pop('filter')
+        if not add:
+            data.pop('add')
+        if not update:
+            data.pop('update')
+        data = urllib.parse.urlencode(data)
+        full_url = ampache_url + '?' + data
+        ampache_response = self.fetch_url(full_url, self.AMPACHE_API, 'list')
+        if not ampache_response:
+            return False
+        return self.return_data(ampache_response)
+
+    def browse(self, filter_str: str = False, object_type: str = False, catalog: int = False, add: int = False,
+               update: int = False, offset=0, limit=0):
+        """ browse
+            MINIMUM_API_VERSION=6.0.0
+
+            Return children of a parent object in a folder traversal/browse style
+            If you don't send any parameters you'll get a catalog list (the 'root' path)
+
+            INPUTS
+            * filter_str  = (string) object_id //optional
+            * object_type = (string) 'root', 'catalog', 'artist', 'album', 'podcast' // optional
+            * catalog = (integer) catalog ID you are browsing
+            * add     = Api::set_filter(date) //optional
+            * update  = Api::set_filter(date) //optional
+            * offset  = (integer) //optional
+            * limit   = (integer) //optional
+        """
+        ampache_url = self.AMPACHE_URL + '/server/' + self.AMPACHE_API + '.server.php'
+        data = {'action': 'browse',
+                'auth': self.AMPACHE_SESSION,
+                'filter': filter_str,
+                'type': object_type,
+                'catalog': catalog,
+                'add': add,
+                'update': update,
+                'offset': str(offset),
+                'limit': str(limit)}
+        if not filter_str:
+            data.pop('filter')
+        if not object_type:
+            data.pop('type')
+        if not catalog:
+            data.pop('catalog')
         if not add:
             data.pop('add')
         if not update:
@@ -1542,6 +1587,73 @@ class API(object):
         data = urllib.parse.urlencode(data)
         full_url = ampache_url + '?' + data
         ampache_response = self.fetch_url(full_url, self.AMPACHE_API, 'catalog')
+        if not ampache_response:
+            return False
+        return self.return_data(ampache_response)
+
+    def catalog_add(self, cat_name, cat_path, cat_type=False, media_type=False, file_pattern=False,
+                    folder_pattern=False, username=False, password=False):
+        """ catalog_add
+            MINIMUM_API_VERSION=6.0.0
+
+            Create a new catalog
+
+            INPUTS
+            * name           = (string) catalog_name
+            * path           = (string) URL or folder path for your catalog
+            * type           = (string) catalog_type default: local ('local', 'beets', 'remote', 'subsonic', 'seafile', 'beetsremote') //optional
+            * media_type     = (string) Default: 'music' ('music', 'podcast', 'clip', 'tvshow', 'movie', 'personal_video') //optional
+            * file_pattern   = (string) Pattern used identify tags from the file name. Default '%T - %t' //optional
+            * folder_pattern = (string) Pattern used identify tags from the folder name. Default '%a/%A' //optional
+            * username       = (string) login to remote catalog ('remote', 'subsonic', 'seafile') //optional
+            * password       = (string) password to remote catalog ('remote', 'subsonic', 'seafile', 'beetsremote') //optional
+        """
+        ampache_url = self.AMPACHE_URL + '/server/' + self.AMPACHE_API + '.server.php'
+        data = {'action': 'catalog_add',
+                'auth': self.AMPACHE_SESSION,
+                'name': cat_name,
+                'path': cat_path,
+                'type': cat_type,
+                'media_type': media_type,
+                'file_pattern': file_pattern,
+                'folder_pattern': folder_pattern,
+                'username': username,
+                'password': password}
+        if not cat_type:
+            data.pop('type')
+        if not media_type:
+            data.pop('media_type')
+        if not file_pattern:
+            data.pop('file_pattern')
+        if not folder_pattern:
+            data.pop('folder_pattern')
+        if not username:
+            data.pop('username')
+        if not password:
+            data.pop('password')
+        data = urllib.parse.urlencode(data)
+        full_url = ampache_url + '?' + data
+        ampache_response = self.fetch_url(full_url, self.AMPACHE_API, 'catalog_action')
+        if not ampache_response:
+            return False
+        return self.return_data(ampache_response)
+
+    def catalog_delete(self, filter_id: int):
+        """ catalog_delete
+            MINIMUM_API_VERSION=6.0.0
+
+            Delete an existing catalog. (if it exists)
+
+            INPUTS
+            * filter = (string) catalog_id to delete
+        """
+        ampache_url = self.AMPACHE_URL + '/server/' + self.AMPACHE_API + '.server.php'
+        data = {'action': 'catalog_delete',
+                'auth': self.AMPACHE_SESSION,
+                'filter': filter_id}
+        data = urllib.parse.urlencode(data)
+        full_url = ampache_url + '?' + data
+        ampache_response = self.fetch_url(full_url, self.AMPACHE_API, 'bookmark_delete')
         if not ampache_response:
             return False
         return self.return_data(ampache_response)
@@ -2521,10 +2633,10 @@ class API(object):
             return False
         return self.return_data(ampache_response)
 
-    def user_update(self, username, password=False, fullname=False, email=False,
-                    website=False, state=False, city=False, disable=False, maxbitrate=False):
+    def user_edit(self, username, password=False, fullname=False, email=False,
+                  website=False, state=False, city=False, disable=False, maxbitrate=False):
         """ user_update
-            MINIMUM_API_VERSION=400001
+            MINIMUM_API_VERSION=600000
 
             Update an existing user. @param array $input
 
@@ -2544,7 +2656,7 @@ class API(object):
             disable = 1
         else:
             disable = 0
-        data = {'action': 'user_update',
+        data = {'action': 'user_edit',
                 'auth': self.AMPACHE_SESSION,
                 'username': username,
                 'password': password,
@@ -3382,6 +3494,61 @@ class API(object):
         data = urllib.parse.urlencode(data)
         full_url = ampache_url + '?' + data
         ampache_response = self.fetch_url(full_url, self.AMPACHE_API, 'tag_songs')
+        if not ampache_response:
+            return False
+        return self.return_data(ampache_response)
+
+    def user_update(self, username, password=False, fullname=False, email=False,
+                    website=False, state=False, city=False, disable=False, maxbitrate=False):
+        """ user_update
+            MINIMUM_API_VERSION=400001
+
+            Update an existing user. @param array $input
+
+            INPUTS
+            * username    = (string) $username
+            * password    = (string) hash('sha256', $password)) //optional
+            * fullname    = (string) //optional
+            * email       = (string) 'user@gmail.com' //optional
+            * website     = (string) //optional
+            * state       = (string) //optional
+            * city        = (string) //optional
+            * disable     = (boolean|integer) (True,False | 0|1) //optional
+            * maxbitrate  = (string) //optional
+        """
+        ampache_url = self.AMPACHE_URL + '/server/' + self.AMPACHE_API + '.server.php'
+        if bool(disable):
+            disable = 1
+        else:
+            disable = 0
+        data = {'action': 'user_update',
+                'auth': self.AMPACHE_SESSION,
+                'username': username,
+                'password': password,
+                'fullname': fullname,
+                'email': email,
+                'website': website,
+                'state': state,
+                'city': city,
+                'disable': disable,
+                'maxbitrate': maxbitrate}
+        if not password:
+            data.pop('password')
+        if not fullname:
+            data.pop('fullname')
+        if not email:
+            data.pop('email')
+        if not website:
+            data.pop('website')
+        if not state:
+            data.pop('state')
+        if not city:
+            data.pop('city')
+        if not maxbitrate:
+            data.pop('maxbitrate')
+        data = urllib.parse.urlencode(data)
+        full_url = ampache_url + '?' + data
+        ampache_response = self.fetch_url(full_url, self.AMPACHE_API, 'user_update')
         if not ampache_response:
             return False
         return self.return_data(ampache_response)
