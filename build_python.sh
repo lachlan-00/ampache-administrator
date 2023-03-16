@@ -56,11 +56,18 @@ else
   echo "START 3"
   python3 ./build_all.py 3
   echo "DONE 3"
+
+  echo "RESET THE DATABASE"
+  docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /var/lib/mysql/ampache-test.sql"
+  docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
+  echo "START Subsonic"
+  python3 ./build_all.py 16
+  echo "DONE Subsonic"
 fi
 
-#echo "RESET THE DATABASE"
-#docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /var/lib/mysql/ampache-test.sql"
-#docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
+echo "RESET THE DATABASE"
+docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /var/lib/mysql/ampache-test.sql"
+docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
 
 # go home
 cd $AMPACHEDIR

@@ -19,6 +19,7 @@ api3_version = '391000'
 api4_version = '443000'
 api5_version = '5.5.7'
 api6_version = '6.0.0'
+subsonic_api = '1.16.1'
 docpath = "docs/"
 song_url = 'https://music.com.au/play/index.php?ssid=eeb9f1b6056246a7d563f479f518bb34&type=song&oid=60&uid=4&player=api&name=Synthetic%20-%20BrownSmoke.wma'
 APIVERSION = 0
@@ -84,6 +85,10 @@ def build_docs(ampache_url, ampache_api, ampache_user, api_format):
         ampacheConnection.set_debug_path("python3-ampache6/docs/" + api_format + "-responses/")
         docpath = "python3-ampache6/docs/" + api_format + "-responses/"
         ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, api_format, docpath)
+    if (api_version == subsonic_api):
+        ampacheConnection.set_debug_path("python3-ampache6/docs/ampache-subsonic/" + api_format + "-responses/")
+        docpath = "subsonic/docs/" + api_format + "-responses/"
+        subsonic_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, api_format, docpath)
 
 
 def self_check(api_format, ampache_url, ampache_api, ampache_session, docpath):
@@ -94,7 +99,7 @@ def self_check(api_format, ampache_url, ampache_api, ampache_session, docpath):
         f.close()
 
         url_text = ampache_url.replace("https://", "")
-        url_text = ampache_url.replace("http://", "")
+        url_text = url_text.replace("http://", "")
         newdata = re.sub(url_text, "music.com.au", filedata)
         newdata = re.sub("CDATA\[\/media\/", "CDATA[/mnt/files-music/ampache-test/", newdata)
         newdata = re.sub("\\\/media\\\/", "\\\/mnt\\\/files-music\\\/ampache-test\\\/", newdata)
@@ -2517,6 +2522,605 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     self_check(api_format, ampache_url, ampache_api, ampache_session, docpath)
 
 
+def subsonic_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, api_format, docpath):
+    # Base subsonic url data
+    base_url = ampache_url + "/rest/"
+    base_parameters = ".view?u=" + ampache_user + "&p=" + ampache_api + "&v=1.16.1&c=Ampache&f=" + api_format
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "ping"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getLicense"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+    fetch_url = base_url + action + base_parameters
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getMusicFolders"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getIndexes"
+    # musicFolderId (optional)
+    # ifModifiedSince (optional)
+    params = ''
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getMusicDirectory"
+    # id
+    params = '&id=1'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getGenres"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+
+    action = "getArtists"
+    # musicFolderId (optional)
+    params = ''
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getArtist"
+    # id
+    params = '&id=100000002'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getAlbum"
+    # id
+    params = '&id=200000021'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getSong"
+    # id
+    params = '&id=300000060'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getVideos"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getVideoInfo"
+    # id
+    params = '&id=500000001'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getArtistInfo"
+    # id
+    # count
+    # includeNotPresent
+    params = '&id=100000002'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getArtistInfo2"
+    # id
+    # count
+    # includeNotPresent
+    params = '&id=100000002'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getAlbumInfo"
+    # id
+    params = '&id=200000021'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getAlbumInfo2"
+    # id
+    params = '&id=200000021'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getSimilarSongs"
+    # id
+    # count
+    params = '&id=300000060'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getSimilarSongs2"
+    # id
+    # count
+    params = '&id=300000060'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getTopSongs"
+    # artist
+    # count
+    params = '&artist=100000002'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getAlbumList"
+    # type
+    # size
+    # offset
+    # fromYear
+    # toYear
+    # genre
+    # musicFolderId
+    params = '&type=newest'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getAlbumList2"
+    # type
+    # size
+    # offset
+    # fromYear
+    # toYear
+    # genre
+    # musicFolderId
+    params = '&type=newest'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getRandomSongs"
+    # size
+    # genre
+    # fromYear
+    # toYear
+    # musicFolderId
+    params = ''
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getSongsByGenre"
+    # genre
+    # count
+    # offset
+    # musicFolderId
+    params = '&genre=Electronic'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getNowPlaying"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getStarred"
+    # musicFolderId
+    params = ''
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getStarred2"
+    # musicFolderId
+    params = ''
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "search"
+    # artist
+    # album
+    # title
+    # any
+    # count
+    # offset
+    # newerThan
+    params = '&any=m'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "search2"
+    # query
+    # artistCount
+    # artistOffset
+    # albumCount
+    # albumOffset
+    # songCount
+    # songOffset
+    # musicFolderId
+    params = '&query=Metal&artistCount=20&albumCount=20&songCount=50'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "search3"
+    # query
+    # artistCount
+    # artistOffset
+    # albumCount
+    # albumOffset
+    # songCount
+    # songOffset
+    # musicFolderId
+    params = '&query=Metal&artistCount=20&albumCount=20&songCount=50'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getPlaylists"
+    # username
+    params = ''
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getPlaylist"
+    # id
+    params = '&id=1770'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "createPlaylist"
+    # playlistId
+    # name
+    # songId
+    params = '&name=testcreate&songId=300000060'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "updatePlaylist"
+    # playlistId
+    # name
+    # comment
+    # public
+    # songIdToAdd
+    params = '&playlistId=4'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "deletePlaylist"
+    # id
+    params = '&id=291770'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns binary data on success, or an XML document on error (in which case the HTTP content type will start with "text/xml").
+    # action = "stream"
+    # #id
+    # #maxBitRate
+    # #format
+    # #timeOffset
+    # #size
+    # #estimateContentLength
+    # #converted
+    # params = ''
+    # fetch_url = base_url + action + base_parameters + params
+    # ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns binary data on success, or an XML document on error (in which case the HTTP content type will start with "text/xml").
+    # action = "download"
+    # #id
+    # params = ''
+    # fetch_url = base_url + action + base_parameters + params
+    # ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "hls"
+    # id
+    # bitRate
+    # audioTrack
+    params = '&id=82'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns the raw video captions.
+    # action = "getCaptions"
+    # #id
+    # #format
+    # params = '&id=460'
+    # fetch_url = base_url + action + base_parameters + params
+    # ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns the cover art image in binary form.
+    # action = "getCoverArt"
+    # #id
+    # #size
+    # params = ''
+    # fetch_url = base_url + action + base_parameters + params
+    # ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getLyrics"
+    # artist
+    # title
+    params = '&artist=METISSE&title=What%20to%20do'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns the avatar image in binary form.
+    # action = "getAvatar"
+    # #username
+    # params = '&username=guest'
+    # fetch_url = base_url + action + base_parameters + params
+    # ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "star"
+    # id
+    # albumId
+    # artistId
+    params = '&id=300000060'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "unstar"
+    # id
+    # albumId
+    # artistId
+    params = '&id=300000060'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "setRating"
+    # id
+    # rating
+    params = '&id=300000060&rating=5'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "scrobble"
+    # id
+    # time
+    # submission
+    params = '&id=300000060'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getShares"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "createShare"
+    # id
+    # description
+    # expires
+    params = '&id=300000078'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "updateShare"
+    # id
+    # description
+    # expires
+    params = '&id=300000075'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "deleteShare"
+    # id
+    params = '&id=29770'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getPodcasts"
+    # includeEpisodes
+    # id
+    params = ''
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getNewestPodcasts"
+    # count
+    params = ''
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "refreshPodcasts"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "createPodcastChannel"
+    # url
+    params = '&url=https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "deletePodcastChannel"
+    # id
+    params = '&id=29864'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "deletePodcastEpisode"
+    # id
+    params = '&id=29864'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "downloadPodcastEpisode"
+    # id
+    params = '&id=29864'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "jukeboxControl"
+    # action
+    # index
+    # offset
+    # id
+    # gain
+    params = '&action=status'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+    params = '&action=get'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getInternetRadioStations"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "createInternetRadioStation"
+    # streamUrl
+    # name
+    # homepageUrl
+    # stream_name = 'HBR1.com - Tronic Lounge'
+    #     stream_website = 'http://www.hbr1.com/'
+    #     stream_url = 'http://ubuntu.hbr1.com:19800/tronic.ogg'
+    params = '&streamUrl=https://iheart.4zzz.org.au/4zzz&name=4ZZZ%20Community%20Radio&homepageUrl=https://4zzzfm.org.au'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "updateInternetRadioStation"
+    # id
+    # streamUrl
+    # name
+    # homepageUrl
+    params = '&id=3&streamUrl=https://iheart.4zzz.org.au/4zzz&name=4ZZZ%20Community%20Radio&homepageUrl=https://4zzzfm.org.au'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "deleteInternetRadioStation"
+    # id
+    params = '&id=29864'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getChatMessages"
+    # since
+    params = ''
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "addChatMessage"
+    # message
+    params = '&message=Api%20Script%20Testing'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getUser"
+    # username
+    params = '&username=guest'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getUsers"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "createUser"
+    # username
+    # password
+    # email
+    # ldapAuthenticated
+    # adminRole
+    # settingsRole
+    # streamRole
+    # jukeboxRole
+    # downloadRole
+    # uploadRole
+    # playlistRole
+    # coverArtRole
+    # commentRole
+    # podcastRole
+    # shareRole
+    # videoConversionRole
+    # musicFolderId
+    params = '&username=created&password=34563737hdfrthdrt&email=created@gmail.com'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "updateUser"
+    # username
+    # password
+    # email
+    # ldapAuthenticated
+    # adminRole
+    # settingsRole
+    # streamRole
+    # jukeboxRole
+    # downloadRole
+    # uploadRole
+    # coverArtRole
+    # commentRole
+    # podcastRole
+    # shareRole
+    # videoConversionRole
+    # musicFolderId
+    # maxBitRate
+    params = '&username=created&password=34563737hdfrthdrt&email=created@gmail.com'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "deleteUser"
+    # username
+    params = '&username=created'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "changePassword"
+    # username
+    # password
+    params = '&username=demo&password=demodemo'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "createBookmark"
+    # id
+    # position
+    # comment
+    params = '&id=300000060&position=2000'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getBookmarks"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "deleteBookmark"
+    # id
+    params = '&id=300000060'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getPlayQueue"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    # Returns an empty <subsonic-response> element on success.
+    action = "savePlayQueue"
+    # id
+    # current
+    # position
+    params = '&id=300000060&current=300000060'
+    fetch_url = base_url + action + base_parameters + params
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "getScanStatus"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
+    action = "startScan"
+    fetch_url = base_url + action + base_parameters
+    ampacheConnection.fetch_url(fetch_url, api_format, action)
+
 if APIVERSION == 6:
     api_version = api6_version
     build_docs(url, api, user, 'json')
@@ -2532,6 +3136,10 @@ elif APIVERSION == 4:
 elif APIVERSION == 3:
     api_version = api3_version
     build_docs(url, api, user, 'xml')
+elif APIVERSION == 16:
+    api_version = subsonic_api
+    build_docs(url, api, user, 'json')
+    build_docs(url, api, user, 'xml')
 else:
     api_version = api6_version
     build_docs(url, api, user, 'json')
@@ -2543,5 +3151,8 @@ else:
     build_docs(url, api, user, 'json')
     build_docs(url, api, user, 'xml')
     api_version = api3_version
+    build_docs(url, api, user, 'xml')
+    api_version = subsonic_api
+    build_docs(url, api, user, 'json')
     build_docs(url, api, user, 'xml')
 
