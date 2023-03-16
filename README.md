@@ -141,3 +141,11 @@ Personal repos
 
 * [ampache-test](https://github.com/lachlan-00/ampache-test)
 
+## TODO
+
+Confirm correct data for Subsonic calls
+
+* createShare
+* getShares
+* getTopSongs
+* hls (is that needed as it's returning a playlist)
