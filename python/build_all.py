@@ -1882,6 +1882,11 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/json-responses/browse.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/master/docs/xml-responses/browse.xml)
 
+    ampacheConnection.browse()
+    if os.path.isfile(docpath + "browse." + api_format):
+        shutil.move(docpath + "browse." + api_format,
+                    docpath + "browse (root)." + api_format)
+
     ampacheConnection.browse(2, 'podcast', 3)
     if os.path.isfile(docpath + "browse." + api_format):
         shutil.move(docpath + "browse." + api_format,
@@ -1897,15 +1902,20 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "browse." + api_format,
                     docpath + "browse (album)." + api_format)
 
-    ampacheConnection.browse(2, 'catalog')
-    if os.path.isfile(docpath + "browse." + api_format):
-        shutil.move(docpath + "browse." + api_format,
-                    docpath + "browse (video)." + api_format)
-
     ampacheConnection.browse(1, 'catalog')
     if os.path.isfile(docpath + "browse." + api_format):
         shutil.move(docpath + "browse." + api_format,
-                    docpath + "browse (catalog)." + api_format)
+                    docpath + "browse (music catalog)." + api_format)
+
+    ampacheConnection.browse(2, 'catalog')
+    if os.path.isfile(docpath + "browse." + api_format):
+        shutil.move(docpath + "browse." + api_format,
+                    docpath + "browse (video catalog)." + api_format)
+
+    ampacheConnection.browse(3, 'catalog')
+    if os.path.isfile(docpath + "browse." + api_format):
+        shutil.move(docpath + "browse." + api_format,
+                    docpath + "browse (podcast catalog)." + api_format)
 
     ampacheConnection.browse()
 
