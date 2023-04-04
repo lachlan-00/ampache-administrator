@@ -956,7 +956,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/share_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/share_create.xml)
-    share_create = ampacheConnection.share_create(single_song, 'song', False, False)
+    share_create = ampacheConnection.share_create(single_song, 'song', False, 7)
     if api_format == 'xml':
         share_new = share_create[1].attrib['id']
     else:
@@ -1662,7 +1662,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/share_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/share_create.xml)
-    share_create = ampacheConnection.share_create(single_song, 'song', False, False)
+    share_create = ampacheConnection.share_create(single_song, 'song', False, 7)
     if api_format == 'xml':
         share_new = share_create[1].attrib['id']
     else:
@@ -2458,7 +2458,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/share_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/share_create.xml)
-    share_create = ampacheConnection.share_create(single_song, 'song', False, False)
+    share_create = ampacheConnection.share_create(single_song, 'song', False, 7)
     if api_format == 'xml':
         share_new = share_create[1].attrib['id']
     else:
