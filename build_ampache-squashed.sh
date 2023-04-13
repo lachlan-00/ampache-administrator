@@ -25,18 +25,27 @@ if [ ! -f $AMPACHEDIR/ampache-squashed/index.php ]; then
   git clone -b squashed https://github.com/ampache/ampache.git ampache-squashed
 fi
 
-rm -rf ./ampache-squashed/public
+# force reset everything
+cd $AMPACHEDIR/ampache-master && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
+
+rm -rf $AMPACHEDIR/ampache-squashed/public
 
 # existing base folders
-cp -rfv ./ampache-master/bin/* ./ampache-squashed/bin/
-cp -rfv ./ampache-master/config/* ./ampache-squashed/config/
-cp -rfv ./ampache-master/docs/* ./ampache-squashed/docs/
-cp -rfv ./ampache-master/locale/* ./ampache-squashed/locale/
-cp -rfv ./ampache-master/resources/* ./ampache-squashed/resources/
-cp -rfv ./ampache-master/src/* ./ampache-squashed/src/
-cp -rfv ./ampache-master/tests/* ./ampache-squashed/tests/
+cp -rfv $AMPACHEDIR/ampache-master/bin/* $AMPACHEDIR/ampache-squashed/bin/
+cp -rfv $AMPACHEDIR/ampache-master/config/* $AMPACHEDIR/ampache-squashed/config/
+cp -rfv $AMPACHEDIR/ampache-master/docs/* $AMPACHEDIR/ampache-squashed/docs/
+cp -rfv $AMPACHEDIR/ampache-master/locale/* $AMPACHEDIR/ampache-squashed/locale/
+cp -rfv $AMPACHEDIR/ampache-master/resources/* $AMPACHEDIR/ampache-squashed/resources/
+cp -rfv $AMPACHEDIR/ampache-master/src/* $AMPACHEDIR/ampache-squashed/src/
+cp -rfv $AMPACHEDIR/ampache-master/tests/* $AMPACHEDIR/ampache-squashed/tests/
 #copy public back over the top
-cp -rfv ./ampache-master/public/* ./ampache-squashed/
+cp -rfv $AMPACHEDIR/ampache-master/public/* $AMPACHEDIR/ampache-squashed/
+
+rm -rf $AMPACHEDIR/ampache-squashed/channel
+rm -f $AMPACHEDIR/ampache-squashed/channel.php
+rm -f $AMPACHEDIR/ampache-squashed/docs/examples/channel*
+
+cd $AMPACHEDIR
 
 # regex the old strings from the public branch to the squashed branch
 python3 ./squash-ampache.py
