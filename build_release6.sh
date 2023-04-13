@@ -227,10 +227,6 @@ cd $AMPACHEDIR/php82_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.
 # go back
 cd $AMPACHEDIR
 
-# copy the file for default releases
-cp -vf $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php7.4.zip $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all.zip
-cp -vf $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php7.4.zip $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed.zip
-
 if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php7.4.zip ]; then
   echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php7.4.zip
 fi
@@ -260,9 +256,7 @@ cd $AMPACHEDIR/releases
 # echo the version checksum
 echo
 echo "php7.4"
-md5sum ./ampache-${RELEASEVERSION}_all.zip
 md5sum ./ampache-${RELEASEVERSION}_all_php7.4.zip
-md5sum ./ampache-${RELEASEVERSION}_all_squashed.zip
 md5sum ./ampache-${RELEASEVERSION}_all_squashed_php7.4.zip
 echo
 echo "php8.0"
