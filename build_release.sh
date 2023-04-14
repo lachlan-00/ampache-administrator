@@ -1,6 +1,7 @@
 #!/bin/sh
 
 RELEASEBRANCH="patch5"
+SQUASHBRANCH="squashed5"
 AMPACHEDIR=$PWD
 COMPOSERPATH="/usr/local/bin/composer"
 RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-master/src/Config/Init/InitializationHandlerConfig.php`
@@ -26,11 +27,11 @@ if [ ! -f $AMPACHEDIR/php74/index.php ]; then
   git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php74
 fi
 if [ ! -d $AMPACHEDIR/php74_squashed ]; then
-  git clone -b squashed https://github.com/ampache/ampache.git php74_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php74_squashed
 fi
 if [ ! -f $AMPACHEDIR/php74_squashed/index.php ]; then
   rm -rf $AMPACHEDIR/php74_squashed
-  git clone -b squashed https://github.com/ampache/ampache.git php74_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php74_squashed
 fi
 
 if [ ! -d $AMPACHEDIR/php80 ]; then
@@ -41,11 +42,11 @@ if [ ! -f $AMPACHEDIR/php80/index.php ]; then
   git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php80
 fi
 if [ ! -d $AMPACHEDIR/php80_squashed ]; then
-  git clone -b squashed https://github.com/ampache/ampache.git php80_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php80_squashed
 fi
 if [ ! -f $AMPACHEDIR/php80_squashed/index.php ]; then
   rm -rf $AMPACHEDIR/php80_squashed
-  git clone -b squashed https://github.com/ampache/ampache.git php80_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php80_squashed
 fi
 
 if [ ! -d $AMPACHEDIR/php81 ]; then
@@ -56,11 +57,11 @@ if [ ! -f $AMPACHEDIR/php81/index.php ]; then
   git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php81
 fi
 if [ ! -d $AMPACHEDIR/php81_squashed ]; then
-  git clone -b squashed https://github.com/ampache/ampache.git php81_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php81_squashed
 fi
 if [ ! -f $AMPACHEDIR/php81_squashed/index.php ]; then
   rm -rf $AMPACHEDIR/php81_squashed
-  git clone -b squashed https://github.com/ampache/ampache.git php81_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php81_squashed
 fi
 
 if [ ! -d $AMPACHEDIR/php82 ]; then
@@ -71,22 +72,22 @@ if [ ! -f $AMPACHEDIR/php82/index.php ]; then
   git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php82
 fi
 if [ ! -d $AMPACHEDIR/php82_squashed ]; then
-  git clone -b squashed https://github.com/ampache/ampache.git php82_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php82_squashed
 fi
 if [ ! -f $AMPACHEDIR/php82_squashed/index.php ]; then
   rm -rf $AMPACHEDIR/php82_squashed
-  git clone -b squashed https://github.com/ampache/ampache.git php82_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php82_squashed
 fi
 
 # force reset everything
 cd $AMPACHEDIR/php74 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php74_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
+cd $AMPACHEDIR/php74_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 cd $AMPACHEDIR/php80 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php80_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
+cd $AMPACHEDIR/php80_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 cd $AMPACHEDIR/php81 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php81_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
+cd $AMPACHEDIR/php81_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 cd $AMPACHEDIR/php82 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php82_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
+cd $AMPACHEDIR/php82_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 
 # php 7.4
 cd $AMPACHEDIR/php74

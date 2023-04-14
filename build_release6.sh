@@ -1,6 +1,7 @@
 #!/bin/sh
 
 RELEASEBRANCH="patch6"
+SQUASHBRANCH="squashed6"
 AMPACHEDIR=$PWD
 COMPOSERPATH="/usr/local/bin/composer"
 RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-master/src/Config/Init/InitializationHandlerConfig.php`
@@ -80,13 +81,13 @@ fi
 
 # force reset everything
 cd $AMPACHEDIR/php74 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php74_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
+cd $AMPACHEDIR/php74_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 cd $AMPACHEDIR/php80 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php80_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
+cd $AMPACHEDIR/php80_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 cd $AMPACHEDIR/php81 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php81_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
+cd $AMPACHEDIR/php81_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 cd $AMPACHEDIR/php82 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php82_squashed && git fetch origin squashed && git checkout squashed && git reset --hard origin/squashed && git pull
+cd $AMPACHEDIR/php82_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 
 # php 7.4
 cd $AMPACHEDIR/php74
