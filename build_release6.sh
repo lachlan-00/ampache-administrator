@@ -27,11 +27,11 @@ if [ ! -f $AMPACHEDIR/php74/index.php ]; then
   git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php74
 fi
 if [ ! -d $AMPACHEDIR/php74_squashed ]; then
-  git clone -b squashed https://github.com/ampache/ampache.git php74_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php74_squashed
 fi
 if [ ! -f $AMPACHEDIR/php74_squashed/index.php ]; then
   rm -rf $AMPACHEDIR/php74_squashed
-  git clone -b squashed https://github.com/ampache/ampache.git php74_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php74_squashed
 fi
 
 if [ ! -d $AMPACHEDIR/php80 ]; then
@@ -42,11 +42,11 @@ if [ ! -f $AMPACHEDIR/php80/index.php ]; then
   git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php80
 fi
 if [ ! -d $AMPACHEDIR/php80_squashed ]; then
-  git clone -b squashed https://github.com/ampache/ampache.git php80_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php80_squashed
 fi
 if [ ! -f $AMPACHEDIR/php80_squashed/index.php ]; then
   rm -rf $AMPACHEDIR/php80_squashed
-  git clone -b squashed https://github.com/ampache/ampache.git php80_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php80_squashed
 fi
 
 if [ ! -d $AMPACHEDIR/php81 ]; then
@@ -57,11 +57,11 @@ if [ ! -f $AMPACHEDIR/php81/index.php ]; then
   git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php81
 fi
 if [ ! -d $AMPACHEDIR/php81_squashed ]; then
-  git clone -b squashed https://github.com/ampache/ampache.git php81_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php81_squashed
 fi
 if [ ! -f $AMPACHEDIR/php81_squashed/index.php ]; then
   rm -rf $AMPACHEDIR/php81_squashed
-  git clone -b squashed https://github.com/ampache/ampache.git php81_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php81_squashed
 fi
 
 if [ ! -d $AMPACHEDIR/php82 ]; then
@@ -72,11 +72,11 @@ if [ ! -f $AMPACHEDIR/php82/index.php ]; then
   git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php82
 fi
 if [ ! -d $AMPACHEDIR/php82_squashed ]; then
-  git clone -b squashed https://github.com/ampache/ampache.git php82_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php82_squashed
 fi
 if [ ! -f $AMPACHEDIR/php82_squashed/index.php ]; then
   rm -rf $AMPACHEDIR/php82_squashed
-  git clone -b squashed https://github.com/ampache/ampache.git php82_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php82_squashed
 fi
 
 # force reset everything
