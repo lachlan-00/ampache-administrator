@@ -80,14 +80,14 @@ if [ ! -f $AMPACHEDIR/php82_squashed/index.php ]; then
 fi
 
 # force reset everything
-cd $AMPACHEDIR/php74 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php74_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
-cd $AMPACHEDIR/php80 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php80_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
-cd $AMPACHEDIR/php81 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php81_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
-cd $AMPACHEDIR/php82 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php82_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
+cd $AMPACHEDIR/php74 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
+cd $AMPACHEDIR/php74_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
+cd $AMPACHEDIR/php80 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
+cd $AMPACHEDIR/php80_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
+cd $AMPACHEDIR/php81 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
+cd $AMPACHEDIR/php81_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
+cd $AMPACHEDIR/php82 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
+cd $AMPACHEDIR/php82_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 
 # php 7.4
 cd $AMPACHEDIR/php74

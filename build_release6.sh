@@ -80,14 +80,14 @@ if [ ! -f $AMPACHEDIR/php82_squashed/index.php ]; then
 fi
 
 # force reset everything
-cd $AMPACHEDIR/php74 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php74_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
-cd $AMPACHEDIR/php80 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php80_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
-cd $AMPACHEDIR/php81 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php81_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
-cd $AMPACHEDIR/php82 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
-cd $AMPACHEDIR/php82_squashed && git fetch origin $SQUASHBRANCH && git checkout $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
+cd $AMPACHEDIR/php74 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
+cd $AMPACHEDIR/php74_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
+cd $AMPACHEDIR/php80 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
+cd $AMPACHEDIR/php80_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
+cd $AMPACHEDIR/php81 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
+cd $AMPACHEDIR/php81_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
+cd $AMPACHEDIR/php82 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
+cd $AMPACHEDIR/php82_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 
 # php 7.4
 cd $AMPACHEDIR/php74
@@ -102,7 +102,7 @@ cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/php74_squashed
-cp -f $AMPACHEDIR/extras/composer_old.json ./composer.json
+cp -f $AMPACHEDIR/extras/composer_old_squashed.json ./composer.json
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php7.4 $COMPOSERPATH install
 php7.4 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -125,7 +125,7 @@ cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/php80_squashed
-cp -f $AMPACHEDIR/extras/composer_old.json ./composer.json
+cp -f $AMPACHEDIR/extras/composer_old_squashed.json ./composer.json
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php8.0 $COMPOSERPATH install
 php8.0 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -148,7 +148,7 @@ cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/php81_squashed
-cp -f $AMPACHEDIR/extras/composer_old.json ./composer.json
+cp -f $AMPACHEDIR/extras/composer_old_squashed.json ./composer.json
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php8.1 $COMPOSERPATH install
 php8.1 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -256,6 +256,20 @@ fi
 if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip ]; then
   echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip
 fi
+
+# Copy back the default composer after updates
+cd $AMPACHEDIR/php74
+cp -f $AMPACHEDIR/extras/composer_php8.2.json ./composer.json
+cd $AMPACHEDIR/php74_squashed
+cp -f $AMPACHEDIR/extras/composer_php8.2_squashed.json ./composer.json
+cd $AMPACHEDIR/php80
+cp -f $AMPACHEDIR/extras/composer_php8.2.json ./composer.json
+cd $AMPACHEDIR/php80_squashed
+cp -f $AMPACHEDIR/extras/composer_php8.2_squashed.json ./composer.json
+cd $AMPACHEDIR/php81
+cp -f $AMPACHEDIR/extras/composer_php8.2.json ./composer.json
+cd $AMPACHEDIR/php81_squashed
+cp -f $AMPACHEDIR/extras/composer_php8.2_squashed.json ./composer.json
 
 cd $AMPACHEDIR/releases
 # echo the version checksum
