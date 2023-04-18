@@ -1117,11 +1117,11 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/label.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/label.xml)
-    ampacheConnection.label(1677)
+    ampacheConnection.label(2)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/label_artists.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/label_artists.xml)
-    ampacheConnection.label_artists(1677)
+    ampacheConnection.label_artists(2)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/url_to_song.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/url_to_song.xml)
@@ -1868,11 +1868,11 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/label.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/label.xml)
-    ampacheConnection.label(1677)
+    ampacheConnection.label(2)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/label_artists.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/label_artists.xml)
-    ampacheConnection.label_artists(1677)
+    ampacheConnection.label_artists(2)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/url_to_song.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/url_to_song.xml)
