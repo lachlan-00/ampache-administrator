@@ -41,10 +41,6 @@ cp -rfv $AMPACHEDIR/ampache-master/tests/* $AMPACHEDIR/ampache-squashed/tests/
 #copy public back over the top
 cp -rfv $AMPACHEDIR/ampache-master/public/* $AMPACHEDIR/ampache-squashed/
 
-rm -rf $AMPACHEDIR/ampache-squashed/channel
-rm -f $AMPACHEDIR/ampache-squashed/channel.php
-rm -f $AMPACHEDIR/ampache-squashed/docs/examples/channel*
-
 cd $AMPACHEDIR
 
 # regex the old strings from the public branch to the squashed branch

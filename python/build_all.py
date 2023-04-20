@@ -208,7 +208,7 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.albums(album_title, 1, False, False, 0, 10, False)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/stats%20\(album\).xml)
-    ampacheConnection.stats('album', 'random', ampache_user, None, 0, 2)
+    ampacheConnection.stats('album', 'newest', ampache_user, None, 0, 2)
     if os.path.isfile(docpath + "stats." + api_format):
         shutil.move(docpath + "stats." + api_format,
                     docpath + "stats (album)." + api_format)
@@ -482,7 +482,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/get_indexes%20\(song with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/get_indexes%20\(song with include\).xml)
-    ampacheConnection.get_indexes('song', False, False, False, False, True, offset, limit)
+    ampacheConnection.get_indexes('song', False, False, False, False, 1, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (song with include)." + api_format)
@@ -496,7 +496,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/get_indexes%20\(album with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/get_indexes%20\(album with include\).xml)
-    ampacheConnection.get_indexes('album', False, False, False, False, True, offset, limit)
+    ampacheConnection.get_indexes('album', False, False, False, False, 1, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (album with include)." + api_format)
@@ -510,7 +510,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/get_indexes%20\(artist with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/get_indexes%20\(artist with include\).xml)
-    ampacheConnection.get_indexes('artist', False, False, False, False, True, offset, limit)
+    ampacheConnection.get_indexes('artist', False, False, False, False, 1, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (artist with include)." + api_format)
@@ -545,7 +545,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/get_indexes%20\(podcast with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/get_indexes%20\(podcast with include\).xml)
-    ampacheConnection.get_indexes('podcast', False, False, False, False, True, offset, limit)
+    ampacheConnection.get_indexes('podcast', False, False, False, False, 1, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (podcast with include)." + api_format)
@@ -649,7 +649,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/stats%20\(album\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/stats%20\(album\).xml)
-    stats = ampacheConnection.stats('album', 'random', ampache_user, None, 0, 2)
+    stats = ampacheConnection.stats('album', 'newest', ampache_user, None, 0, 2)
     if os.path.isfile(docpath + "stats." + api_format):
         shutil.move(docpath + "stats." + api_format,
                     docpath + "stats (album)." + api_format)
@@ -1176,7 +1176,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/get_indexes%20\(song with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/get_indexes%20\(song with include\).xml)
-    ampacheConnection.get_indexes('song', False, False, False, False, True, offset, limit)
+    ampacheConnection.get_indexes('song', False, False, False, False, 1, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (song with include)." + api_format)
@@ -1191,7 +1191,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/get_indexes%20\(album with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/get_indexes%20\(album with include\).xml)
-    ampacheConnection.get_indexes('album', False, False, False, False, True, offset, limit)
+    ampacheConnection.get_indexes('album', False, False, False, False, 1, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (album with include)." + api_format)
@@ -1208,7 +1208,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/get_indexes%20\(artist with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/get_indexes%20\(artist with include\).xml)
-    ampacheConnection.get_indexes('artist', False, False, False, False, True, offset, limit)
+    ampacheConnection.get_indexes('artist', False, False, False, False, 1, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (artist with include)." + api_format)
@@ -1245,7 +1245,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/get_indexes%20\(podcast with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/get_indexes%20\(podcast with include\).xml)
-    ampacheConnection.get_indexes('podcast', False, False, False, False, True, offset, limit)
+    ampacheConnection.get_indexes('podcast', False, False, False, False, 1, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (podcast with include)." + api_format)
@@ -1354,7 +1354,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/stats%20\(album\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/stats%20\(album\).xml)
-    stats = ampacheConnection.stats('album', 'random', ampache_user, None, 0, 2)
+    stats = ampacheConnection.stats('album', 'newest', ampache_user, None, 0, 2)
     if os.path.isfile(docpath + "stats." + api_format):
         shutil.move(docpath + "stats." + api_format,
                     docpath + "stats (album)." + api_format)
@@ -1972,7 +1972,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/get_indexes%20\(song with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/get_indexes%20\(song with include\).xml)
-    ampacheConnection.get_indexes('song', False, False, False, False, True, offset, limit)
+    ampacheConnection.get_indexes('song', False, False, False, False, 1, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (song with include)." + api_format)
@@ -1987,7 +1987,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/get_indexes%20\(album with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/get_indexes%20\(album with include\).xml)
-    ampacheConnection.get_indexes('album', False, False, False, False, True, offset, limit)
+    ampacheConnection.get_indexes('album', False, False, False, False, 1, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (album with include)." + api_format)
@@ -2004,7 +2004,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/get_indexes%20\(artist with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/get_indexes%20\(artist with include\).xml)
-    ampacheConnection.get_indexes('artist', False, False, False, False, True, offset, limit)
+    ampacheConnection.get_indexes('artist', False, False, False, False, 1, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (artist with include)." + api_format)
@@ -2041,7 +2041,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/get_indexes%20\(podcast with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/get_indexes%20\(podcast with include\).xml)
-    ampacheConnection.get_indexes('podcast', False, False, False, False, True, offset, limit)
+    ampacheConnection.get_indexes('podcast', False, False, False, False, 1, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (podcast with include)." + api_format)
@@ -2150,7 +2150,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/stats%20\(album\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/stats%20\(album\).xml)
-    stats = ampacheConnection.stats('album', 'random', ampache_user, None, 0, 2)
+    stats = ampacheConnection.stats('album', 'newest', ampache_user, None, 0, 2)
     if os.path.isfile(docpath + "stats." + api_format):
         shutil.move(docpath + "stats." + api_format,
                     docpath + "stats (album)." + api_format)
