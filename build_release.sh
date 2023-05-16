@@ -1,7 +1,7 @@
 #!/bin/sh
 
 RELEASEBRANCH="patch5"
-SQUASHBRANCH="squashed5"
+SQUASHBRANCH="squashed"
 AMPACHEDIR=$PWD
 COMPOSERPATH="/usr/local/bin/composer"
 RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-master/src/Config/Init/InitializationHandlerConfig.php`
