@@ -10,42 +10,42 @@ if [ ! -f $COMPOSERPATH ]; then
   chmod +x $COMPOSERPATH
 fi
 
-if [ ! -d $AMPACHEDIR/ampache-master ]; then
-  git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git ampache-master
+if [ ! -d $AMPACHEDIR/ampache-patch6 ]; then
+  git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git ampache-patch6
 fi
-if [ ! -f $AMPACHEDIR/ampache-master/index.php ]; then
-  rm -rf $AMPACHEDIR/ampache-master
-  git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git ampache-master
+if [ ! -f $AMPACHEDIR/ampache-patch6/index.php ]; then
+  rm -rf $AMPACHEDIR/ampache-patch6
+  git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git ampache-patch6
 fi
-if [ ! -d $AMPACHEDIR/ampache-squashed ]; then
-  git clone -b squashed https://github.com/ampache/ampache.git ampache-squashed
+if [ ! -d $AMPACHEDIR/ampache-squashed6 ]; then
+  git clone -b squashed6 https://github.com/ampache/ampache.git ampache-squashed6
 fi
-if [ ! -f $AMPACHEDIR/ampache-squashed/index.php ]; then
-  rm -rf $AMPACHEDIR/ampache-squashed
-  git clone -b squashed https://github.com/ampache/ampache.git ampache-squashed
+if [ ! -f $AMPACHEDIR/ampache-squashed6/index.php ]; then
+  rm -rf $AMPACHEDIR/ampache-squashed6
+  git clone -b squashed6 https://github.com/ampache/ampache.git ampache-squashed6
 fi
 
 # force reset everything
-cd $AMPACHEDIR/ampache-master && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
+cd $AMPACHEDIR/ampache-patch6 && git fetch origin $RELEASEBRANCH && git checkout $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
 
-rm -rf $AMPACHEDIR/ampache-squashed/public
+rm -rf $AMPACHEDIR/ampache-squashed6/public
 
 # existing base folders
-cp -rfv $AMPACHEDIR/ampache-master/bin/* $AMPACHEDIR/ampache-squashed/bin/
-cp -rfv $AMPACHEDIR/ampache-master/config/* $AMPACHEDIR/ampache-squashed/config/
-cp -rfv $AMPACHEDIR/ampache-master/docs/* $AMPACHEDIR/ampache-squashed/docs/
-cp -rfv $AMPACHEDIR/ampache-master/locale/* $AMPACHEDIR/ampache-squashed/locale/
-cp -rfv $AMPACHEDIR/ampache-master/resources/* $AMPACHEDIR/ampache-squashed/resources/
-cp -rfv $AMPACHEDIR/ampache-master/src/* $AMPACHEDIR/ampache-squashed/src/
-cp -rfv $AMPACHEDIR/ampache-master/tests/* $AMPACHEDIR/ampache-squashed/tests/
+cp -rfv $AMPACHEDIR/ampache-patch6/bin/* $AMPACHEDIR/ampache-squashed6/bin/
+cp -rfv $AMPACHEDIR/ampache-patch6/config/* $AMPACHEDIR/ampache-squashed6/config/
+cp -rfv $AMPACHEDIR/ampache-patch6/docs/* $AMPACHEDIR/ampache-squashed6/docs/
+cp -rfv $AMPACHEDIR/ampache-patch6/locale/* $AMPACHEDIR/ampache-squashed6/locale/
+cp -rfv $AMPACHEDIR/ampache-patch6/resources/* $AMPACHEDIR/ampache-squashed6/resources/
+cp -rfv $AMPACHEDIR/ampache-patch6/src/* $AMPACHEDIR/ampache-squashed6/src/
+cp -rfv $AMPACHEDIR/ampache-patch6/tests/* $AMPACHEDIR/ampache-squashed6/tests/
 #copy public back over the top
-cp -rfv $AMPACHEDIR/ampache-master/public/* $AMPACHEDIR/ampache-squashed/
+cp -rfv $AMPACHEDIR/ampache-patch6/public/* $AMPACHEDIR/ampache-squashed6/
 
-rm -rf $AMPACHEDIR/ampache-squashed/channel
-rm -f $AMPACHEDIR/ampache-squashed/channel.php
-rm -f $AMPACHEDIR/ampache-squashed/docs/examples/channel*
+rm -rf $AMPACHEDIR/ampache-squashed6/channel
+rm -f $AMPACHEDIR/ampache-squashed6/channel.php
+rm -f $AMPACHEDIR/ampache-squashed6/docs/examples/channel*
 
 cd $AMPACHEDIR
 
 # regex the old strings from the public branch to the squashed branch
-python3 ./squash-ampache.py
+python3 ./squash-ampache6.py
