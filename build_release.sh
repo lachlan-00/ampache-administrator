@@ -14,7 +14,7 @@ if [ ! -f $AMPACHEDIR/ampache-patch5/index.php ]; then
 fi
 cd $AMPACHEDIR/ampache-patch5 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
 
-RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-patch5/src/Config/Init/InitializationHandlerConfig.php`
+RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' $AMPACHEDIR/ampache-patch5/src/Config/Init/InitializationHandlerConfig.php`
 if [ ! $# -eq 0 ]; then
   RELEASEVERSION=$1
 fi
