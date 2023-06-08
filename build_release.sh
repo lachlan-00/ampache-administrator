@@ -31,6 +31,7 @@ if [ ! -f $COMPOSERPATH ]; then
   chmod +x $COMPOSERPATH
 fi
 
+cd $AMPACHEDIR/releases/5
 if [ ! -d $AMPACHEDIR/releases/5/php74 ]; then
   git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php74
 fi
