@@ -12,6 +12,7 @@ if [ ! -f $AMPACHEDIR/ampache-patch6/index.php ]; then
   rm -rf $AMPACHEDIR/ampache-patch6
   git clone -b patch6 https://github.com/ampache/ampache.git ampache-patch6
 fi
+cd $AMPACHEDIR/ampache-patch6 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
 
 RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-patch6/src/Config/Init/InitializationHandlerConfig.php`
 if [ ! $# -eq 0 ]; then

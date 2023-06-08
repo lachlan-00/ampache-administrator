@@ -12,6 +12,7 @@ if [ ! -f $AMPACHEDIR/ampache-patch5/index.php ]; then
   rm -rf $AMPACHEDIR/ampache-patch5
   git clone -b patch5 https://github.com/ampache/ampache.git ampache-patch5
 fi
+cd $AMPACHEDIR/ampache-patch5 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
 
 RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-patch5/src/Config/Init/InitializationHandlerConfig.php`
 if [ ! $# -eq 0 ]; then
@@ -227,7 +228,7 @@ cd $AMPACHEDIR/releases/5/php74 && zip -r -q -u -9 --exclude=./config/ampache.cf
 cd $AMPACHEDIR/releases/5/php74_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../../ampache-${RELEASEVERSION}_all_squashed_php7.4.zip ./ ./
 
 ## php 8.0
-cd $AMPACHEDIR/releases/5/php80 && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../releases/ampache-${RELEASEVERSION}_all_php8.0.zip ./
+cd $AMPACHEDIR/releases/5/php80 && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../../ampache-${RELEASEVERSION}_all_php8.0.zip ./
 cd $AMPACHEDIR/releases/5/php80_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../../ampache-${RELEASEVERSION}_all_squashed_php8.0.zip ./
 
 ## php 8.1
