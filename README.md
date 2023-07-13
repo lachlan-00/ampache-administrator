@@ -14,9 +14,9 @@ this process it should be easier for anyone else to pick this up by doing it all
 
 ## Files for Ampache Administrators
 
-### build_release.sh
+### build_release.sh & build_release6.sh
 
-Build ampache release files from the current master branch
+Build ampache release files from the current patch5 or patch6 branches
 
 Release files are built from the php dirs and will create a zip file in the releases folder
 
@@ -35,12 +35,14 @@ e.g. `sh build_release.sh zips`
   * ./vendor/gettext/gettext/src/Utils/StringReader.php
 * Copy missing prettyphoto images to ./public/lib/components/prettyphoto/images
 
-### build_ampache-squashed.sh
+### build_ampache-squashed.sh & build_ampache-squashed6.sh
 
 This script will update the squashed repo so you don't have to manually edit the files for updating that branch
 
 * Copy the files from `./ampache-master` to `./ampache-squashed`
 * Run `./squash-ampache.py` to regex the strings to match the squashed structure
+
+squashed 6 copies from `./ampache-patch6` to `./ampache-squashed6`
 
 ### build_docker.sh
 
@@ -78,6 +80,37 @@ and then generate the xml and json example documents against that server.
 * Build the api docs for api4
 * Build the api docs for api5
 
+### docker-release-test.sh
+
+Test Zip file releases but installing to a local docker stack
+
+Release zips must be in the `/releases` folder. by default it will check for the latest version in `/patch6`
+
+Set a custom version number in the cli adding the version string at the end
+
+e.g. `sh docker-release-test.sh 6.0.0`
+
+Sites are then using the php* folders and creates the following container images:
+
+* release-test-ampache_ampache74
+  * Website root `./release-test/php74`
+  * Accessible on http://localhost:18074
+* release-test-ampache_ampache74_squashed
+  * Website root `./release-test/php74_squashed`
+  * Accessible on http://localhost:18075
+* release-test-ampache_ampache80
+  * Website root `./release-test/php80`
+  * Accessible on http://localhost:18084
+* release-test-ampache_ampache80_squashed
+  * Website root `./release-test/php80_squashed`
+  * Accessible on http://localhost:18085
+* release-test-ampache_ampache81
+  * Website root `./release-test/php81`
+  * Accessible on http://localhost:18086
+* release-test-ampache_ampache81_squashed
+  * Website root `./release-test/php81_squashed`
+  * Accessible on http://localhost:18087
+
 ## Files for Ampache Users
 
 ### setup-workspace.sh
@@ -92,13 +125,13 @@ Clone Ampache develop to `./ampache-develop` and then clone Ampache master to `.
 
 This file sets up all the api folders for building python documentation
 
-### setup-docker.sh
+### setup-docker.sh & setup-docker6.sh
 
-Docker-compose setup allowing you locally run Ampache on php 7.4, 8.0 and 8.1
+Docker-compose setup allowing you locally run Ampache on php 7.4, 8.0, 8.1 and 8.2
 
 Used for testing releases on each release type but an easy way for anyone to just get up and running
 
-You can launch a container for php7.4, 8.0 and 8.1 by issuing the following command
+You can launch a container for php7.4, 8.0, 8.1 and 8.2 by issuing the following command
 
 ```
 docker-compose up
