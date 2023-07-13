@@ -3,6 +3,7 @@
 ampache-*_all*.zip
 ampache/
 ampache-*/
+ampacheapi-php/
 docker/ampache-docker/
 docker/ampache-docker-nosql/
 docker/ampache-docker-develop/
@@ -24,4 +25,3 @@ php74/
 releases/*
 www/ampache.org-api/
 www/ampache.github.io/
-
