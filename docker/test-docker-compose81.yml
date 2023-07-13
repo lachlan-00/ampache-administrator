@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  testampache81:
+    build:
+      context: .
+      dockerfile: Dockerfilephp81
+    restart: on-failure
+    ports:
+      - "18180:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ../release-test/php81:/var/www/html
+      - ./log:/var/log/ampache
+      - ./media:/media
+      - ./art:/mnt/art
+      - ./music:/mnt/music
+      - ./podcast:/mnt/podcast
+      - ./upload:/mnt/upload
+      - ./video:/mnt/video
+
