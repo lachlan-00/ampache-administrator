@@ -287,21 +287,21 @@ cp -f $AMPACHEDIR/extras/composer_php8.2_squashed.json ./composer.json
 cd $AMPACHEDIR/releases
 # echo the version checksum
 echo
-echo "php7.4"
-md5sum ./ampache-${RELEASEVERSION}_all_php7.4.zip
-md5sum ./ampache-${RELEASEVERSION}_all_squashed_php7.4.zip
-echo
-echo "php8.0"
-md5sum ./ampache-${RELEASEVERSION}_all_php8.0.zip
-md5sum ./ampache-${RELEASEVERSION}_all_squashed_php8.0.zip
+echo "php8.2"
+md5sum ./ampache-${RELEASEVERSION}_all_php8.2.zip
+md5sum ./ampache-${RELEASEVERSION}_all_squashed_php8.2.zip
 echo
 echo "php8.1"
 md5sum ./ampache-${RELEASEVERSION}_all_php8.1.zip
 md5sum ./ampache-${RELEASEVERSION}_all_squashed_php8.1.zip
 echo
-echo "php8.2"
-md5sum ./ampache-${RELEASEVERSION}_all_php8.2.zip
-md5sum ./ampache-${RELEASEVERSION}_all_squashed_php8.2.zip
+echo "php8.0"
+md5sum ./ampache-${RELEASEVERSION}_all_php8.0.zip
+md5sum ./ampache-${RELEASEVERSION}_all_squashed_php8.0.zip
+echo
+echo "**UNSUPPORTED** php7.4 (_will be built until it can't be done any more_)"
+md5sum ./ampache-${RELEASEVERSION}_all_php7.4.zip
+md5sum ./ampache-${RELEASEVERSION}_all_squashed_php7.4.zip
 echo
 echo
 echo
