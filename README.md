@@ -22,10 +22,6 @@ Release files are built from the php dirs and will create a zip file in the rele
 
 e.g. `releases/ampache-${a_version}_all_php7.4.zip`
 
-**note** you can rebuild the zip files without rebuilding the repos by adding an argument to the command
-
-e.g. `sh build_release.sh zips`
-
 #### Script workarounds for release builds
 
 * Make sure the jquery-context menu map files are created
