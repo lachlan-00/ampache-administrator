@@ -833,7 +833,7 @@ show_footer_statistics = "true"
 ; Debug
 ; If this is enabled Ampache will write debugging information to the log file
 ; DEFAULT: "false"
-;debug = "true"
+debug = "true"
 
 ; Debug Level
 ; This should always be set in conjunction with the
@@ -860,7 +860,7 @@ log_path = "/var/log/ampache"
 ; This defines where the log file name pattern
 ; %name.%Y%m%d.log will create a different log file every day.
 ; DEFAULT: %name.%Y%m%d.log
-log_filename = "%name.%Y%m%d.log"
+log_filename = "release-test.log"
 
 ;#########################################################
 ; Encoding Settings                                      #
