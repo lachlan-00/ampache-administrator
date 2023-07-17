@@ -9,7 +9,7 @@ fi
 
 if [ $BRANCH = "master" ] || [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
   RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-master/src/Config/Init/InitializationHandlerConfig.php`
-  status=$(curl --head --silent https://github.com/ampache/ampache/releases/download/${RELEASEVERSION}/ampache-${RELEASEVERSION}_all_php8.1.zip | head -n 1)
+  status=$(curl --head --silent https://github.com/ampache/ampache/releases/download/${RELEASEVERSION}/ampache-${RELEASEVERSION}_all_php8.2.zip | head -n 1)
   if echo "$status" | grep -q 404; then
     read -p "Failed to find $RELEASEVERSION... Enter Ampache Version: " RELEASEVERSION
   fi
