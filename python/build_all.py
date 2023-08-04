@@ -303,7 +303,7 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.playlist(single_playlist)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_songs.xml)
-    ampacheConnection.playlist_songs(single_playlist, offset, limit)
+    ampacheConnection.playlist_songs(single_playlist, 0, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_delete.xml)
     params = 65
@@ -795,7 +795,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/playlist_songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/playlist_songs.xml)
-    ampacheConnection.playlist_songs(single_playlist, offset, limit)
+    ampacheConnection.playlist_songs(single_playlist, 0, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/playlist_delete.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/playlist_delete.xml)
@@ -1500,7 +1500,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/playlist_songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/playlist_songs.xml)
-    ampacheConnection.playlist_songs(single_playlist, offset, limit)
+    ampacheConnection.playlist_songs(single_playlist, 0, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/playlist_delete.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/playlist_delete.xml)
@@ -2296,7 +2296,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_songs.xml)
-    ampacheConnection.playlist_songs(single_playlist, offset, limit)
+    ampacheConnection.playlist_songs(single_playlist, 0, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_delete.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_delete.xml)
