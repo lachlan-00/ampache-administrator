@@ -5,6 +5,7 @@ SQUASHBRANCH="squashed6"
 AMPACHEDIR=$PWD
 COMPOSERPATH="/usr/local/bin/composer"
 LOCALIP=$(ip addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v '127.0.0.1' | head -n 1)
+DATABASE="ampachetest"
 
 if [ ! -f $COMPOSERPATH ]; then
   COMPOSERPATH="$AMPACHEDIR/docker/composer"
@@ -181,28 +182,112 @@ chown $UID:33 $AMPACHEDIR/release-test/php82_squashed
 chmod 775 $AMPACHEDIR/release-test/php82_squashed
 
 # copy test config back
-cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php74/config/
-cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php74_squashed/config/
-cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php80/config/
-cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php80_squashed/config/
-cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php81/config/
-cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php81_squashed/config/
-cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php82/config/
-cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php82_squashed/config/
+#cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php74/config/
+#cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php74_squashed/config/
+#cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php80/config/
+#cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php80_squashed/config/
+#cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php81/config/
+#cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php81_squashed/config/
+#cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php82/config/
+#cp $AMPACHEDIR/release-test/ampache.cfg.php $AMPACHEDIR/release-test/php82_squashed/config/
 
-sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
-sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
-sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php80/config/ampache.cfg.php
-sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php80_squashed/config/ampache.cfg.php
-sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php81/config/ampache.cfg.php
-sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
-sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
-sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+#sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
+#sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
+#sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php80/config/ampache.cfg.php
+#sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php80_squashed/config/ampache.cfg.php
+#sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php81/config/ampache.cfg.php
+#sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
+#sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
+#sed -i "s/database_hostname = \"localhost\"/database_hostname = \"$LOCALIP\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
 
 # ReLaunch all the containers
 
 docker-compose down -v
 docker-compose -p "release-test" -f docker/test-docker-compose74.yml -f docker/test-docker-compose74_squashed.yml -f docker/test-docker-compose80.yml -f docker/test-docker-compose80_squashed.yml -f docker/test-docker-compose81.yml -f docker/test-docker-compose81_squashed.yml -f docker/test-docker-compose82.yml -f docker/test-docker-compose82_squashed.yml up -d --build
 
+echo "Enter your local database user:"
+read -s DATABASEUSER
+echo "Enter your local database password:"
+read -s DATABASEPASSWORD
+LOCALIP=$(ip addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v '127.0.0.1' | head -n 1)
+DATABASE="ampachetest"
+INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u $DATABASE -p $DATABASE -d $DATABASE"
+AMPACHEPASSWORD="]@zRGb_Rs2i'XVc"
+USERCOMMAND="php /var/www/html/bin/cli admin:addUser admin -p $AMPACHEPASSWORD -e admin@ampache.dev -l 100"
+UPDATEDBCOMMAND="php /var/www/html/bin/cli admin:updateDatabase -e"
+
+# Install DB and add the admin user
+
+echo "INSTALLING AMPACHE on PHP7.4"
+
+# php7.4
+docker exec -u root -it release-test-testampache74-1 ${INSTALLCOMMAND}74
+docker exec -u root -it release-test-testampache74-1 ${USERCOMMAND}
+docker exec -u root -it release-test-testampache74-1 ${UPDATEDBCOMMAND}
+
+docker exec -u root -it release-test-testampache74_squashed-1 ${INSTALLCOMMAND}74s
+docker exec -u root -it release-test-testampache74_squashed-1 ${USERCOMMAND}
+docker exec -u root -it release-test-testampache74_squashed-1 ${UPDATEDBCOMMAND}
+
+echo "INSTALLING AMPACHE on PHP8.0"
+
+# php8.0
+docker exec -u root -it release-test-testampache80-1 ${INSTALLCOMMAND}80
+docker exec -u root -it release-test-testampache80-1 ${USERCOMMAND}
+docker exec -u root -it release-test-testampache80-1 ${UPDATEDBCOMMAND}
+
+docker exec -u root -it release-test-testampache80_squashed-1 ${INSTALLCOMMAND}80s
+docker exec -u root -it release-test-testampache80_squashed-1 ${USERCOMMAND}
+docker exec -u root -it release-test-testampache80_squashed-1 ${UPDATEDBCOMMAND}
+
+echo "INSTALLING AMPACHE on PHP8.1"
+
+# php8.1
+docker exec -u root -it release-test-testampache81-1 ${INSTALLCOMMAND}81
+docker exec -u root -it release-test-testampache81-1 ${USERCOMMAND}
+docker exec -u root -it release-test-testampache81-1 ${UPDATEDBCOMMAND}
+
+docker exec -u root -it release-test-testampache81_squashed-1 ${INSTALLCOMMAND}81s
+docker exec -u root -it release-test-testampache81_squashed-1 ${USERCOMMAND}
+docker exec -u root -it release-test-testampache81_squashed-1 ${USERCOMMAND}
+docker exec -u root -it release-test-testampache81_squashed-1 ${UPDATEDBCOMMAND}
+
+echo "INSTALLING AMPACHE on PHP8.2"
+
+# php8.2
+docker exec -u root -it release-test-testampache82-1 ${INSTALLCOMMAND}82
+docker exec -u root -it release-test-testampache82-1 ${USERCOMMAND}
+docker exec -u root -it release-test-testampache82-1 ${UPDATEDBCOMMAND}
+
+docker exec -u root -it release-test-testampache82_squashed-1 ${INSTALLCOMMAND}82s
+docker exec -u root -it release-test-testampache82_squashed-1 ${USERCOMMAND}
+docker exec -u root -it release-test-testampache82_squashed-1 ${UPDATEDBCOMMAND}
+
+
 echo "Testing $RELEASEVERSION"
+
+#release-test-testampache74
+python3 ./python/release_test.py http://${LOCALIP}:17480 admin $AMPACHEPASSWORD
+
+#release-test-testampache74_squashed
+python3 ./release_test.py http://${LOCALIP}:17481 admin $AMPACHEPASSWORD
+
+#release-test-testampache80
+python3 ./release_test.py http://${LOCALIP}:18080 admin $AMPACHEPASSWORD
+
+#release-test-testampache80_squashed
+python3 ./release_test.py http://${LOCALIP}:18081 admin $AMPACHEPASSWORD
+
+#release-test-testampache81
+python3 ./release_test.py http://${LOCALIP}:18180 admin $AMPACHEPASSWORD
+
+#release-test-testampache81_squashed
+python3 ./release_test.py http://${LOCALIP}:18181 admin $AMPACHEPASSWORD
+
+#release-test-testampache82
+python3 ./release_test.py http://${LOCALIP}:18280 admin $AMPACHEPASSWORD
+
+#release-test-testampache82_squashed
+python3 ./release_test.py http://${LOCALIP}:18281 admin $AMPACHEPASSWORD
+
 
