@@ -110,7 +110,7 @@ php7.4 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
-cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
+#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
@@ -121,7 +121,7 @@ php7.4 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
-cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
+#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
@@ -133,7 +133,7 @@ php8.0 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
-cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
+#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
@@ -144,7 +144,7 @@ php8.0 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
-cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
+#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
@@ -156,7 +156,7 @@ php8.1 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
-cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
+#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
@@ -167,7 +167,7 @@ php8.1 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
-cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
+#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
@@ -178,7 +178,7 @@ php8.2 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
-cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
+#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
@@ -188,7 +188,7 @@ php8.2 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
 cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
-cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
+#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
