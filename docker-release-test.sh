@@ -209,7 +209,6 @@ echo "INSTALLING SQUASHED AMPACHE on PHP8.1"
 INSTALLCOMMAND="php /var/www/html/public/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}81s -p $DATABASE -d $DATABASE"
 docker exec -u root -it release-test-testampache81_squashed-1 ${INSTALLCOMMAND}81s
 docker exec -u root -it release-test-testampache81_squashed-1 ${USERCOMMAND}
-docker exec -u root -it release-test-testampache81_squashed-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache81_squashed-1 ${UPDATEDBCOMMAND}
 
 echo "INSTALLING SQUASHED AMPACHE on PHP8.2"
