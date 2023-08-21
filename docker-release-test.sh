@@ -22,9 +22,9 @@ DATABASE="ampachetest"
 AMPACHEPASSWORD="]@zRGb_Rs2i'XVc"
 
 echo "Enter your local database user:"
-read -s DATABASEUSER
+read DATABASEUSER
 echo "Enter your local database password:"
-read -s DATABASEPASSWORD
+read DATABASEPASSWORD
 
 # Shutdown stack
 
