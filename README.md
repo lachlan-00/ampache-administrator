@@ -78,9 +78,15 @@ and then generate the xml and json example documents against that server.
 
 ### docker-release-test.sh
 
-Test Zip file releases but installing to a local docker stack
+Test Zip file releases but installing to a local docker stack. (make sure you build them using build_release first!)
 
-Release zips must be in the `/releases` folder. by default it will check for the latest version in `/patch6`
+Release zips must be in the `./releases/` folder. by default it will check for the latest version in `./patch6`
+
+The zips are extracted to `./release-test/` and set as a volume for the local html folder for each container
+
+Once the containers are build the database and admin user are installed.
+
+Finally; `python/release_test.py` is run to create a test user which allows running demo build scripts.
 
 Set a custom version number in the cli adding the version string at the end
 
