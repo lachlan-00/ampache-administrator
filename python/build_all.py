@@ -910,9 +910,16 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/podcast_episode.xml)
     ampacheConnection.podcast_episode(23)
 
+    catalogs = ampacheConnection.catalogs('podcast')
+    if api_format == 'xml':
+        for child in catalogs:
+            if child.tag == 'catalog':
+                catalog_id = child.attrib['id']
+    else:
+        catalog_id = catalogs[0]['id']
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/podcast_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/podcast_create.xml)
-    ampacheConnection.podcast_create('https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', 3)
+    ampacheConnection.podcast_create('https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', catalog_id)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/podcast_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/podcast_edit.xml)
@@ -1629,9 +1636,16 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/podcast_episode.xml)
     ampacheConnection.podcast_episode(23)
 
+    catalogs = ampacheConnection.catalogs('podcast')
+    if api_format == 'xml':
+        for child in catalogs:
+            if child.tag == 'catalog':
+                catalog_id = child.attrib['id']
+    else:
+        catalog_id = catalogs['catalog'][0]['id']
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/podcast_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/podcast_create.xml)
-    ampacheConnection.podcast_create('https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', 3)
+    ampacheConnection.podcast_create('https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', catalog_id)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/podcast_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/podcast_edit.xml)
@@ -2425,9 +2439,16 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/podcast_episode.xml)
     ampacheConnection.podcast_episode(23)
 
+    catalogs = ampacheConnection.catalogs('podcast')
+    if api_format == 'xml':
+        for child in catalogs:
+            if child.tag == 'catalog':
+                catalog_id = child.attrib['id']
+    else:
+        catalog_id = catalogs['catalog'][0]['id']
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/podcast_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/podcast_create.xml)
-    ampacheConnection.podcast_create('https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', 3)
+    ampacheConnection.podcast_create('https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', catalog_id)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/podcast_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/podcast_edit.xml)
