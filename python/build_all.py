@@ -23,6 +23,7 @@ subsonic_api = '1.16.1'
 docpath = "docs/"
 song_url = 'https://music.com.au/play/index.php?ssid=eeb9f1b6056246a7d563f479f518bb34&type=song&oid=60&uid=4&player=api&name=Synthetic%20-%20BrownSmoke.wma'
 APIVERSION = 0
+ENABLEDEBUG = True
 try:
     if sys.argv[1]:
         url = sys.argv[1]
@@ -30,6 +31,9 @@ try:
         api = sys.argv[2]
     if sys.argv[3]:
         user = sys.argv[3]
+    if sys.argv[4]:
+        if sys.argv[4] == '1':
+            ENABLEDEBUG = False
 except IndexError:
     if os.path.isfile(os.path.join(os.pardir, 'ampache.conf')):
         conf = configparser.RawConfigParser()
@@ -65,8 +69,7 @@ def build_docs(ampache_url, ampache_api, ampache_user, api_format):
     """ def set_debug(boolean):
         This function can be used to enable/disable debugging messages
     """
-    ampacheConnection.set_debug(True)
-    # ampacheConnection.set_debug(False)
+    ampacheConnection.set_debug(ENABLEDEBUG)
     ampacheConnection.set_format(api_format)
 
     if (api_version == api3_version):
@@ -92,6 +95,8 @@ def build_docs(ampache_url, ampache_api, ampache_user, api_format):
 
 
 def self_check(api_format, ampache_url, ampache_api, ampache_session, docpath):
+    if not os.path.isdir("./" + docpath):
+        return
     print("Checking files in " + docpath + " for private strings")
     for files in os.listdir("./" + docpath):
         f = open("./" + docpath + files, 'r', encoding="utf-8")
@@ -273,6 +278,14 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlists.xml)
     ampacheConnection.playlists(False, False, offset, limit)
 
+    lookup = ampacheConnection.playlists('rename', False, offset, limit)
+    if api_format == 'xml':
+        for child in lookup:
+            if child.tag == 'playlist':
+                ampacheConnection.playlist_delete(child.attrib['id'])
+    else:
+        if 'playlist' in lookup and 'id' in lookup['playlist']:
+            ampacheConnection.playlist_delete(lookup['playlist']['id'])
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
     if api_format == 'xml':
@@ -757,6 +770,14 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/playlists.xml)
     ampacheConnection.playlists(False, False, offset, limit)
 
+    lookup = ampacheConnection.playlists('rename', False, offset, limit)
+    if api_format == 'xml':
+        for child in lookup:
+            if child.tag == 'playlist':
+                ampacheConnection.playlist_delete(child.attrib['id'])
+    else:
+        if 'playlist' in lookup and 'id' in lookup['playlist']:
+            ampacheConnection.playlist_delete(lookup['playlist']['id'])
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/playlist_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
@@ -1469,6 +1490,14 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/playlists.xml)
     ampacheConnection.playlists(False, False, offset, limit)
 
+    lookup = ampacheConnection.playlists('rename', False, offset, limit)
+    if api_format == 'xml':
+        for child in lookup:
+            if child.tag == 'playlist':
+                ampacheConnection.playlist_delete(child.attrib['id'])
+    else:
+        if 'playlist' in lookup and 'id' in lookup['playlist']:
+            ampacheConnection.playlist_delete(lookup['playlist']['id'])
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/playlist_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
@@ -2272,6 +2301,14 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlists.xml)
     ampacheConnection.playlists(False, False, offset, limit)
 
+    lookup = ampacheConnection.playlists('rename', False, offset, limit)
+    if api_format == 'xml':
+        for child in lookup:
+            if child.tag == 'playlist':
+                ampacheConnection.playlist_delete(child.attrib['id'])
+    else:
+        if 'playlist' in lookup and 0 in lookup['playlist'] and 'id' in lookup['playlist'][0]:
+            ampacheConnection.playlist_delete(lookup['playlist'][0]['id'])
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')

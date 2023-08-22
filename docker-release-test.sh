@@ -239,40 +239,40 @@ echo
 echo "Testing $RELEASEVERSION ampache74"
 #release-test-testampache74
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:17480 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:17480 $DEMOPASSWORD admin
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:17480 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache74_squashed"
 #release-test-testampache74_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:17481 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:17481 $DEMOPASSWORD admin
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:17481 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache80"
 #release-test-testampache80
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18080 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18080 $DEMOPASSWORD admin
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18080 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache80_squashed"
 #release-test-testampache80_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18081 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18081 $DEMOPASSWORD admin
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18081 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache81"
 #release-test-testampache81
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18180 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18180 $DEMOPASSWORD admin
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18180 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache81_squashed"
 #release-test-testampache81_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18181 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18181 $DEMOPASSWORD admin
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18181 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache82"
 #release-test-testampache82
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18280 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18280 $DEMOPASSWORD admin
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18280 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache82_squashed"
 #release-test-testampache82_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18281 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18281 $DEMOPASSWORD admin
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18281 $DEMOPASSWORD admin 1
 
