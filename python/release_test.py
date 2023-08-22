@@ -60,12 +60,15 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     tempusername = 'demo'
     ampacheConnection.user_create(tempusername, 'demodemo', 'email@gmail.com', False, False)
+    ampacheConnection.user_create('generic', 'demodemo', 'generic@gmail.com', False, False)
+
     # add an api key for use later
     ampacheConnection.user_edit(tempusername, False, False, False, False, False, False, False, False, False, 1, False, False)
     ampacheConnection.user_edit('admin', False, False, False, False, False, False, False, False, False, 1, False, False)
 
     ampacheConnection.catalog_add('music', '/media/music', 'local', 'music')
     ampacheConnection.catalog_add('podcast', '/media/podcast', 'local', 'podcast')
+    ampacheConnection.catalog_add('video', '/media/video', 'local', 'clip')
 
     catalogs = ampacheConnection.catalogs('music')
     catalog_id = catalogs['catalog'][0]['id']
@@ -73,8 +76,9 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.catalog_action('add_to_catalog', catalog_id)
     # update the counts after adding
     ampacheConnection.catalog_action('garbage_collect', catalog_id)
-    # enable share
+    # enable share and video access
     ampacheConnection.preference_edit('share', 1, 1)
+    ampacheConnection.preference_edit('allow_video', 1, 1)
     # ampache-test data
     ampacheConnection.live_stream_create('HBR1.com - Dream Factory', 'http://ubuntu.hbr1.com:19800/ambient.aac', 'mp4', catalog_id, 'http://www.hbr1.com/')
     ampacheConnection.live_stream_create('HBR1.com - I.D.M. Tranceponder', 'http://ubuntu.hbr1.com:19800/trance.ogg', 'ogg', catalog_id, 'http://www.hbr1.com/')

@@ -31,7 +31,6 @@ read DATABASEPASSWORD
 docker-compose -p "release-test" down -v
 
 # remove the old release
-
 rm -rf $AMPACHEDIR/release-test/php*
 
 # php7.4
@@ -218,6 +217,33 @@ docker exec -u root -it release-test-testampache82_squashed-1 ${INSTALLCOMMAND}8
 docker exec -u root -it release-test-testampache82_squashed-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache82_squashed-1 ${UPDATEDBCOMMAND}
 
+sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
+sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
+sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php80/config/ampache.cfg.php
+sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php80_squashed/config/ampache.cfg.php
+sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php81/config/ampache.cfg.php
+sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
+sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
+sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+
+sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
+sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
+sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php80/config/ampache.cfg.php
+sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php80_squashed/config/ampache.cfg.php
+sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php81/config/ampache.cfg.php
+sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
+sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
+sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+
+sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
+sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
+sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php80/config/ampache.cfg.php
+sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php80_squashed/config/ampache.cfg.php
+sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php81/config/ampache.cfg.php
+sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
+sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
+sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php80/config/ampache.cfg.php
@@ -235,6 +261,7 @@ sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php81.log\"/g" 
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php81s.log\"/g"   $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php82.log\"/g"   $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php82s.log\"/g"   $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+
 echo
 echo "Testing $RELEASEVERSION ampache74"
 #release-test-testampache74

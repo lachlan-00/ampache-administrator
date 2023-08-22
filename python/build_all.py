@@ -284,8 +284,13 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
             if child.tag == 'playlist':
                 ampacheConnection.playlist_delete(child.attrib['id'])
     else:
-        if 'playlist' in lookup and 'id' in lookup['playlist']:
-            ampacheConnection.playlist_delete(lookup['playlist']['id'])
+        try:
+            delete_id = lookup['playlist']['id']
+            ampacheConnection.playlist_delete(delete_id)
+        except IndexError:
+            pass
+        except TypeError:
+            pass
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
     if api_format == 'xml':
@@ -776,8 +781,13 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
             if child.tag == 'playlist':
                 ampacheConnection.playlist_delete(child.attrib['id'])
     else:
-        if 'playlist' in lookup and 'id' in lookup['playlist']:
-            ampacheConnection.playlist_delete(lookup['playlist']['id'])
+        try:
+            delete_id = lookup['playlist']['id']
+            ampacheConnection.playlist_delete(delete_id)
+        except IndexError:
+            pass
+        except TypeError:
+            pass
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/playlist_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
@@ -1496,8 +1506,13 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
             if child.tag == 'playlist':
                 ampacheConnection.playlist_delete(child.attrib['id'])
     else:
-        if 'playlist' in lookup and 'id' in lookup['playlist']:
-            ampacheConnection.playlist_delete(lookup['playlist']['id'])
+        try:
+            delete_id = lookup['playlist']['id']
+            ampacheConnection.playlist_delete(delete_id)
+        except IndexError:
+            pass
+        except TypeError:
+            pass
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/playlist_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
@@ -2307,8 +2322,13 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
             if child.tag == 'playlist':
                 ampacheConnection.playlist_delete(child.attrib['id'])
     else:
-        if 'playlist' in lookup and 0 in lookup['playlist'] and 'id' in lookup['playlist'][0]:
-            ampacheConnection.playlist_delete(lookup['playlist'][0]['id'])
+        try:
+            delete_id = lookup['playlist'][0]['id']
+            ampacheConnection.playlist_delete(delete_id)
+        except IndexError:
+            pass
+        except TypeError:
+            pass
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
@@ -3238,4 +3258,6 @@ else:
     api_version = subsonic_api
     build_docs(url, api, user, 'json')
     build_docs(url, api, user, 'xml')
+
+print("build_all.py COMPLETED")
 
