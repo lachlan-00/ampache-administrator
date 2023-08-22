@@ -226,7 +226,7 @@ sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php81/
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
- = "%name.%Y%m%d.log"
+
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php74.log\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php74s.log\"/g"   $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php80.log\"/g"   $AMPACHEDIR/release-test/php80/config/ampache.cfg.php
