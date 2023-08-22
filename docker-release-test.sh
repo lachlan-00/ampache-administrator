@@ -218,37 +218,61 @@ docker exec -u root -it release-test-testampache82_squashed-1 ${INSTALLCOMMAND}8
 docker exec -u root -it release-test-testampache82_squashed-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache82_squashed-1 ${UPDATEDBCOMMAND}
 
+sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
+sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
+sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php80/config/ampache.cfg.php
+sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php80_squashed/config/ampache.cfg.php
+sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php81/config/ampache.cfg.php
+sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
+sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
+sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+ = "%name.%Y%m%d.log"
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php74.log\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php74s.log\"/g"   $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php80.log\"/g"   $AMPACHEDIR/release-test/php80/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php80s.log\"/g"   $AMPACHEDIR/release-test/php80_squashed/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php81.log\"/g"   $AMPACHEDIR/release-test/php81/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php81s.log\"/g"   $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php82.log\"/g"   $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php82s.log\"/g"   $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
 echo
 echo "Testing $RELEASEVERSION ampache74"
 #release-test-testampache74
-python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:17480 admin $AMPACHEPASSWORD
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:17480 admin $AMPACHEPASSWORD)
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:17480 $DEMOPASSWORD admin
 echo
 echo "Testing $RELEASEVERSION ampache74_squashed"
 #release-test-testampache74_squashed
-python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:17481 admin $AMPACHEPASSWORD
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:17481 admin $AMPACHEPASSWORD)
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:17481 $DEMOPASSWORD admin
 echo
 echo "Testing $RELEASEVERSION ampache80"
 #release-test-testampache80
-python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18080 admin $AMPACHEPASSWORD
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18080 admin $AMPACHEPASSWORD)
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18080 $DEMOPASSWORD admin
 echo
 echo "Testing $RELEASEVERSION ampache80_squashed"
 #release-test-testampache80_squashed
-python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18081 admin $AMPACHEPASSWORD
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18081 admin $AMPACHEPASSWORD)
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18081 $DEMOPASSWORD admin
 echo
 echo "Testing $RELEASEVERSION ampache81"
 #release-test-testampache81
-python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18180 admin $AMPACHEPASSWORD
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18180 admin $AMPACHEPASSWORD)
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18180 $DEMOPASSWORD admin
 echo
 echo "Testing $RELEASEVERSION ampache81_squashed"
 #release-test-testampache81_squashed
-python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18181 admin $AMPACHEPASSWORD
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18181 admin $AMPACHEPASSWORD)
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18181 $DEMOPASSWORD admin
 echo
 echo "Testing $RELEASEVERSION ampache82"
 #release-test-testampache82
-python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18280 admin $AMPACHEPASSWORD
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18280 admin $AMPACHEPASSWORD)
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18280 $DEMOPASSWORD admin
 echo
 echo "Testing $RELEASEVERSION ampache82_squashed"
 #release-test-testampache82_squashed
-python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18281 admin $AMPACHEPASSWORD
-
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test.py http://${LOCALIP}:18281 admin $AMPACHEPASSWORD)
+python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18281 $DEMOPASSWORD admin
 

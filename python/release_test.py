@@ -60,13 +60,39 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     tempusername = 'demo'
     ampacheConnection.user_create(tempusername, 'demodemo', 'email@gmail.com', False, False)
+    # add an api key for use later
+    ampacheConnection.user_edit(tempusername, False, False, False, False, False, False, False, False, False, 1, False, False)
+    ampacheConnection.user_edit('admin', False, False, False, False, False, False, False, False, False, 1, False, False)
 
     ampacheConnection.catalog_add('music', '/media/music', 'local', 'music')
+    ampacheConnection.catalog_add('podcast', '/media/podcast', 'local', 'podcast')
 
     catalogs = ampacheConnection.catalogs('music')
-    ampacheConnection.catalog_action('add_to_catalog', catalogs['catalog'][0]['id'])
+    catalog_id = catalogs['catalog'][0]['id']
+    # add items to the catalog
+    ampacheConnection.catalog_action('add_to_catalog', catalog_id)
+    # update the counts after adding
+    ampacheConnection.catalog_action('garbage_collect', catalog_id)
+    # enable share
+    ampacheConnection.preference_edit('share', 1, 1)
+    # ampache-test data
+    ampacheConnection.live_stream_create('HBR1.com - Dream Factory', 'http://ubuntu.hbr1.com:19800/ambient.aac', 'mp4', catalog_id, 'http://www.hbr1.com/')
+    ampacheConnection.live_stream_create('HBR1.com - I.D.M. Tranceponder', 'http://ubuntu.hbr1.com:19800/trance.ogg', 'ogg', catalog_id, 'http://www.hbr1.com/')
+    ampacheConnection.live_stream_create('4ZZZ Community Radio', 'https://stream.4zzz.org.au:9200/4zzz', 'mp3', catalog_id, 'https://4zzzfm.org.au')
+    ampacheConnection.podcast_create('http://rss.sciam.com/sciam/60secsciencepodcast', catalog_id)
+    ampacheConnection.podcast_create('https://anchor.fm/s/90932e8/podcast/rss', catalog_id)
+    ampacheConnection.podcast_create('https://anchor.fm/s/90932e8/podcast/rss', catalog_id)
+    ampacheConnection.share_create(5, 'artist')
+    ampacheConnection.share_create(2, 'album')
+    ampacheConnection.share_create(15, 'song')
 
-
+    # return the api key to run build_all
+    user = ampacheConnection.user('admin')
+    if not user['auth']:
+        print()
+        sys.exit('ERROR: NO AUTH KEY')
+    
+    print(user['auth'])
 
 api_version = api6_version
 build_docs(url, api, user, 'json')
