@@ -28,7 +28,7 @@ if [ $BRANCH = "master" ] || [ $BRANCH = "all" ]; then
     rm -rf $AMPACHEDIR/docker/ampache-docker
     cd $AMPACHEDIR/docker && git clone -b master https://github.com/ampache/ampache-docker.git ampache-docker
   fi
-  cd $AMPACHEDIR/docker/ampache-docker/ && git checkout master && git reset --hard origin/master && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:5 -t ampache/ampache:${RELEASEVERSION} -t ampache/ampache:latest --push . &
+  cd $AMPACHEDIR/docker/ampache-docker/ && git checkout master && git reset --hard origin/master && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:5 -t ampache/ampache:${RELEASEVERSION} --push . &
 fi
 
 # NOSQL
