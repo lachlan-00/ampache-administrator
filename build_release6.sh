@@ -105,6 +105,7 @@ cd $AMPACHEDIR/releases/6/php82_squashed && git fetch origin $SQUASHBRANCH && gi
 # php 7.4
 cd $AMPACHEDIR/releases/6/php74
 cp -f $AMPACHEDIR/extras/composer_old.json ./composer.json
+rm ./composer_old.json
 rm -rf ./composer.lock vendor/* public/lib/components/* && php7.4 $COMPOSERPATH install
 php7.4 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -116,6 +117,7 @@ find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/6/php74_squashed
 cp -f $AMPACHEDIR/extras/composer_old_squashed.json ./composer.json
+rm ./composer_old.json
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php7.4 $COMPOSERPATH install
 php7.4 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -128,6 +130,7 @@ find . -name "*.map.1" -exec rm {} \;
 # php 8.0
 cd $AMPACHEDIR/releases/6/php80
 cp -f $AMPACHEDIR/extras/composer_old.json ./composer.json
+rm ./composer_old.json
 rm -rf ./composer.lock vendor/* public/lib/components/* && php8.0 $COMPOSERPATH install
 php8.0 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -139,6 +142,7 @@ find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/6/php80_squashed
 cp -f $AMPACHEDIR/extras/composer_old_squashed.json ./composer.json
+rm ./composer_old.json
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php8.0 $COMPOSERPATH install
 php8.0 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -151,6 +155,7 @@ find . -name "*.map.1" -exec rm {} \;
 # php 8.1
 cd $AMPACHEDIR/releases/6/php81
 cp -f $AMPACHEDIR/extras/composer_old.json ./composer.json
+rm ./composer_old.json
 rm -rf ./composer.lock vendor/* public/lib/components/* && php8.1 $COMPOSERPATH install
 php8.1 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -162,6 +167,7 @@ find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/6/php81_squashed
 cp -f $AMPACHEDIR/extras/composer_old_squashed.json ./composer.json
+rm ./composer_old.json
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php8.1 $COMPOSERPATH install
 php8.1 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
