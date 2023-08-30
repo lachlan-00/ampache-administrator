@@ -32,6 +32,12 @@ if [ ! -f $COMPOSERPATH ]; then
   chmod +x $COMPOSERPATH
 fi
 cd $AMPACHEDIR/releases/6
+if [ ! -d $AMPACHEDIR/releases/6/generic ]; then
+  git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git generic
+fi
+if [ ! -d $AMPACHEDIR/releases/6/generic_squashed ]; then
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git generic_squashed
+fi
 if [ ! -d $AMPACHEDIR/releases/6/php74 ]; then
   git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php74
 fi
@@ -93,6 +99,8 @@ if [ ! -f $AMPACHEDIR/releases/6/php82_squashed/index.php ]; then
 fi
 
 # force reset everything
+cd $AMPACHEDIR/releases/6/generic && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
+cd $AMPACHEDIR/releases/6/generic_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 cd $AMPACHEDIR/releases/6/php74 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
 cd $AMPACHEDIR/releases/6/php74_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 cd $AMPACHEDIR/releases/6/php80 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
@@ -101,6 +109,17 @@ cd $AMPACHEDIR/releases/6/php81 && git fetch origin $RELEASEBRANCH && git checko
 cd $AMPACHEDIR/releases/6/php81_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 cd $AMPACHEDIR/releases/6/php82 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
 cd $AMPACHEDIR/releases/6/php82_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
+
+# GENERIC (No composer packages installed)
+cd $AMPACHEDIR/releases/6/generic
+rm -rf ./composer.lock vendor/* public/lib/components/*
+find . -xtype l -exec rm {} \;
+find . -name "*.map.1" -exec rm {} \;
+
+cd $AMPACHEDIR/releases/6/generic_squashed
+rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/
+find . -xtype l -exec rm {} \;
+find . -name "*.map.1" -exec rm {} \;
 
 # php 7.4
 cd $AMPACHEDIR/releases/6/php74
@@ -199,8 +218,11 @@ cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 # remove possible old release files before building the new one
-if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all.zip ]; then
-  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all.zip
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_public.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_public.zip
+fi
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_squashed.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_squashed.zip
 fi
 if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed.zip ]; then
   rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed.zip
@@ -232,6 +254,10 @@ fi
 
 # Build Releases
 
+## GENERIC
+cd $AMPACHEDIR/releases/6/generic && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../../ampache-${RELEASEVERSION}_public.zip ./
+cd $AMPACHEDIR/releases/6/generic_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../../ampache-${RELEASEVERSION}_squashed.zip ./ ./
+
 ## php 7.4
 cd $AMPACHEDIR/releases/6/php74 && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../../ampache-${RELEASEVERSION}_all_php7.4.zip ./
 cd $AMPACHEDIR/releases/6/php74_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../../ampache-${RELEASEVERSION}_all_squashed_php7.4.zip ./ ./
@@ -251,6 +277,12 @@ cd $AMPACHEDIR/releases/6/php82_squashed && zip -r -q -u -9 --exclude=./config/a
 # go back
 cd $AMPACHEDIR
 
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_public.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_squashed.zip
+fi
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php7.4.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php7.4.zip
+fi
 if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php7.4.zip ]; then
   echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php7.4.zip
 fi
@@ -308,6 +340,10 @@ echo
 echo "**UNSUPPORTED** php7.4 (_will be built until it can't be done any more_)"
 md5sum ./ampache-${RELEASEVERSION}_all_php7.4.zip
 md5sum ./ampache-${RELEASEVERSION}_all_squashed_php7.4.zip
+echo
+echo "**UNSUPPORTED** Code only release. (Requires composer install)"
+md5sum ./ampache-${RELEASEVERSION}_public.zip
+md5sum ./ampache-${RELEASEVERSION}_squashed.zip
 echo
 echo
 echo
