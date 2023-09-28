@@ -19,6 +19,10 @@ if [ ! $# -eq 0 ]; then
   RELEASEVERSION=$1
 fi
 
+echo
+echo $RELEASEVERSION
+echo
+
 if [ ! -d $AMPACHEDIR/releases ]; then
   mkdir $AMPACHEDIR/releases
 fi
@@ -324,6 +328,8 @@ cp -f $AMPACHEDIR/extras/composer_php8.2_squashed.json ./composer.json
 
 cd $AMPACHEDIR/releases
 # echo the version checksum
+echo
+echo "# ${RELEASEVERSION}"
 echo
 echo "php8.2"
 md5sum ./ampache-${RELEASEVERSION}_all_php8.2.zip

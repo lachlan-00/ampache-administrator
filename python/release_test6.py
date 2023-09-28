@@ -18,6 +18,7 @@ offset = 0
 api3_version = '391000'
 api4_version = '443000'
 api5_version = '5.5.7'
+api6_version = '6.0.0'
 subsonic_api = '1.16.1'
 docpath = "docs/"
 song_url = 'https://music.com.au/play/index.php?ssid=eeb9f1b6056246a7d563f479f518bb34&type=song&oid=60&uid=4&player=api&name=Synthetic%20-%20BrownSmoke.wma'
@@ -40,10 +41,10 @@ def build_docs(ampache_url, ampache_api, ampache_user, api_format):
     ampacheConnection.set_debug(False)
     ampacheConnection.set_format(api_format)
 
-    ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, api_format, docpath)
+    ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, api_format, docpath)
 
 
-def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, api_format, docpath):
+def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, api_format, docpath):
     mytime = int(time.time())
     encrypted_key = ampacheConnection.encrypt_password(ampache_api, mytime)
 
@@ -97,7 +98,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     
     print(user['auth'])
 
-api_version = api5_version
+api_version = api6_version
 build_docs(url, api, user, 'json')
 #build_docs(url, api, user, 'xml')
 

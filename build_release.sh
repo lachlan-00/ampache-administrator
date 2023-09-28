@@ -19,6 +19,10 @@ if [ ! $# -eq 0 ]; then
   RELEASEVERSION=$1
 fi
 
+echo
+echo $RELEASEVERSION
+echo
+
 if [ ! -d $AMPACHEDIR/releases ]; then
   mkdir $AMPACHEDIR/releases
 fi
@@ -273,6 +277,8 @@ fi
 
 cd $AMPACHEDIR/releases
 # echo the version checksum
+echo
+echo "# ${RELEASEVERSION}"
 echo
 echo "php7.4"
 md5sum ./ampache-${RELEASEVERSION}_all.zip
