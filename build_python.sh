@@ -31,42 +31,42 @@ if [ ! $BRANCH -eq 0 ]; then
   docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /tmp/sql/ampache-test.sql"
   docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
   echo "START $BRANCH"
-  python3 ./build_all.py $BRANCH
+  python3 ./build_all6.py $BRANCH
   echo "DONE $BRANCH"
 else
   echo "RESET THE DATABASE"
   docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /tmp/sql/ampache-test.sql"
   docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
   echo "START 6"
-  python3 ./build_all.py 6
+  python3 ./build_all6.py 6
   echo "DONE 6"
 
   echo "RESET THE DATABASE"
   docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /tmp/sql/ampache-test.sql"
   docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
   echo "START 5"
-  python3 ./build_all.py 5
+  python3 ./build_all6.py 5
   echo "DONE 5"
 
   echo "RESET THE DATABASE"
   docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /tmp/sql/ampache-test.sql"
   docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
   echo "START 4"
-  python3 ./build_all.py 4
+  python3 ./build_all6.py 4
   echo "DONE 4"
 
   echo "RESET THE DATABASE"
   docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /tmp/sql/ampache-test.sql"
   docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
   echo "START 3"
-  python3 ./build_all.py 3
+  python3 ./build_all6.py 3
   echo "DONE 3"
 
   echo "RESET THE DATABASE"
   docker exec ampache-test-ampachetest-1 sh -c "mysql -uroot ampachetest < /tmp/sql/ampache-test.sql"
   docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
   echo "START Subsonic"
-  python3 ./build_all.py 16
+  python3 ./build_all6.py 16
   echo "DONE Subsonic"
 fi
 

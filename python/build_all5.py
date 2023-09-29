@@ -144,7 +144,8 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "ping." + api_format,
                     docpath + "ping (no auth)." + api_format)
 
-    encrypted_key = ampacheConnection.encrypt_string(ampache_api, ampache_user)
+    mytime = int(time.time())
+    encrypted_key = ampacheConnection.encrypt_password(ampache_api, mytime)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/handshake%20\(error\).xml)
     ampacheConnection.handshake(ampache_url, 'badkey', '', 0, api_version)
@@ -153,7 +154,7 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                     docpath + "handshake (error)." + api_format)
     # use correct details
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/handshake.xml)
-    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, '', 0, api_version)
+    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, ampache_user, 0, api_version)
     if not ampache_session:
         print(encrypted_key)
         sys.exit('ERROR: Failed to connect to ' + ampache_url)
@@ -421,7 +422,8 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "ping." + api_format,
                     docpath + "ping (no auth)." + api_format)
 
-    encrypted_key = ampacheConnection.encrypt_string(ampache_api, ampache_user)
+    mytime = int(time.time())
+    encrypted_key = ampacheConnection.encrypt_password(ampache_api, mytime)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/handshake%20\(error\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/handshake%20\(error\).xml)
@@ -432,7 +434,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/handshake.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/handshake.xml)
-    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, '', 0, api_version)
+    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, ampache_user, 0, api_version)
     if not ampache_session:
         print(encrypted_key)
         sys.exit('ERROR: Failed to connect to ' + ampache_url)
@@ -1116,7 +1118,8 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "ping." + api_format,
                     docpath + "ping (no auth)." + api_format)
 
-    encrypted_key = ampacheConnection.encrypt_string(ampache_api, ampache_user)
+    mytime = int(time.time())
+    encrypted_key = ampacheConnection.encrypt_password(ampache_api, mytime)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/handshake%20\(error\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/handshake%20\(error\).xml)
@@ -1127,7 +1130,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # use correct details
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/handshake.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/handshake.xml)
-    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, '', 0, api_version)
+    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, ampache_user, 0, api_version)
     if not ampache_session:
         print(encrypted_key)
         sys.exit('ERROR: Failed to connect to ' + ampache_url)
@@ -1857,7 +1860,8 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "ping." + api_format,
                     docpath + "ping (no auth)." + api_format)
 
-    encrypted_key = ampacheConnection.encrypt_string(ampache_api, ampache_user)
+    mytime = int(time.time())
+    encrypted_key = ampacheConnection.encrypt_password(ampache_api, mytime)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/handshake%20\(error\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/handshake%20\(error\).xml)
@@ -1868,7 +1872,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # use correct details
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/handshake.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/handshake.xml)
-    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, '', 0, api_version)
+    ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, ampache_user, 0, api_version)
     if not ampache_session:
         print(encrypted_key)
         sys.exit('ERROR: Failed to connect to ' + ampache_url)
@@ -3226,11 +3230,7 @@ def subsonic_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     fetch_url = base_url + action + base_parameters
     ampacheConnection.fetch_url(fetch_url, api_format, action)
 
-if APIVERSION == 6:
-    api_version = api6_version
-    build_docs(url, api, user, 'json')
-    build_docs(url, api, user, 'xml')
-elif APIVERSION == 5:
+if APIVERSION == 5:
     api_version = api5_version
     build_docs(url, api, user, 'json')
     build_docs(url, api, user, 'xml')
@@ -3246,9 +3246,6 @@ elif APIVERSION == 16:
     build_docs(url, api, user, 'json')
     build_docs(url, api, user, 'xml')
 else:
-    api_version = api6_version
-    build_docs(url, api, user, 'json')
-    build_docs(url, api, user, 'xml')
     api_version = api5_version
     build_docs(url, api, user, 'json')
     build_docs(url, api, user, 'xml')
@@ -3261,5 +3258,5 @@ else:
     build_docs(url, api, user, 'json')
     build_docs(url, api, user, 'xml')
 
-print("build_all.py COMPLETED")
+print("build_all5.py COMPLETED")
 

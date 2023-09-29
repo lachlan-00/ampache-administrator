@@ -152,6 +152,10 @@ docker-compose -p "release-test" -f docker/test-docker-compose74.yml -f docker/t
 
 USERCOMMAND="php /var/www/html/bin/cli admin:addUser admin -p $AMPACHEPASSWORD -e admin@ampache.dev -l 100"
 UPDATEDBCOMMAND="php /var/www/html/bin/cli admin:updateDatabase -e"
+ADDMUSICCATALOGCOMMAND="php /var/www/html/bin/cli run:addCatalog music /media/music"
+ADDPODCASTCATALOGCOMMAND="php /var/www/html/bin/cli run:addCatalog podcast /media/podcast podcast"
+ADDVIDEOCATALOGCOMMAND="php /var/www/html/bin/cli run:addCatalog video /media/video clip"
+
 
 echo "INSTALLING AMPACHE on PHP7.4"
 
@@ -160,6 +164,9 @@ INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $
 docker exec -u root -it release-test-testampache74-1 ${INSTALLCOMMAND}74
 docker exec -u root -it release-test-testampache74-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache74-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-testampache74-1 ${ADDMUSICCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache74-1 ${ADDPODCASTCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache74-1 ${ADDVIDEOCATALOGCOMMAND}
 
 
 echo "INSTALLING AMPACHE on PHP8.0"
@@ -169,6 +176,9 @@ INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $
 docker exec -u root -it release-test-testampache80-1 ${INSTALLCOMMAND}80
 docker exec -u root -it release-test-testampache80-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache80-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-testampache80-1 ${ADDMUSICCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache80-1 ${ADDPODCASTCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache80-1 ${ADDVIDEOCATALOGCOMMAND}
 
 echo "INSTALLING AMPACHE on PHP8.1"
 
@@ -177,6 +187,9 @@ INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $
 docker exec -u root -it release-test-testampache81-1 ${INSTALLCOMMAND}81
 docker exec -u root -it release-test-testampache81-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache81-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-testampache81-1 ${ADDMUSICCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache81-1 ${ADDPODCASTCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache81-1 ${ADDVIDEOCATALOGCOMMAND}
 
 echo "INSTALLING AMPACHE on PHP8.2"
 
@@ -185,9 +198,15 @@ INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $
 docker exec -u root -it release-test-testampache82-1 ${INSTALLCOMMAND}82
 docker exec -u root -it release-test-testampache82-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache82-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-testampache82-1 ${ADDMUSICCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache82-1 ${ADDPODCASTCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache82-1 ${ADDVIDEOCATALOGCOMMAND}
 
 USERCOMMAND="php /var/www/html/public/bin/cli admin:addUser admin -p $AMPACHEPASSWORD -e admin@ampache.dev -l 100"
 UPDATEDBCOMMAND="php /var/www/html/public/bin/cli admin:updateDatabase -e"
+ADDMUSICCATALOGCOMMAND="php /var/www/html/public/bin/cli run:addCatalog music /media/music"
+ADDPODCASTCATALOGCOMMAND="php /var/www/html/public/bin/cli run:addCatalog podcast /media/podcast podcast"
+ADDVIDEOCATALOGCOMMAND="php /var/www/html/public/bin/cli run:addCatalog video /media/video clip"
 
 echo "INSTALLING SQUASHED AMPACHE on PHP7.4"
 
@@ -195,6 +214,9 @@ INSTALLCOMMAND="php /var/www/html/public/bin/installer install -f -U $DATABASEUS
 docker exec -u root -it release-test-testampache74_squashed-1 ${INSTALLCOMMAND}74s
 docker exec -u root -it release-test-testampache74_squashed-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache74_squashed-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-testampache74_squashed-1 ${ADDMUSICCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache74_squashed-1 ${ADDPODCASTCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache74_squashed-1 ${ADDVIDEOCATALOGCOMMAND}
 
 echo "INSTALLING SQUASHED AMPACHE on PHP8.0"
 
@@ -202,6 +224,9 @@ INSTALLCOMMAND="php /var/www/html/public/bin/installer install -f -U $DATABASEUS
 docker exec -u root -it release-test-testampache80_squashed-1 ${INSTALLCOMMAND}80s
 docker exec -u root -it release-test-testampache80_squashed-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache80_squashed-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-testampache80_squashed-1 ${ADDMUSICCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache80_squashed-1 ${ADDPODCASTCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache80_squashed-1 ${ADDVIDEOCATALOGCOMMAND}
 
 echo "INSTALLING SQUASHED AMPACHE on PHP8.1"
 
@@ -209,6 +234,9 @@ INSTALLCOMMAND="php /var/www/html/public/bin/installer install -f -U $DATABASEUS
 docker exec -u root -it release-test-testampache81_squashed-1 ${INSTALLCOMMAND}81s
 docker exec -u root -it release-test-testampache81_squashed-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache81_squashed-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-testampache81_squashed-1 ${ADDMUSICCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache81_squashed-1 ${ADDPODCASTCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache81_squashed-1 ${ADDVIDEOCATALOGCOMMAND}
 
 echo "INSTALLING SQUASHED AMPACHE on PHP8.2"
 
@@ -216,6 +244,9 @@ INSTALLCOMMAND="php /var/www/html/public/bin/installer install -f -U $DATABASEUS
 docker exec -u root -it release-test-testampache82_squashed-1 ${INSTALLCOMMAND}82s
 docker exec -u root -it release-test-testampache82_squashed-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache82_squashed-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-testampache82_squashed-1 ${ADDMUSICCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache82_squashed-1 ${ADDPODCASTCATALOGCOMMAND}
+docker exec -u root -it release-test-testampache82_squashed-1 ${ADDVIDEOCATALOGCOMMAND}
 
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
@@ -266,40 +297,40 @@ echo
 echo "Testing $RELEASEVERSION ampache74"
 #release-test-testampache74
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test5.py http://${LOCALIP}:17480 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:17480 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all5.py http://${LOCALIP}:17480 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache74_squashed"
 #release-test-testampache74_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test5.py http://${LOCALIP}:17481 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:17481 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all5.py http://${LOCALIP}:17481 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache80"
 #release-test-testampache80
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test5.py http://${LOCALIP}:18080 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18080 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all5.py http://${LOCALIP}:18080 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache80_squashed"
 #release-test-testampache80_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test5.py http://${LOCALIP}:18081 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18081 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all5.py http://${LOCALIP}:18081 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache81"
 #release-test-testampache81
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test5.py http://${LOCALIP}:18180 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18180 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all5.py http://${LOCALIP}:18180 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache81_squashed"
 #release-test-testampache81_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test5.py http://${LOCALIP}:18181 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18181 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all5.py http://${LOCALIP}:18181 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache82"
 #release-test-testampache82
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test5.py http://${LOCALIP}:18280 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18280 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all5.py http://${LOCALIP}:18280 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache82_squashed"
 #release-test-testampache82_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test5.py http://${LOCALIP}:18281 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all.py http://${LOCALIP}:18281 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all5.py http://${LOCALIP}:18281 $DEMOPASSWORD admin 1
 

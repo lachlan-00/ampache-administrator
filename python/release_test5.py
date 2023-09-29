@@ -49,7 +49,6 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, ampache_user, mytime, api_version)
     if not ampache_session:
-        print(encrypted_key)
         sys.exit('ERROR: Failed to connect to ' + ampache_url)
 
     my_ping = ampacheConnection.ping(ampache_url, ampache_session, api_version)
@@ -62,12 +61,8 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.user_create('generic', 'demodemo', 'generic@gmail.com', False, False)
 
     # add an api key for use later
-    ampacheConnection.user_edit(tempusername, False, False, False, False, False, False, False, False, False, 1, False, False)
-    ampacheConnection.user_edit('admin', False, False, False, False, False, False, False, False, False, 1, False, False)
-
-    ampacheConnection.catalog_add('music', '/media/music', 'local', 'music')
-    ampacheConnection.catalog_add('podcast', '/media/podcast', 'local', 'podcast')
-    ampacheConnection.catalog_add('video', '/media/video', 'local', 'clip')
+    #ampacheConnection.user_update(tempusername, False, False, False, False, False, False, False, False, False, 1, False, False)
+    #ampacheConnection.user_update('admin', False, False, False, False, False, False, False, False, False, 1, False, False)
 
     catalogs = ampacheConnection.catalogs('music')
     catalog_id = catalogs['catalog'][0]['id']
@@ -92,10 +87,9 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # return the api key to run build_all
     user = ampacheConnection.user('admin')
     if not user['auth']:
-        print()
-        sys.exit('ERROR: NO AUTH KEY')
-    
-    print(user['auth'])
+        print(ampache_api)
+    else:
+        print(user['auth'])
 
 api_version = api5_version
 build_docs(url, api, user, 'json')
