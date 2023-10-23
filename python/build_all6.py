@@ -55,7 +55,7 @@ except IndexError:
         user = conf.get('conf', 'ampache_user')
     else:
         print()
-        sys.exit('Error: docs/examples/ampyche.conf not found and no arguments set')
+        sys.exit(api_version + ' ERROR docs/examples/ampyche.conf not found and no arguments set')
     try:
         if sys.argv[1]:
             APIVERSION = int(sys.argv[1])
@@ -156,12 +156,12 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, '', 0, api_version)
     if not ampache_session:
         print(encrypted_key)
-        sys.exit('ERROR: Failed to connect to ' + ampache_url)
+        sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
     my_ping = ampacheConnection.ping(ampache_url, ampache_session, api_version)
     if not my_ping:
         print()
-        sys.exit('ERROR: Failed to ping ' + ampache_url)
+        sys.exit(api_version + ' ERROR Failed to ping ' + ampache_url)
 
     search_rules = [['favorite', 0, '%'], ['title', 2, 'D']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/advanced_search%20\(song\).xml)
@@ -435,12 +435,12 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, '', 0, api_version)
     if not ampache_session:
         print(encrypted_key)
-        sys.exit('ERROR: Failed to connect to ' + ampache_url)
+        sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
     my_ping = ampacheConnection.ping(ampache_url, ampache_session, api_version)
     if not my_ping:
         print()
-        sys.exit('ERROR: Failed to ping ' + ampache_url)
+        sys.exit(api_version + ' ERROR Failed to ping ' + ampache_url)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/url_to_song.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/url_to_song.xml)
@@ -1130,12 +1130,12 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, '', 0, api_version)
     if not ampache_session:
         print(encrypted_key)
-        sys.exit('ERROR: Failed to connect to ' + ampache_url)
+        sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
     my_ping = ampacheConnection.ping(ampache_url, ampache_session, api_version)
     if not my_ping:
         print()
-        sys.exit('ERROR: Failed to ping ' + ampache_url)
+        sys.exit(api_version + ' ERROR Failed to ping ' + ampache_url)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/system_update.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/system_update.xml)
@@ -1871,12 +1871,12 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, '', 0, api_version)
     if not ampache_session:
         print(encrypted_key)
-        sys.exit('ERROR: Failed to connect to ' + ampache_url)
+        sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
     my_ping = ampacheConnection.ping(ampache_url, ampache_session, api_version)
     if not my_ping:
         print()
-        sys.exit('ERROR: Failed to ping ' + ampache_url)
+        sys.exit(api_version + ' ERROR Failed to ping ' + ampache_url)
 
     # Registration should be disabled
     ampacheConnection.register('user', 'no', 'passwonord', 'no')
