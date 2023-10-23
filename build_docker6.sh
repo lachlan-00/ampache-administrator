@@ -14,7 +14,7 @@ if [ $BRANCH = "master" ] || [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
     read -p "Failed to find $RELEASEVERSION... Enter Ampache Version: " RELEASEVERSION
   fi
 fi
- 
+echo $RELEASEVERSION
 if [ ! -d $AMPACHEDIR/docker ]; then
   mkdir $AMPACHEDIR/docker
 fi

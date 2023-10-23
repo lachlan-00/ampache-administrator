@@ -43,18 +43,6 @@ if [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
   cd $AMPACHEDIR/docker/ampache-docker-nosql/ && git checkout nosql && git reset --hard origin/nosql && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:nosql5 -t ampache/ampache:nosql${RELEASEVERSION} -t ampache/ampache:nosql --push . &
 fi
 
-# DEVELOP
-if [ $BRANCH = "develop" ] || [ $BRANCH = "all" ]; then
-  if [ ! -d $AMPACHEDIR/docker/ampache-docker-develop/ ]; then
-    cd $AMPACHEDIR/docker && git clone -b develop https://github.com/ampache/ampache-docker.git ampache-docker-develop
-  fi
-  if [ ! -f $AMPACHEDIR/docker/ampache-docker-develop/Dockerfile ]; then
-    rm -rf $AMPACHEDIR/docker/ampache-docker-develop
-    cd $AMPACHEDIR/docker && git clone -b develop https://github.com/ampache/ampache-docker.git ampache-docker-develop
-  fi
-  cd $AMPACHEDIR/docker/ampache-docker-develop/ && git checkout develop && git reset --hard origin/develop && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 -t ampache/ampache:develop -t ampache/ampache:preview --push . &
-fi
-
 # go home
 cd $AMPACHEDIR
 
