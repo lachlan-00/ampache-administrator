@@ -10,7 +10,7 @@ import time
 import ampache
 
 # user variables
-url = 'https://demo.ampache.dev'
+url = 'https://develop.ampache.dev'
 api = 'demo'
 user = 'demodemo'
 limit = 4
@@ -18,7 +18,7 @@ offset = 0
 api3_version = '391000'
 api4_version = '443000'
 api5_version = '5.5.7'
-api6_version = '6.0.0'
+api6_version = '6.1.0'
 subsonic_api = '1.16.1'
 docpath = "docs/"
 song_url = 'https://music.com.au/play/index.php?ssid=eeb9f1b6056246a7d563f479f518bb34&type=song&oid=60&uid=4&player=api&name=Synthetic%20-%20BrownSmoke.wma'
@@ -1804,6 +1804,8 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark_edit.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmarks.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmarks.xml)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/catalog_file.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/catalog_file.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/catalog_folder.json)
@@ -1812,6 +1814,8 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/get_bookmark.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/get_similar.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/get_similar.xml)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/lost_password.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/lost_password.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/podcast_episode_delete.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/podcast_episode_delete.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/preference_create.json)
