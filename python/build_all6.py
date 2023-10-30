@@ -1796,16 +1796,6 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
 def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, api_format, docpath):
     #TODO
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark_create.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark_create.xml)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark_delete)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark_delete)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark_edit.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark_edit.xml)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmarks.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmarks.xml)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/catalog_file.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/catalog_file.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/catalog_folder.json)
@@ -2285,6 +2275,48 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     if os.path.isfile(docpath + "catalog_action." + api_format):
         shutil.move(docpath + "catalog_action." + api_format,
                     docpath + "catalog_action (error)." + api_format)
+
+    ampacheConnection.bookmark_create(115, 'song', 0, 'client1')
+    ampacheConnection.bookmark_create(64, 'song', 10, 'client')
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmarks.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmarks.xml)
+    ampacheConnection.bookmarks(False, True)
+    if os.path.isfile(docpath + "bookmarks." + api_format):
+        shutil.move(docpath + "bookmarks." + api_format,
+                    docpath + "bookmarks (with include)." + api_format)
+    ampacheConnection.bookmarks()
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark.xml)
+    ampacheConnection.bookmark(2)
+    if os.path.isfile(docpath + "bookmark." + api_format):
+        shutil.move(docpath + "bookmark." + api_format,
+                    docpath + "bookmark (with include)." + api_format)
+    ampacheConnection.bookmark(2)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark_create.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark_create.xml)
+    ampacheConnection.bookmark_create(6, 'song')
+    ampacheConnection.get_bookmark(6, 'song', 1)
+    if os.path.isfile(docpath + "get_bookmark." + api_format):
+        shutil.move(docpath + "get_bookmark." + api_format,
+                    docpath + "get_bookmark (with include)." + api_format)
+    mybookmark = ampacheConnection.get_bookmark(6, 'song')
+    if api_format == 'xml':
+        for child in mybookmark:
+            if child.tag == 'user':
+                mybookmark = child.attrib['id']
+    else:
+        mybookmark = mybookmark['id']
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark_edit.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark_edit.xml)
+    ampacheConnection.bookmark_edit(mybookmark, 'bookmark', 10)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark_delete)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark_delete)
+    ampacheConnection.bookmark_delete(mybookmark, 'bookmark')
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/flag.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/flag.xml)

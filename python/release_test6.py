@@ -89,6 +89,9 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.share_create(5, 'artist')
     ampacheConnection.share_create(2, 'album')
     ampacheConnection.share_create(15, 'song')
+    ampacheConnection.bookmark_create(5, 'song')
+    ampacheConnection.bookmark_create(2, 'podcast_episode')
+    ampacheConnection.bookmark_create(15, 'song')
 
     # return the api key to run build_all
     user = ampacheConnection.user('admin')
