@@ -21,7 +21,7 @@ api5_version = '5.5.7'
 api6_version = '6.1.0'
 subsonic_api = '1.16.1'
 docpath = "docs/"
-song_url = 'https://music.com.au/play/index.php?ssid=eeb9f1b6056246a7d563f479f518bb34&type=song&oid=60&uid=4&player=api&name=Synthetic%20-%20BrownSmoke.wma'
+song_url = url + '/play/index.php?ssid=eeb9f1b6056246a7d563f479f518bb34&type=song&oid=60&uid=4&player=api&name=Synthetic%20-%20BrownSmoke.wma'
 APIVERSION = 0
 ENABLEDEBUG = True
 try:
@@ -1800,8 +1800,6 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/catalog_file.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/catalog_folder.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/catalog_folder.xml)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/get_bookmark.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/get_bookmark.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/get_similar.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/get_similar.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/lost_password.json)
@@ -2298,10 +2296,19 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark_create.xml)
     ampacheConnection.bookmark_create(6, 'song')
+    time.sleep(2)
+    ampacheConnection.bookmark_create(6, 'song')
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/get_bookmark.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/get_bookmark.xml)
     ampacheConnection.get_bookmark(6, 'song', 1)
     if os.path.isfile(docpath + "get_bookmark." + api_format):
         shutil.move(docpath + "get_bookmark." + api_format,
                     docpath + "get_bookmark (with include)." + api_format)
+    ampacheConnection.get_bookmark(6, 'song', 0, 1)
+    if os.path.isfile(docpath + "get_bookmark." + api_format):
+        shutil.move(docpath + "get_bookmark." + api_format,
+                    docpath + "get_bookmark (show all)." + api_format)
     mybookmark = ampacheConnection.get_bookmark(6, 'song')
     if api_format == 'xml':
         for child in mybookmark:
