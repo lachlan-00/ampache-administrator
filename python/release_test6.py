@@ -91,8 +91,16 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.share_create(15, 'song')
     ampacheConnection.bookmark_create(5, 'song')
     ampacheConnection.bookmark_create(2, 'podcast_episode')
+    ampacheConnection.bookmark_create(2, 'podcast_episode')
     ampacheConnection.bookmark_create(15, 'song')
 
+    ampacheConnection.bookmark_create(115, 'song', 0, 'client1')
+    ampacheConnection.bookmark_create(64, 'song', 10, 'client')
+    ampacheConnection.bookmark_create(115, 'song', 0, 'client1')
+    ampacheConnection.bookmark_create(64, 'song', 10, 'client')
+    ampacheConnection.bookmark_create(115, 'song', 0, 'client1')
+    ampacheConnection.bookmark_create(64, 'song', 10, 'client')
+    
     # return the api key to run build_all
     user = ampacheConnection.user('admin')
     if not user['auth']:
