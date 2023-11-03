@@ -2287,32 +2287,32 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark.xml)
-    ampacheConnection.bookmark(2)
+    ampacheConnection.bookmark(4, 1)
     if os.path.isfile(docpath + "bookmark." + api_format):
         shutil.move(docpath + "bookmark." + api_format,
                     docpath + "bookmark (with include)." + api_format)
-    ampacheConnection.bookmark(2)
+    ampacheConnection.bookmark(4)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark_create.xml)
-    ampacheConnection.bookmark_create(6, 'song')
+    ampacheConnection.bookmark_create(83, 'song')
     time.sleep(2)
-    ampacheConnection.bookmark_create(6, 'song')
+    ampacheConnection.bookmark_create(83, 'song')
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/get_bookmark.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/get_bookmark.xml)
-    ampacheConnection.get_bookmark(6, 'song', 1)
+    ampacheConnection.get_bookmark(64, 'song', 1)
     if os.path.isfile(docpath + "get_bookmark." + api_format):
         shutil.move(docpath + "get_bookmark." + api_format,
                     docpath + "get_bookmark (with include)." + api_format)
-    ampacheConnection.get_bookmark(6, 'song', 0, 1)
+    ampacheConnection.get_bookmark(64, 'song', 0, 1)
     if os.path.isfile(docpath + "get_bookmark." + api_format):
         shutil.move(docpath + "get_bookmark." + api_format,
                     docpath + "get_bookmark (show all)." + api_format)
-    mybookmark = ampacheConnection.get_bookmark(6, 'song')
+    mybookmark = ampacheConnection.get_bookmark(64, 'song')
     if api_format == 'xml':
         for child in mybookmark:
-            if child.tag == 'user':
+            if child.tag == 'bookmark':
                 mybookmark = child.attrib['id']
     else:
         mybookmark = mybookmark['id']
