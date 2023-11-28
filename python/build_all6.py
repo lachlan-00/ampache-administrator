@@ -97,7 +97,8 @@ def build_docs(ampache_url, ampache_api, ampache_user, api_format):
 def self_check(api_format, ampache_url, ampache_api, ampache_session, docpath):
     if not os.path.isdir("./" + docpath):
         return
-    print("Checking files in " + docpath + " for private strings")
+    if ENABLEDEBUG:
+        print("Checking files in " + docpath + " for private strings")
     for files in os.listdir("./" + docpath):
         f = open("./" + docpath + files, 'r', encoding="utf-8")
         filedata = f.read()
@@ -2274,8 +2275,8 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "catalog_action." + api_format,
                     docpath + "catalog_action (error)." + api_format)
 
-    ampacheConnection.bookmark_create(115, 'song', 0, 'client1')
-    ampacheConnection.bookmark_create(64, 'song', 10, 'client')
+    ampacheConnection.bookmark_create(55, 'song', 0, 'client1')
+    ampacheConnection.bookmark_create(15, 'song', 10, 'client')
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmarks.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmarks.xml)
@@ -2295,21 +2296,21 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark_create.xml)
-    ampacheConnection.bookmark_create(83, 'song')
+    ampacheConnection.bookmark_create(33, 'song')
     time.sleep(2)
-    ampacheConnection.bookmark_create(83, 'song')
+    ampacheConnection.bookmark_create(33, 'song')
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/get_bookmark.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/get_bookmark.xml)
-    ampacheConnection.get_bookmark(64, 'song', 1)
+    ampacheConnection.get_bookmark(15, 'song', 1)
     if os.path.isfile(docpath + "get_bookmark." + api_format):
         shutil.move(docpath + "get_bookmark." + api_format,
                     docpath + "get_bookmark (with include)." + api_format)
-    ampacheConnection.get_bookmark(64, 'song', 0, 1)
+    ampacheConnection.get_bookmark(15, 'song', 0, 1)
     if os.path.isfile(docpath + "get_bookmark." + api_format):
         shutil.move(docpath + "get_bookmark." + api_format,
                     docpath + "get_bookmark (show all)." + api_format)
-    mybookmark = ampacheConnection.get_bookmark(64, 'song')
+    mybookmark = ampacheConnection.get_bookmark(15, 'song')
     if api_format == 'xml':
         for child in mybookmark:
             if child.tag == 'bookmark':
