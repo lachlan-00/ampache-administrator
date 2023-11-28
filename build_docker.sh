@@ -40,7 +40,7 @@ if [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
     rm -rf $AMPACHEDIR/docker/ampache-docker-nosql
     cd $AMPACHEDIR/docker && git clone -b nosql https://github.com/ampache/ampache-docker.git ampache-docker-nosql
   fi
-  cd $AMPACHEDIR/docker/ampache-docker-nosql/ && git checkout nosql && git reset --hard origin/nosql && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:nosql5 -t ampache/ampache:nosql${RELEASEVERSION} -t ampache/ampache:nosql --push . &
+  cd $AMPACHEDIR/docker/ampache-docker-nosql/ && git checkout nosql && git reset --hard origin/nosql && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:nosql5 -t ampache/ampache:nosql${RELEASEVERSION} --push . &
 fi
 
 # go home
