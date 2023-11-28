@@ -102,6 +102,21 @@ if [ ! -f $AMPACHEDIR/releases/6/php82_squashed/index.php ]; then
   git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php82_squashed
 fi
 
+if [ ! -d $AMPACHEDIR/releases/6/php83 ]; then
+  git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php83
+fi
+if [ ! -f $AMPACHEDIR/releases/6/php83/index.php ]; then
+  rm -rf $AMPACHEDIR/releases/6/php83
+  git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php83
+fi
+if [ ! -d $AMPACHEDIR/releases/6/php83_squashed ]; then
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php83_squashed
+fi
+if [ ! -f $AMPACHEDIR/releases/6/php83_squashed/index.php ]; then
+  rm -rf $AMPACHEDIR/releases/6/php83_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php83_squashed
+fi
+
 # force reset everything
 cd $AMPACHEDIR/releases/6/generic && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
 cd $AMPACHEDIR/releases/6/generic_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
@@ -113,6 +128,8 @@ cd $AMPACHEDIR/releases/6/php81 && git fetch origin $RELEASEBRANCH && git checko
 cd $AMPACHEDIR/releases/6/php81_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 cd $AMPACHEDIR/releases/6/php82 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
 cd $AMPACHEDIR/releases/6/php82_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
+cd $AMPACHEDIR/releases/6/php83 && git fetch origin $RELEASEBRANCH && git checkout -f $RELEASEBRANCH && git reset --hard origin/$RELEASEBRANCH && git pull
+cd $AMPACHEDIR/releases/6/php83_squashed && git fetch origin $SQUASHBRANCH && git checkout -f $SQUASHBRANCH && git reset --hard origin/$SQUASHBRANCH && git pull
 
 # GENERIC (No composer packages installed)
 cd $AMPACHEDIR/releases/6/generic
@@ -221,6 +238,27 @@ cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-con
 cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
+# php 8.3
+cd $AMPACHEDIR/releases/6/php83
+rm -rf ./composer.lock vendor/* public/lib/components/* && php8.3 $COMPOSERPATH install
+php8.3 $COMPOSERPATH install
+find . -xtype l -exec rm {} \;
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
+#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
+cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
+find . -name "*.map.1" -exec rm {} \;
+
+cd $AMPACHEDIR/releases/6/php83_squashed
+rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php8.3 $COMPOSERPATH install
+php8.3 $COMPOSERPATH install
+find . -xtype l -exec rm {} \;
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
+cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
+#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
+cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
+find . -name "*.map.1" -exec rm {} \;
+
 # remove possible old release files before building the new one
 if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_public.zip ]; then
   rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_public.zip
@@ -255,6 +293,12 @@ fi
 if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip ]; then
   rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip
 fi
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3.zip
+fi
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.3.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.3.zip
+fi
 
 # Build Releases
 
@@ -277,6 +321,10 @@ cd $AMPACHEDIR/releases/6/php81_squashed && zip -r -q -u -9 --exclude=./config/a
 ## php 8.2
 cd $AMPACHEDIR/releases/6/php82 && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../..//ampache-${RELEASEVERSION}_all_php8.2.zip ./
 cd $AMPACHEDIR/releases/6/php82_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../../ampache-${RELEASEVERSION}_all_squashed_php8.2.zip ./
+
+## php 8.3
+cd $AMPACHEDIR/releases/6/php83 && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../..//ampache-${RELEASEVERSION}_all_php8.3.zip ./
+cd $AMPACHEDIR/releases/6/php83_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../../ampache-${RELEASEVERSION}_all_squashed_php8.3.zip ./
 
 # go back
 cd $AMPACHEDIR
@@ -311,6 +359,12 @@ fi
 if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip ]; then
   echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip
 fi
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3.zip
+fi
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.3.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.3.zip
+fi
 
 # Copy back the default composer after updates
 cd $AMPACHEDIR/releases/6/php74
@@ -330,6 +384,10 @@ cd $AMPACHEDIR/releases
 # echo the version checksum
 echo
 echo "# ${RELEASEVERSION}"
+echo
+echo "php8.3"
+md5sum ./ampache-${RELEASEVERSION}_all_php8.3.zip
+md5sum ./ampache-${RELEASEVERSION}_all_squashed_php8.3.zip
 echo
 echo "php8.2"
 md5sum ./ampache-${RELEASEVERSION}_all_php8.2.zip

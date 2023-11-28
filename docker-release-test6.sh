@@ -49,6 +49,10 @@ unzip $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.1.zip -d 
 unzip $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2.zip -d $AMPACHEDIR/release-test/php82
 unzip $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip -d $AMPACHEDIR/release-test/php82_squashed
 
+# php8.3
+unzip $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3.zip -d $AMPACHEDIR/release-test/php83
+unzip $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.3.zip -d $AMPACHEDIR/release-test/php83_squashed
+
 # reset perms
 
 # php7.4
@@ -127,6 +131,25 @@ chmod -R 775 $AMPACHEDIR/release-test/php82_squashed/vendor/
 chown -R $UID:33 $AMPACHEDIR/release-test/php82_squashed/
 chmod -R 775 $AMPACHEDIR/release-test/php82_squashed/
 
+# php8.3
+chown $UID:33 $AMPACHEDIR/release-test/php83/composer.json 
+chmod 775 $AMPACHEDIR/release-test/php83/composer.json
+chown -R $UID:33 $AMPACHEDIR/release-test/php83/config
+chmod -R 775 $AMPACHEDIR/release-test/php83/config
+chown -R $UID:33 $AMPACHEDIR/release-test/php83/vendor/
+chmod -R 775 $AMPACHEDIR/release-test/php83/vendor/
+chown -R $UID:33 $AMPACHEDIR/release-test/php83/public/
+chmod -R 775 $AMPACHEDIR/release-test/php83/public/
+
+chown $UID:33 $AMPACHEDIR/release-test/php83_squashed/composer.json 
+chmod 775 $AMPACHEDIR/release-test/php83_squashed/composer.json
+chown -R $UID:33 $AMPACHEDIR/release-test/php83_squashed/config
+chmod -R 775 $AMPACHEDIR/release-test/php83_squashed/config
+chown -R $UID:33 $AMPACHEDIR/release-test/php83_squashed/vendor/
+chmod -R 775 $AMPACHEDIR/release-test/php83_squashed/vendor/
+chown -R $UID:33 $AMPACHEDIR/release-test/php83_squashed/
+chmod -R 775 $AMPACHEDIR/release-test/php83_squashed/
+
 chown $UID:33 $AMPACHEDIR/release-test/php74
 chmod 775 $AMPACHEDIR/release-test/php74
 chown $UID:33 $AMPACHEDIR/release-test/php74_squashed
@@ -143,10 +166,20 @@ chown $UID:33 $AMPACHEDIR/release-test/php82
 chmod 775 $AMPACHEDIR/release-test/php82
 chown $UID:33 $AMPACHEDIR/release-test/php82_squashed
 chmod 775 $AMPACHEDIR/release-test/php82_squashed
+chown $UID:33 $AMPACHEDIR/release-test/php83
+chmod 775 $AMPACHEDIR/release-test/php83
+chown $UID:33 $AMPACHEDIR/release-test/php83_squashed
+chmod 775 $AMPACHEDIR/release-test/php83_squashed
 
 # ReLaunch all the containers
 
-docker-compose -p "release-test" -f docker/test-docker-compose74.yml -f docker/test-docker-compose74_squashed.yml -f docker/test-docker-compose80.yml -f docker/test-docker-compose80_squashed.yml -f docker/test-docker-compose81.yml -f docker/test-docker-compose81_squashed.yml -f docker/test-docker-compose82.yml -f docker/test-docker-compose82_squashed.yml up -d --build
+docker-compose -p "release-test" \
+ -f docker/test-docker-compose74.yml -f docker/test-docker-compose74_squashed.yml \
+ -f docker/test-docker-compose80.yml -f docker/test-docker-compose80_squashed.yml \
+ -f docker/test-docker-compose81.yml -f docker/test-docker-compose81_squashed.yml \
+ -f docker/test-docker-compose82.yml -f docker/test-docker-compose82_squashed.yml \
+ -f docker/test-docker-compose83.yml -f docker/test-docker-compose83_squashed.yml \
+ up -d --build
 
 # Install DB and add the admin user
 
@@ -186,6 +219,14 @@ docker exec -u root -it release-test-testampache82-1 ${INSTALLCOMMAND}82
 docker exec -u root -it release-test-testampache82-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache82-1 ${UPDATEDBCOMMAND}
 
+echo "INSTALLING AMPACHE on PHP8.3"
+
+# php8.3
+INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}83 -p $DATABASE -d $DATABASE"
+docker exec -u root -it release-test-testampache83-1 ${INSTALLCOMMAND}83
+docker exec -u root -it release-test-testampache83-1 ${USERCOMMAND}
+docker exec -u root -it release-test-testampache83-1 ${UPDATEDBCOMMAND}
+
 USERCOMMAND="php /var/www/html/public/bin/cli admin:addUser admin -p $AMPACHEPASSWORD -e admin@ampache.dev -l 100"
 UPDATEDBCOMMAND="php /var/www/html/public/bin/cli admin:updateDatabase -e"
 
@@ -217,6 +258,13 @@ docker exec -u root -it release-test-testampache82_squashed-1 ${INSTALLCOMMAND}8
 docker exec -u root -it release-test-testampache82_squashed-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache82_squashed-1 ${UPDATEDBCOMMAND}
 
+echo "INSTALLING SQUASHED AMPACHE on PHP8.3"
+
+INSTALLCOMMAND="php /var/www/html/public/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}83s -p $DATABASE -d $DATABASE"
+docker exec -u root -it release-test-testampache83_squashed-1 ${INSTALLCOMMAND}83s
+docker exec -u root -it release-test-testampache83_squashed-1 ${USERCOMMAND}
+docker exec -u root -it release-test-testampache83_squashed-1 ${UPDATEDBCOMMAND}
+
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php80/config/ampache.cfg.php
@@ -225,6 +273,8 @@ sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"tr
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php83/config/ampache.cfg.php
+sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php83_squashed/config/ampache.cfg.php
 
 sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
 sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
@@ -234,6 +284,8 @@ sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-tes
 sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
 sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
 sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php83/config/ampache.cfg.php
+sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php83_squashed/config/ampache.cfg.php
 
 sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
 sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
@@ -243,6 +295,8 @@ sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php81/
 sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
 sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
 sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php83/config/ampache.cfg.php
+sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/php83_squashed/config/ampache.cfg.php
 
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
@@ -252,6 +306,8 @@ sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php81/
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php83/config/ampache.cfg.php
+sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php83_squashed/config/ampache.cfg.php
 
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php74.log\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php74s.log\"/g"   $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
@@ -261,6 +317,8 @@ sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php81.log\"/g" 
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php81s.log\"/g"   $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php82.log\"/g"   $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php82s.log\"/g"   $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php83.log\"/g"   $AMPACHEDIR/release-test/php83/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php83s.log\"/g"   $AMPACHEDIR/release-test/php83_squashed/config/ampache.cfg.php
 
 echo
 echo "Testing $RELEASEVERSION ampache74"
@@ -302,4 +360,15 @@ echo "Testing $RELEASEVERSION ampache82_squashed"
 #release-test-testampache82_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18281 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18281 $DEMOPASSWORD admin 1
+echo
+echo "Testing $RELEASEVERSION ampache83"
+#release-test-testampache83
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18380 admin $AMPACHEPASSWORD)
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18380 $DEMOPASSWORD admin 1
+echo
+echo "Testing $RELEASEVERSION ampache83_squashed"
+#release-test-testampache83_squashed
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18381 admin $AMPACHEPASSWORD)
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18381 $DEMOPASSWORD admin 1
+
 

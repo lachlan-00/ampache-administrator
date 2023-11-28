@@ -40,7 +40,7 @@ This script will update the squashed repo so you don't have to manually edit the
 
 squashed 6 copies from `./ampache-patch6` to `./ampache-squashed6`
 
-### build_docker.sh
+### build_docker.sh & build_docker6.sh
 
 Build all the docker images and upload to docker hub
 
@@ -51,7 +51,7 @@ Build all the docker images and upload to docker hub
 Build single branches with branch name as an argument
 
 ```
-sh ./build_docker.sh master
+sh ./build_docker6.sh master
 ```
 
 ### build_www.sh
@@ -76,7 +76,7 @@ and then generate the xml and json example documents against that server.
 * Build the api docs for api4
 * Build the api docs for api5
 
-### docker-release-test.sh
+### docker-release-test.sh & docker-release-test6.sh
 
 Test Zip file releases but installing to a local docker stack. (make sure you build them using build_release first!)
 
@@ -90,7 +90,7 @@ Finally; `python/release_test.py` is run to create a test user which allows runn
 
 Set a custom version number in the cli adding the version string at the end
 
-e.g. `sh docker-release-test.sh 6.0.0`
+e.g. `sh docker-release-test6.sh 6.1.0`
 
 Sites are then using the php* folders and creates the following container images:
 
@@ -129,14 +129,20 @@ This file sets up all the api folders for building python documentation
 
 ### setup-docker.sh & setup-docker6.sh
 
-Docker-compose setup allowing you locally run Ampache on php 7.4, 8.0, 8.1 and 8.2
+Docker-compose setup allowing you locally run Ampache on php 7.4, 8.0, 8.1, 8.2 and 8.3
 
 Used for testing releases on each release type but an easy way for anyone to just get up and running
 
-You can launch a container for php7.4, 8.0, 8.1 and 8.2 by issuing the following command
+You can launch a container for php7.4, 8.0, 8.1, 8.2 and 8.3 by issuing the following command
 
 ```
-docker-compose up
+docker-compose -p "ampache" \
+ -f docker/docker-compose74.yml -f docker/docker-compose74_squashed.yml \
+ -f docker/docker-compose80.yml -f docker/docker-compose80_squashed.yml \
+ -f docker/docker-compose81.yml -f docker/docker-compose81_squashed.yml \
+ -f docker/docker-compose82.yml -f docker/docker-compose82_squashed.yml \
+ -f docker/docker-compose83.yml -f docker/docker-compose83_squashed.yml \
+ up -d --build
 ```
 
 If you don't have composer installed to `/usr/local/bin/composer` then it will be saved to `./docker/composer`
@@ -145,22 +151,34 @@ Sites are then using the php* folders and creates the following container images
 
 * ampache_ampache74
   * Website root `./php74`
-  * Accessible on http://localhost:8074
+  * Accessible on http://localhost:7480
 * ampache_ampache74_squashed
   * Website root `./php74_squashed`
-  * Accessible on http://localhost:8075
+  * Accessible on http://localhost:7481
 * ampache_ampache80
   * Website root `./php80`
-  * Accessible on http://localhost:8084
+  * Accessible on http://localhost:8080
 * ampache_ampache80_squashed
   * Website root `./php80_squashed`
-  * Accessible on http://localhost:8085
+  * Accessible on http://localhost:8081
 * ampache_ampache81
   * Website root `./php81`
-  * Accessible on http://localhost:8086
+  * Accessible on http://localhost:8180
 * ampache_ampache81_squashed
   * Website root `./php81_squashed`
-  * Accessible on http://localhost:8087
+  * Accessible on http://localhost:8181
+* ampache_ampache82
+  * Website root `./php82`
+  * Accessible on http://localhost:8280
+* ampache_ampache82_squashed
+  * Website root `./php82_squashed`
+  * Accessible on http://localhost:8281
+* ampache_ampache83
+  * Website root `./php83`
+  * Accessible on http://localhost:8380
+* ampache_ampache83_squashed
+  * Website root `./php83_squashed`
+  * Accessible on http://localhost:8381
 
 ## Reference Repos
 
