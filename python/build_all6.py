@@ -2276,7 +2276,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                     docpath + "catalog_action (error)." + api_format)
 
     ampacheConnection.bookmark_create(55, 'song', 0, 'client1')
-    ampacheConnection.bookmark_create(15, 'song', 10, 'client')
+    ampacheConnection.bookmark_create(54, 'song', 10, 'client')
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmarks.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmarks.xml)
@@ -2302,15 +2302,15 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/get_bookmark.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/get_bookmark.xml)
-    ampacheConnection.get_bookmark(15, 'song', 1)
+    ampacheConnection.get_bookmark(54, 'song', 1)
     if os.path.isfile(docpath + "get_bookmark." + api_format):
         shutil.move(docpath + "get_bookmark." + api_format,
                     docpath + "get_bookmark (with include)." + api_format)
-    ampacheConnection.get_bookmark(15, 'song', 0, 1)
+    ampacheConnection.get_bookmark(54, 'song', 0, 1)
     if os.path.isfile(docpath + "get_bookmark." + api_format):
         shutil.move(docpath + "get_bookmark." + api_format,
                     docpath + "get_bookmark (show all)." + api_format)
-    mybookmark = ampacheConnection.get_bookmark(15, 'song')
+    mybookmark = ampacheConnection.get_bookmark(54, 'song')
     if api_format == 'xml':
         for child in mybookmark:
             if child.tag == 'bookmark':

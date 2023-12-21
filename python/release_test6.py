@@ -67,8 +67,8 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.user_edit('admin', False, False, False, False, False, False, False, False, False, 1, False, False)
 
     ampacheConnection.catalog_add('music', '/media/music', 'local', 'music')
-    ampacheConnection.catalog_add('podcast', '/media/podcast', 'local', 'podcast')
     ampacheConnection.catalog_add('video', '/media/video', 'local', 'clip')
+    ampacheConnection.catalog_add('podcast', '/media/podcast', 'local', 'podcast')
 
     catalogs = ampacheConnection.catalogs('music')
     catalog_id = catalogs['catalog'][0]['id']
@@ -94,11 +94,11 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.bookmark_create(2, 'podcast_episode')
     ampacheConnection.bookmark_create(15, 'song')
 
-    ampacheConnection.bookmark_create(115, 'song', 0, 'client1')
+    ampacheConnection.bookmark_create(54, 'song', 0, 'client1')
     ampacheConnection.bookmark_create(64, 'song', 10, 'client')
-    ampacheConnection.bookmark_create(115, 'song', 0, 'client1')
+    ampacheConnection.bookmark_create(54, 'song', 0, 'client1')
     ampacheConnection.bookmark_create(64, 'song', 10, 'client')
-    ampacheConnection.bookmark_create(115, 'song', 0, 'client1')
+    ampacheConnection.bookmark_create(54, 'song', 0, 'client1')
     ampacheConnection.bookmark_create(64, 'song', 10, 'client')
     
     # return the api key to run build_all
