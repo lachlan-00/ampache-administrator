@@ -13,7 +13,7 @@ if [ ! -f $COMPOSERPATH ]; then
   chmod +x $COMPOSERPATH
 fi
 sh ./setup-python.sh
-cd $AMPACHEDIR/ampache-test/ampache && git pull && $COMPOSERPATH install
+cd $AMPACHEDIR/ampache-test/ampache && git reset --hard origin/develop  && git pull && $COMPOSERPATH install
 
 docker container stop ampache-test-ampachetest-1
 

@@ -2778,7 +2778,7 @@ def subsonic_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     action = "getTopSongs"
     # artist
     # count
-    params = '&artist=100000002'
+    params = '&artist=Smashing+Pumpkins'
     fetch_url = base_url + action + base_parameters + params
     ampacheConnection.fetch_url(fetch_url, api_format, action)
 

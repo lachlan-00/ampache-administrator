@@ -55,6 +55,9 @@ unzip $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.3.zip -d 
 
 # reset perms
 
+chown -R $UID:33 $AMPACHEDIR/docker/media
+chmod -R 775 $AMPACHEDIR/docker/media
+
 # php7.4
 chown $UID:33 $AMPACHEDIR/release-test/php74/composer.json 
 chmod 775 $AMPACHEDIR/release-test/php74/composer.json
