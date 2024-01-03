@@ -257,6 +257,15 @@ sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"tr
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
 
+sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
+sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
+sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/php80/config/ampache.cfg.php
+sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/php80_squashed/config/ampache.cfg.php
+sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/php81/config/ampache.cfg.php
+sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/php81_squashed/config/ampache.cfg.php
+sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
+sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+
 sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php74/config/ampache.cfg.php
 sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php74_squashed/config/ampache.cfg.php
 sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/php80/config/ampache.cfg.php
