@@ -2152,6 +2152,14 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     else:
         artist_title = search_artist['artist'][0]['name']
 
+    search_rules = [['favorite', 0, '%'], ['title', 2, 'D']]
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/search_group%20\(all\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/search_group%20\(all\).xml)]]
+    search_song = ampacheConnection.search_group(search_rules, 'or', 'all', offset, limit, 0)
+    if os.path.isfile(docpath + "search_group." + api_format):
+        shutil.move(docpath + "search_group." + api_format,
+                    docpath + "search_group (all)." + api_format)
+
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/album%20\(with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/album%20\(with include\).xml)
     ampacheConnection.album(2, True)
