@@ -1797,8 +1797,6 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
 def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, api_format, docpath):
     #TODO 6.3.0
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/search_group.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/search_group.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/search.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/search.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/user_playlists.json)
