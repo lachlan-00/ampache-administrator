@@ -33,3 +33,4 @@ php74/
 releases/*
 www/ampache.org-api/
 www/ampache.github.io/
+docker/composer
