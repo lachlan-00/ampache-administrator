@@ -16,6 +16,13 @@ if [ ! -f $AMPACHEDIR/ampache-master/index.php ]; then
   rm -rf $AMPACHEDIR/ampache-master
   git clone -b master https://github.com/ampache/ampache.git ampache-master
 fi
+
+if [ ! -d $AMPACHEDIR/www ]; then
+  mkdir $AMPACHEDIR/www
+fi
+if [ ! -d $AMPACHEDIR/www/ampache.org-api ]; then
+  git clone https://github.com/ampache/ampache.org-api.git www/ampache.org-api
+fi
 if [ ! -d $AMPACHEDIR/www/ampache.org-api ]; then
   cd $AMPACHEDIR/www && git clone -b master https://github.com/ampache/ampache.github.io.git ampache.github.io
 fi
