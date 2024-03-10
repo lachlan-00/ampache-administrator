@@ -18,7 +18,7 @@ offset = 0
 api3_version = '391000'
 api4_version = '443000'
 api5_version = '5.5.7'
-api6_version = '6.1.0'
+api6_version = '6.3.0'
 subsonic_api = '1.16.1'
 docpath = "docs/"
 song_url = url + '/play/index.php?ssid=eeb9f1b6056246a7d563f479f518bb34&type=song&oid=60&uid=4&player=api&name=Synthetic%20-%20BrownSmoke.wma'
@@ -1796,7 +1796,21 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
 
 def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, api_format, docpath):
-    #TODO
+    #TODO 6.3.0
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/search_group.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/search_group.xml)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/search.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/search.xml)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/user_playlists.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/user_playlists.xml)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/user_smartlists.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/user_smartlists.xml)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_add.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_add.xml)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index.xml)
+
+    #TODO OLD
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/catalog_file.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/catalog_file.xml)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/catalog_folder.json)
@@ -2155,10 +2169,26 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     search_rules = [['favorite', 0, '%'], ['title', 2, 'D']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/search_group%20\(all\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/search_group%20\(all\).xml)]]
-    search_song = ampacheConnection.search_group(search_rules, 'or', 'all', offset, limit, 0)
+    ampacheConnection.search_group(search_rules, 'or', 'all', offset, limit, 0)
     if os.path.isfile(docpath + "search_group." + api_format):
         shutil.move(docpath + "search_group." + api_format,
                     docpath + "search_group (all)." + api_format)
+
+    search_rules = [['artist', 0, 'Synthetic']]
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/search_group%20\(music\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/search_group%20\(music\).xml)]]
+    ampacheConnection.search_group(search_rules, 'or', 'music', offset, limit, 0)
+    if os.path.isfile(docpath + "search_group." + api_format):
+        shutil.move(docpath + "search_group." + api_format,
+                    docpath + "search_group (music)." + api_format)
+
+    search_rules = [['title', 2, 'D']]
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/search_group%20\(podcast\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/search_group%20\(podcast\).xml)]]
+    ampacheConnection.search_group(search_rules, 'or', 'podcast', offset, limit, 0)
+    if os.path.isfile(docpath + "search_group." + api_format):
+        shutil.move(docpath + "search_group." + api_format,
+                    docpath + "search_group (podcast)." + api_format)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/album%20\(with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/album%20\(with include\).xml)
