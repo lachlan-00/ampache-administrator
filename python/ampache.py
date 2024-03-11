@@ -1443,7 +1443,7 @@ class API(object):
             return False
         return self.return_data(ampache_response)
 
-    def playlist_add(self, filter_id: int, object_id, check=False):
+    def playlist_add(self, filter_id: int, object_id: int, object_type: str):
         """ playlist_add
             MINIMUM_API_VERSION=6.3.0
 
@@ -1463,7 +1463,7 @@ class API(object):
                 'auth': self.AMPACHE_SESSION,
                 'filter': filter_id,
                 'id': object_id,
-                'type': check}
+                'type': object_type}
         data = urllib.parse.urlencode(data)
         full_url = ampache_url + '?' + data
         ampache_response = self.fetch_url(full_url, self.AMPACHE_API, 'playlist_add')
