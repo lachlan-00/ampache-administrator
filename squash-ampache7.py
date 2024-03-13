@@ -93,6 +93,7 @@ self_check("./ampache-squashed7/login.php", "__DIR__ \. '/\.\./", "__DIR__ . '/"
 self_check("./ampache-squashed7/shout.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
 
 self_check("./ampache-squashed7/composer.json", "public/lib", "lib")
+self_check("./ampache-squashed7/package.json", "public/lib", "lib")
 self_check("./ampache-squashed7/locale/base/gather-messages.sh", "public/lib", "lib")
 
 self_check("./ampache-squashed7/admin", "\$dic = require __DIR__ \. '/\.\./\.\./src/Config/Init\.php';", "$dic = require __DIR__ . '/../src/Config/Init.php';")
