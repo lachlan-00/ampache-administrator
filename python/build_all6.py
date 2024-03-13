@@ -55,7 +55,7 @@ except IndexError:
         user = conf.get('conf', 'ampache_user')
     else:
         print()
-        sys.exit(api_version + ' ERROR docs/examples/ampyche.conf not found and no arguments set')
+        sys.exit('ERROR docs/examples/ampyche.conf not found and no arguments set')
     try:
         if sys.argv[1]:
             APIVERSION = int(sys.argv[1])
@@ -1195,6 +1195,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "user." + api_format,
                     docpath + "user (error)." + api_format)
 
+    myuser = ampacheConnection.users()
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/user.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/user.xml)
     myuser = ampacheConnection.user(ampache_user)
@@ -2000,6 +2001,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "user." + api_format,
                     docpath + "user (error)." + api_format)
 
+    myuser = ampacheConnection.users()
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/user.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/user.xml)
     myuser = ampacheConnection.user(ampache_user)
@@ -2081,26 +2083,96 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "index." + api_format,
                     docpath + "index (podcast_episode)." + api_format)
 
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(podcast_episode\).json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(podcast_episode\).xml)
-    ampacheConnection.index('podcast_episode', False, False, False, False, False, offset, limit)
-    if os.path.isfile(docpath + "index." + api_format):
-        shutil.move(docpath + "index." + api_format,
-                    docpath + "index (podcast_episode)." + api_format)
-
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(video\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(video\).xml)
-    ampacheConnection.index('song', False, False, False, False, False, offset, limit)
+    ampacheConnection.index('video', False, False, False, False, False, offset, limit)
     if os.path.isfile(docpath + "index." + api_format):
         shutil.move(docpath + "index." + api_format,
-                    docpath + "index (song)." + api_format)
+                    docpath + "index (video)." + api_format)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(live_stream\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(live_stream\).xml)
-    ampacheConnection.index('song', False, False, False, False, False, offset, limit)
+    ampacheConnection.index('live_stream', False, False, False, False, False, offset, limit)
     if os.path.isfile(docpath + "index." + api_format):
         shutil.move(docpath + "index." + api_format,
-                    docpath + "index (song)." + api_format)
+                    docpath + "index (live_stream)." + api_format)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(catalog\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(catalog\).xml)
+    ampacheConnection.index('catalog', False, False, False, False, 1, offset, limit)
+    if os.path.isfile(docpath + "index." + api_format):
+        shutil.move(docpath + "index." + api_format,
+                    docpath + "index (catalog with include)." + api_format)
+    
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(song\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(song\).xml)
+    ampacheConnection.index('song', False, False, False, False, 1, offset, limit)
+    if os.path.isfile(docpath + "index." + api_format):
+        shutil.move(docpath + "index." + api_format,
+                    docpath + "index (song with include)." + api_format)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(album\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(album\).xml)
+    ampacheConnection.index('album', False, False, False, False, 1, offset, limit)
+    if os.path.isfile(docpath + "index." + api_format):
+        shutil.move(docpath + "index." + api_format,
+                    docpath + "index (album with include)." + api_format)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(artist\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(artist\).xml)
+    ampacheConnection.index('artist', False, False, False, False, 1, offset, limit)
+    if os.path.isfile(docpath + "index." + api_format):
+        shutil.move(docpath + "index." + api_format,
+                    docpath + "index (artist with include)." + api_format)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(album_artist\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(album_artist\).xml)
+    ampacheConnection.index('album_artist', False, False, False, False, 1, offset, limit)
+    if os.path.isfile(docpath + "index." + api_format):
+        shutil.move(docpath + "index." + api_format,
+                    docpath + "index (album_artist with include)." + api_format)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(song_artist\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(song_artist\).xml)
+    ampacheConnection.index('song_artist', False, False, False, False, 1, offset, limit)
+    if os.path.isfile(docpath + "index." + api_format):
+        shutil.move(docpath + "index." + api_format,
+                    docpath + "index (song_artist with include)." + api_format)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(playlist\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(playlist\).xml)
+    ampacheConnection.index('playlist', False, False, False, False, 1, offset, limit)
+    if os.path.isfile(docpath + "index." + api_format):
+        shutil.move(docpath + "index." + api_format,
+                    docpath + "index (playlist with include)." + api_format)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(podcast\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(podcast\).xml)
+    ampacheConnection.index('podcast', False, False, False, False, 1, offset, limit)
+    if os.path.isfile(docpath + "index." + api_format):
+        shutil.move(docpath + "index." + api_format,
+                    docpath + "index (podcast with include)." + api_format)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(podcast_episode\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(podcast_episode\).xml)
+    ampacheConnection.index('podcast_episode', False, False, False, False, 1, offset, limit)
+    if os.path.isfile(docpath + "index." + api_format):
+        shutil.move(docpath + "index." + api_format,
+                    docpath + "index (podcast_episode with include)." + api_format)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(video\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(video\).xml)
+    ampacheConnection.index('video', False, False, False, False, 1, offset, limit)
+    if os.path.isfile(docpath + "index." + api_format):
+        shutil.move(docpath + "index." + api_format,
+                    docpath + "index (video with include)." + api_format)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/index%20\(live_stream\).json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/index%20\(live_stream\).xml)
+    ampacheConnection.index('live_stream', False, False, False, False, 1, offset, limit)
+    if os.path.isfile(docpath + "index." + api_format):
+        shutil.move(docpath + "index." + api_format,
+                    docpath + "index (live_stream with include)." + api_format)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/list.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/list.xml)
@@ -2539,7 +2611,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_add.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_add.xml)
-    ampacheConnection.playlist_add(single_playlist, single_song, 'song')
+    ampacheConnection.playlist_add(single_playlist, 2, 'playlist')
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_remove_song.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_remove_song.xml)
