@@ -6,7 +6,14 @@
 ; This value is used to detect if this config file is up to date
 ; this is compared against a constant called CONFIG_VERSION
 ; that is located in src/Config/Init/InitializationHandlerConfig.php
-config_version = 67
+config_version = 71
+
+; Defines the default timezone used by the date functions
+; Uses the same strings as the default date.timezone (https://php.net/date.timezone)
+; If not set fallback to date_default_timezone_get() (https://www.php.net/manual/en/function.date-default-timezone-get.php)
+; EXAMPLE VALUES: "UTC", "Europe/London", "America/Los_Angeles" (https://www.php.net/manual/en/timezones.php)
+; DEFAULT: "UTC"
+;date_timezone = "UTC"
 
 ;#########################################################
 ; Auto Update                                            #
@@ -218,6 +225,12 @@ require_localnet_session = "true"
 ; DEFAULT: "false"
 ;disable_xframe_sameorigin = "true"
 
+; Add a STREAMTOKEN to the account when a new user is created
+; Streamtoken's allow a user to play without having a valid session (links do not expire)
+; https://github.com/ampache/ampache/wiki/ampache6-details#allow-permalink-user-streams
+; DEFAULT: "false"
+;user_create_streamtoken = "true"
+
 ;#########################################################
 ; Metadata                                               #
 ;#########################################################
@@ -234,15 +247,6 @@ getid3_tag_order = "vorbiscomment,id3v2,id3v1,quicktime,matroska,ape,asf,avi,mpe
 ; May break valid tags.
 ; DEFAULT: "false"
 ;getid3_detect_id3v2_encoding = "true"
-
-; This determines if we write the changes to files (as id3 tags) when modifying metadata, or only keep them in Ampache (the default).
-; DEFAULT: "false"
-;write_id3 = "true"
-
-; This determines if we write the changes to files (as id3 tags) when modifying album art, or only keep them in Ampache (the default)
-; as id3 metadata when updated.
-; DEFAULT: "false"
-;write_id3_art = "true"
 
 ; This determines the order in which metadata sources are used (and in the
 ; case of plugins, checked)
@@ -402,13 +406,6 @@ catalog_prefix_pattern = "The|An|A|Die|Das|Ein|Eine|Les|Le|La"
 ; to your zip files, this only applies if you've got allow_zip_downloads
 ; DEFAULT: Ampache - Zip Batch Download
 ;file_zip_comment = "Ampache - Zip Batch Download"
-
-; Load the debug webplayer
-; This will load the *.js player instead of the *.min.js player
-; The unminified player has a lot of console.log() statements in the code.
-; You can make changes and then check how the player is functioning.
-; DEFAULT: "false"
-;webplayer_debug = "true"
 
 ; Waveform
 ; This settings tells Ampache to attempt to generate a waveform
@@ -862,6 +859,19 @@ log_path = "/var/log/ampache"
 ; DEFAULT: %name.%Y%m%d.log
 log_filename = "release-test.log"
 
+; API Debug Handler
+; If this is enabled Ampache will not catch exceptions during API calls.
+; Used for development and not recommended for regular use.
+; DEFAULT: "false"
+api_debug_handler = "true"
+
+; Load the debug webplayer
+; This will load the *.js player instead of the *.min.js player
+; The unminified player has a lot of console.log() statements in the code.
+; You can make changes and then check how the player is functioning.
+; DEFAULT: "false"
+webplayer_debug = "true"
+
 ;#########################################################
 ; Encoding Settings                                      #
 ;#########################################################
@@ -1193,14 +1203,14 @@ transcode_input = "-i %FILE%"
 ; For each output format, you should provide the necessary arguments for
 ; your transcode_cmd.
 ; encode_args_TYPE = TRANSCODE_CMD_ARGS
-encode_args_mp3 = "-vn -b:a %BITRATE%K -c:a libmp3lame -f mp3 pipe:1"
-encode_args_ogg = "-vn -b:a %BITRATE%K -c:a libvorbis -f ogg pipe:1"
-encode_args_opus = "-vn -b:a %BITRATE%K -c:a libopus -compression_level 10 -f ogg pipe:1"
-encode_args_m4a = "-vn -b:a %BITRATE%K -c:a libfdk_aac -f adts pipe:1"
-encode_args_wav = "-vn -b:a %BITRATE%K -c:a pcm_s16le -f wav pipe:1"
-encode_args_flv = "-b:a %BITRATE%K -ar 44100 -ac 2 -v 0 -f flv -c:v libx264 -preset superfast -threads 0 pipe:1"
-encode_args_webm = "-b:a %BITRATE%K -f webm -c:v libvpx -preset superfast -threads 0 pipe:1"
-encode_args_ts = "-q %QUALITY% -s %RESOLUTION% -f mpegts -c:v libx264 -c:a libmp3lame -maxrate %MAXBITRATE%k -preset superfast -threads 0 pipe:1"
+encode_args_mp3 = "-vn -b:a %BITRATE% -c:a libmp3lame -f mp3 pipe:1"
+encode_args_ogg = "-vn -b:a %BITRATE% -c:a libvorbis -f ogg pipe:1"
+encode_args_opus = "-vn -b:a %BITRATE% -c:a libopus -compression_level 10 -f ogg pipe:1"
+encode_args_m4a = "-vn -b:a %BITRATE% -c:a libfdk_aac -f adts pipe:1"
+encode_args_wav = "-vn -b:a %BITRATE% -c:a pcm_s16le -f wav pipe:1"
+encode_args_flv = "-b:a %BITRATE% -ar 44100 -ac 2 -v 0 -f flv -c:v libx264 -preset superfast -threads 0 pipe:1"
+encode_args_webm = "-b:a %BITRATE% -f webm -c:v libvpx -preset superfast -threads 0 pipe:1"
+encode_args_ts = "-q %QUALITY% -s %RESOLUTION% -f mpegts -c:v libx264 -c:a libmp3lame -maxrate %MAXBITRATE% -preset superfast -threads 0 pipe:1"
 encode_args_ogv = "-codec:v libtheora -qscale:v 7 -codec:a libvorbis -qscale:a 5 -f ogg pipe:1"
 
 ; Encoding arguments to retrieve an image from a single frame
