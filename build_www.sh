@@ -43,6 +43,11 @@ cd $AMPACHEDIR/ampache-develop && git pull
 cd $AMPACHEDIR/www/ampache.github.io && git pull
 cd $AMPACHEDIR/www/ampache.org-api && git pull
 
+# remove the builds each time
+rm -rf $AMPACHEDIR/www/ampache.org-api/build/*
+rm -rf $AMPACHEDIR/www/ampache.github.io/api/*
+
+# rebuild and copy to the api site
 cd $AMPACHEDIR/www/ampache.org-api && npm run build && cp -rfv ./build/* $AMPACHEDIR/www/ampache.github.io/api/
 
 cp $AMPACHEDIR/www/ampache.org-api/docs/index.md $AMPACHEDIR/ampache-develop/docs/API.md
