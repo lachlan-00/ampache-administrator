@@ -73,9 +73,9 @@ if [ $BRANCH = "preview" ]; then
   fi
   if [ ! -f $AMPACHEDIR/docker/ampache-docker-nosql-preview/Dockerfile ]; then
     rm -rf $AMPACHEDIR/docker/ampache-docker-nosql-preview
-    cd $AMPACHEDIR/docker && git clone -b preview https://github.com/ampache/ampache-docker.git ampache-docker-nosql-preview
+    cd $AMPACHEDIR/docker && git clone -b nosql-preview https://github.com/ampache/ampache-docker.git ampache-docker-nosql-preview
   fi
-  cd $AMPACHEDIR/docker/ampache-docker-nosql-preview/ && git checkout preview && git reset --hard origin/preview && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 -t ampache/ampache:nosql-preview --push . &
+  cd $AMPACHEDIR/docker/ampache-docker-nosql-preview/ && git checkout nosql-preview && git reset --hard origin/nosql-preview && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 -t ampache/ampache:nosql-preview --push . &
 fi
 
 # go home
