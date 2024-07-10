@@ -44,7 +44,7 @@ if [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
 fi
 
 # DEVELOP
-if [ $BRANCH = "develop" ] || [ $BRANCH = "all" ]; then
+if [ $BRANCH = "develop" ]; then
   if [ ! -d $AMPACHEDIR/docker/ampache-docker-develop/ ]; then
     cd $AMPACHEDIR/docker && git clone -b develop https://github.com/ampache/ampache-docker.git ampache-docker-develop
   fi
