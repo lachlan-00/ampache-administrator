@@ -63,7 +63,7 @@ if [ $BRANCH = "develop" ] || [ $BRANCH = "all" ]; then
     rm -rf $AMPACHEDIR/docker/ampache-docker-nosql-develop
     cd $AMPACHEDIR/docker && git clone -b nosql-develop https://github.com/ampache/ampache-docker.git ampache-docker-nosql-develop
   fi
-  cd $AMPACHEDIR/docker/ampache-docker-nosql-develop/ && git checkout nosql-develop && git reset --hard origin/nosql-develop && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 -t ampache/ampache:nosql-develop --push . &
+  cd $AMPACHEDIR/docker/ampache-docker-nosql-develop/ && git checkout nosql-develop && git reset --hard origin/nosql-develop && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 -t ampache/ampache:nosql-develop -t ampache/ampache:nosql-preview --push . &
 fi
 
 # PREVIEW
