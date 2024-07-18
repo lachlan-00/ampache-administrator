@@ -55,124 +55,124 @@ unzip $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.3.zip -d 
 
 # reset perms
 
-chown -R $UID:33 $AMPACHEDIR/docker/media
-chmod -R 775 $AMPACHEDIR/docker/media
+sudo chown -R $UID:33 $AMPACHEDIR/docker/media
+sudo chmod -R 775 $AMPACHEDIR/docker/media
 
 # php7.4
-chown $UID:33 $AMPACHEDIR/release-test/php74/composer.json 
-chmod 775 $AMPACHEDIR/release-test/php74/composer.json
-chown -R $UID:33 $AMPACHEDIR/release-test/php74/config
-chmod -R 775 $AMPACHEDIR/release-test/php74/config
-chown -R $UID:33 $AMPACHEDIR/release-test/php74/vendor/
-chmod -R 775 $AMPACHEDIR/release-test/php74/vendor/
-chown -R $UID:33 $AMPACHEDIR/release-test/php74/public/
-chmod -R 775 $AMPACHEDIR/release-test/php74/public/
+sudo chown $UID:33 $AMPACHEDIR/release-test/php74/composer.json 
+sudo chmod 775 $AMPACHEDIR/release-test/php74/composer.json
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php74/config
+sudo chmod -R 775 $AMPACHEDIR/release-test/php74/config
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php74/vendor/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php74/vendor/
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php74/public/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php74/public/
 
-chown $UID:33 $AMPACHEDIR/release-test/php74_squashed/composer.json 
-chmod 775 $AMPACHEDIR/release-test/php74_squashed/composer.json
-chown -R $UID:33 $AMPACHEDIR/release-test/php74_squashed/config
-chmod -R 775 $AMPACHEDIR/release-test/php74_squashed/config
-chown -R $UID:33 $AMPACHEDIR/release-test/php74_squashed/vendor/
-chmod -R 775 $AMPACHEDIR/release-test/php74_squashed/vendor/
-chown -R $UID:33 $AMPACHEDIR/release-test/php74_squashed/
-chmod -R 775 $AMPACHEDIR/release-test/php74_squashed/
+sudo chown $UID:33 $AMPACHEDIR/release-test/php74_squashed/composer.json 
+sudo chmod 775 $AMPACHEDIR/release-test/php74_squashed/composer.json
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php74_squashed/config
+sudo chmod -R 775 $AMPACHEDIR/release-test/php74_squashed/config
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php74_squashed/vendor/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php74_squashed/vendor/
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php74_squashed/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php74_squashed/
 
 # php8.0
-chown $UID:33 $AMPACHEDIR/release-test/php80/composer.json 
-chmod 775 $AMPACHEDIR/release-test/php80/composer.json
-chown -R $UID:33 $AMPACHEDIR/release-test/php80/config
-chmod -R 775 $AMPACHEDIR/release-test/php80/config
-chown -R $UID:33 $AMPACHEDIR/release-test/php80/vendor/
-chmod -R 775 $AMPACHEDIR/release-test/php80/vendor/
-chown -R $UID:33 $AMPACHEDIR/release-test/php80/public/
-chmod -R 775 $AMPACHEDIR/release-test/php80/public/
+sudo chown $UID:33 $AMPACHEDIR/release-test/php80/composer.json 
+sudo chmod 775 $AMPACHEDIR/release-test/php80/composer.json
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php80/config
+sudo chmod -R 775 $AMPACHEDIR/release-test/php80/config
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php80/vendor/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php80/vendor/
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php80/public/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php80/public/
 
-chown $UID:33 $AMPACHEDIR/release-test/php80_squashed/composer.json 
-chmod 775 $AMPACHEDIR/release-test/php80_squashed/composer.json
-chown -R $UID:33 $AMPACHEDIR/release-test/php80_squashed/config
-chmod -R 775 $AMPACHEDIR/release-test/php80_squashed/config
-chown -R $UID:33 $AMPACHEDIR/release-test/php80_squashed/vendor/
-chmod -R 775 $AMPACHEDIR/release-test/php80_squashed/vendor/
-chown -R $UID:33 $AMPACHEDIR/release-test/php80_squashed/
-chmod -R 775 $AMPACHEDIR/release-test/php80_squashed/
+sudo chown $UID:33 $AMPACHEDIR/release-test/php80_squashed/composer.json 
+sudo chmod 775 $AMPACHEDIR/release-test/php80_squashed/composer.json
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php80_squashed/config
+sudo chmod -R 775 $AMPACHEDIR/release-test/php80_squashed/config
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php80_squashed/vendor/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php80_squashed/vendor/
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php80_squashed/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php80_squashed/
 
 # php8.1
-chown $UID:33 $AMPACHEDIR/release-test/php81/composer.json 
-chmod 775 $AMPACHEDIR/release-test/php81/composer.json
-chown -R $UID:33 $AMPACHEDIR/release-test/php81/config
-chmod -R 775 $AMPACHEDIR/release-test/php81/config
-chown -R $UID:33 $AMPACHEDIR/release-test/php81/vendor/
-chmod -R 775 $AMPACHEDIR/release-test/php81/vendor/
-chown -R $UID:33 $AMPACHEDIR/release-test/php81/public/
-chmod -R 775 $AMPACHEDIR/release-test/php81/public/
+sudo chown $UID:33 $AMPACHEDIR/release-test/php81/composer.json 
+sudo chmod 775 $AMPACHEDIR/release-test/php81/composer.json
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php81/config
+sudo chmod -R 775 $AMPACHEDIR/release-test/php81/config
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php81/vendor/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php81/vendor/
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php81/public/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php81/public/
 
-chown $UID:33 $AMPACHEDIR/release-test/php81_squashed/composer.json 
-chmod 775 $AMPACHEDIR/release-test/php81_squashed/composer.json
-chown -R $UID:33 $AMPACHEDIR/release-test/php81_squashed/config
-chmod -R 775 $AMPACHEDIR/release-test/php81_squashed/config
-chown -R $UID:33 $AMPACHEDIR/release-test/php81_squashed/vendor/
-chmod -R 775 $AMPACHEDIR/release-test/php81_squashed/vendor/
-chown -R $UID:33 $AMPACHEDIR/release-test/php81_squashed/
-chmod -R 775 $AMPACHEDIR/release-test/php81_squashed/
+sudo chown $UID:33 $AMPACHEDIR/release-test/php81_squashed/composer.json 
+sudo chmod 775 $AMPACHEDIR/release-test/php81_squashed/composer.json
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php81_squashed/config
+sudo chmod -R 775 $AMPACHEDIR/release-test/php81_squashed/config
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php81_squashed/vendor/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php81_squashed/vendor/
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php81_squashed/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php81_squashed/
 
 # php8.2
-chown $UID:33 $AMPACHEDIR/release-test/php82/composer.json 
-chmod 775 $AMPACHEDIR/release-test/php82/composer.json
-chown -R $UID:33 $AMPACHEDIR/release-test/php82/config
-chmod -R 775 $AMPACHEDIR/release-test/php82/config
-chown -R $UID:33 $AMPACHEDIR/release-test/php82/vendor/
-chmod -R 775 $AMPACHEDIR/release-test/php82/vendor/
-chown -R $UID:33 $AMPACHEDIR/release-test/php82/public/
-chmod -R 775 $AMPACHEDIR/release-test/php82/public/
+sudo chown $UID:33 $AMPACHEDIR/release-test/php82/composer.json 
+sudo chmod 775 $AMPACHEDIR/release-test/php82/composer.json
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php82/config
+sudo chmod -R 775 $AMPACHEDIR/release-test/php82/config
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php82/vendor/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php82/vendor/
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php82/public/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php82/public/
 
-chown $UID:33 $AMPACHEDIR/release-test/php82_squashed/composer.json 
-chmod 775 $AMPACHEDIR/release-test/php82_squashed/composer.json
-chown -R $UID:33 $AMPACHEDIR/release-test/php82_squashed/config
-chmod -R 775 $AMPACHEDIR/release-test/php82_squashed/config
-chown -R $UID:33 $AMPACHEDIR/release-test/php82_squashed/vendor/
-chmod -R 775 $AMPACHEDIR/release-test/php82_squashed/vendor/
-chown -R $UID:33 $AMPACHEDIR/release-test/php82_squashed/
-chmod -R 775 $AMPACHEDIR/release-test/php82_squashed/
+sudo chown $UID:33 $AMPACHEDIR/release-test/php82_squashed/composer.json 
+sudo chmod 775 $AMPACHEDIR/release-test/php82_squashed/composer.json
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php82_squashed/config
+sudo chmod -R 775 $AMPACHEDIR/release-test/php82_squashed/config
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php82_squashed/vendor/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php82_squashed/vendor/
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php82_squashed/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php82_squashed/
 
 # php8.3
-chown $UID:33 $AMPACHEDIR/release-test/php83/composer.json 
-chmod 775 $AMPACHEDIR/release-test/php83/composer.json
-chown -R $UID:33 $AMPACHEDIR/release-test/php83/config
-chmod -R 775 $AMPACHEDIR/release-test/php83/config
-chown -R $UID:33 $AMPACHEDIR/release-test/php83/vendor/
-chmod -R 775 $AMPACHEDIR/release-test/php83/vendor/
-chown -R $UID:33 $AMPACHEDIR/release-test/php83/public/
-chmod -R 775 $AMPACHEDIR/release-test/php83/public/
+sudo chown $UID:33 $AMPACHEDIR/release-test/php83/composer.json 
+sudo chmod 775 $AMPACHEDIR/release-test/php83/composer.json
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php83/config
+sudo chmod -R 775 $AMPACHEDIR/release-test/php83/config
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php83/vendor/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php83/vendor/
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php83/public/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php83/public/
 
-chown $UID:33 $AMPACHEDIR/release-test/php83_squashed/composer.json 
-chmod 775 $AMPACHEDIR/release-test/php83_squashed/composer.json
-chown -R $UID:33 $AMPACHEDIR/release-test/php83_squashed/config
-chmod -R 775 $AMPACHEDIR/release-test/php83_squashed/config
-chown -R $UID:33 $AMPACHEDIR/release-test/php83_squashed/vendor/
-chmod -R 775 $AMPACHEDIR/release-test/php83_squashed/vendor/
-chown -R $UID:33 $AMPACHEDIR/release-test/php83_squashed/
-chmod -R 775 $AMPACHEDIR/release-test/php83_squashed/
+sudo chown $UID:33 $AMPACHEDIR/release-test/php83_squashed/composer.json 
+sudo chmod 775 $AMPACHEDIR/release-test/php83_squashed/composer.json
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php83_squashed/config
+sudo chmod -R 775 $AMPACHEDIR/release-test/php83_squashed/config
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php83_squashed/vendor/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php83_squashed/vendor/
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/php83_squashed/
+sudo chmod -R 775 $AMPACHEDIR/release-test/php83_squashed/
 
-chown $UID:33 $AMPACHEDIR/release-test/php74
-chmod 775 $AMPACHEDIR/release-test/php74
-chown $UID:33 $AMPACHEDIR/release-test/php74_squashed
-chmod 775 $AMPACHEDIR/release-test/php74_squashed
-chown $UID:33 $AMPACHEDIR/release-test/php80
-chmod 775 $AMPACHEDIR/release-test/php80
-chown $UID:33 $AMPACHEDIR/release-test/php80_squashed
-chmod 775 $AMPACHEDIR/release-test/php80_squashed
-chown $UID:33 $AMPACHEDIR/release-test/php81
-chmod 775 $AMPACHEDIR/release-test/php81
-chown $UID:33 $AMPACHEDIR/release-test/php81_squashed
-chmod 775 $AMPACHEDIR/release-test/php81_squashed
-chown $UID:33 $AMPACHEDIR/release-test/php82
-chmod 775 $AMPACHEDIR/release-test/php82
-chown $UID:33 $AMPACHEDIR/release-test/php82_squashed
-chmod 775 $AMPACHEDIR/release-test/php82_squashed
-chown $UID:33 $AMPACHEDIR/release-test/php83
-chmod 775 $AMPACHEDIR/release-test/php83
-chown $UID:33 $AMPACHEDIR/release-test/php83_squashed
-chmod 775 $AMPACHEDIR/release-test/php83_squashed
+sudo chown $UID:33 $AMPACHEDIR/release-test/php74
+sudo sudo chmod 775 $AMPACHEDIR/release-test/php74
+sudo chown $UID:33 $AMPACHEDIR/release-test/php74_squashed
+sudo chmod 775 $AMPACHEDIR/release-test/php74_squashed
+sudo chown $UID:33 $AMPACHEDIR/release-test/php80
+sudo chmod 775 $AMPACHEDIR/release-test/php80
+sudo chown $UID:33 $AMPACHEDIR/release-test/php80_squashed
+sudo chmod 775 $AMPACHEDIR/release-test/php80_squashed
+sudo chown $UID:33 $AMPACHEDIR/release-test/php81
+sudo chmod 775 $AMPACHEDIR/release-test/php81
+sudo chown $UID:33 $AMPACHEDIR/release-test/php81_squashed
+sudo chmod 775 $AMPACHEDIR/release-test/php81_squashed
+sudo chown $UID:33 $AMPACHEDIR/release-test/php82
+sudo chmod 775 $AMPACHEDIR/release-test/php82
+sudo chown $UID:33 $AMPACHEDIR/release-test/php82_squashed
+sudo chmod 775 $AMPACHEDIR/release-test/php82_squashed
+sudo chown $UID:33 $AMPACHEDIR/release-test/php83
+sudo chmod 775 $AMPACHEDIR/release-test/php83
+sudo chown $UID:33 $AMPACHEDIR/release-test/php83_squashed
+sudo chmod 775 $AMPACHEDIR/release-test/php83_squashed
 
 # ReLaunch all the containers
 
