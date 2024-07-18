@@ -172,7 +172,9 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                     docpath + "advanced_search (song)." + api_format)
 
     if api_format == 'xml':
-        song_id = search_song[1].attrib['id']
+        for child in search_song:
+            if child.tag == 'song':
+                song_id = child.attrib['id']
     else:
         song_id = search_song['song'][0]['id']
     song_title = "Dance with the Devil"
@@ -586,7 +588,9 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                     docpath + "advanced_search (song)." + api_format)
 
     if api_format == 'xml':
-        song_id = search_song[1].attrib['id']
+        for child in search_song:
+            if child.tag == 'song':
+                song_id = child.attrib['id']
     else:
         song_id = search_song[0]['id']
     song_title = "Dance with the Devil"
@@ -985,7 +989,9 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/shares.xml)
     shares = ampacheConnection.shares(False, False, offset, limit)
     if api_format == 'xml':
-        share_id = shares[1].attrib['id']
+        for child in shares:
+            if child.tag == 'share':
+                share_id = child.attrib['id']
     else:
         share_id = shares[0]['id']
 
@@ -997,7 +1003,9 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/share_create.xml)
     share_create = ampacheConnection.share_create(single_song, 'song', False, 7)
     if api_format == 'xml':
-        share_new = share_create[1].attrib['id']
+        for child in share_create:
+            if child.tag == 'share':
+                share_new = child.attrib['id']
     else:
         share_new = share_create[0]['id']
 
@@ -1308,7 +1316,9 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                     docpath + "advanced_search (song)." + api_format)
 
     if api_format == 'xml':
-        song_id = search_song[1].attrib['id']
+        for child in search_song:
+            if child.tag == 'song':
+                song_id = child.attrib['id']
     else:
         song_id = search_song['song'][0]['id']
     song_title = "Dance with the Devil"
@@ -1724,7 +1734,9 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/share_create.xml)
     share_create = ampacheConnection.share_create(single_song, 'song', False, 7)
     if api_format == 'xml':
-        share_new = share_create[1].attrib['id']
+        for child in share_create:
+            if child.tag == 'share':
+                share_new = child.attrib['id']
     else:
         share_new = share_create['id']
 
@@ -1900,7 +1912,9 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     single_live_stream = ampacheConnection.live_streams(stream_name)
     if api_format == 'xml':
-        live_stream_new = single_live_stream[1].attrib['id']
+        for child in single_live_stream:
+            if child.tag == 'live_stream':
+                live_stream_new = child.attrib['id']
     else:
         live_stream_new = single_live_stream["live_stream"][0]['id']
 
@@ -2287,7 +2301,9 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                     docpath + "advanced_search (song)." + api_format)
 
     if api_format == 'xml':
-        song_id = search_song[1].attrib['id']
+        for child in search_song:
+            if child.tag == 'song':
+                song_id = child.attrib['id']
     else:
         song_id = search_song['song'][0]['id']
     song_title = "Dance with the Devil"
@@ -2794,7 +2810,9 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/share_create.xml)
     share_create = ampacheConnection.share_create(single_song, 'song', False, 7)
     if api_format == 'xml':
-        share_new = share_create[1].attrib['id']
+        for child in share_create:
+            if child.tag == 'share':
+                share_new = child.attrib['id']
     else:
         share_new = share_create['id']
 
