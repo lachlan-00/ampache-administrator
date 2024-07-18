@@ -31,9 +31,9 @@ try:
         api = sys.argv[2]
     if sys.argv[3]:
         user = sys.argv[3]
-    #if sys.argv[4]:
-    #    if sys.argv[4] == '1':
-    #        ENABLEDEBUG = False
+    if sys.argv[4]:
+        if sys.argv[4] == '1':
+            ENABLEDEBUG = False
 except IndexError:
     if os.path.isfile(os.path.join(os.pardir, 'ampache.conf')):
         conf = configparser.RawConfigParser()
@@ -192,7 +192,12 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (album)." + api_format)
 
-    album_title = get_value(api_format, 'album', 'name', search_album)
+    if api_format == 'xml':
+        for child in search_album:
+            if child.tag == 'album':
+                album_title = child.find('name').text
+    else:
+        album_title = search_album['album'][0]['name']
 
     search_rules = [['artist', 2, 'CARN'], ['artist', 2, 'Synthetic']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/advanced_search%20\(artist\).xml)
@@ -2636,6 +2641,10 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_songs.xml)
     ampacheConnection.playlist_songs(single_playlist, 0, offset, limit)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_hash.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_hash.xml)
+    ampacheConnection.playlist_hash(single_playlist)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_delete.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_delete.xml)
