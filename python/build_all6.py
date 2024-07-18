@@ -31,9 +31,9 @@ try:
         api = sys.argv[2]
     if sys.argv[3]:
         user = sys.argv[3]
-    if sys.argv[4]:
-        if sys.argv[4] == '1':
-            ENABLEDEBUG = False
+    #if sys.argv[4]:
+    #    if sys.argv[4] == '1':
+    #        ENABLEDEBUG = False
 except IndexError:
     if os.path.isfile(os.path.join(os.pardir, 'ampache.conf')):
         conf = configparser.RawConfigParser()
@@ -61,6 +61,17 @@ except IndexError:
             APIVERSION = int(sys.argv[1])
     except IndexError:
         APIVERSION = 0
+
+
+def get_value(api_format, key, value, data):
+    if api_format == 'xml':
+        for child in data:
+            if child.tag == key:
+                result = child.attrib[value]
+    else:
+        result = data[key][0][value]
+
+    return result;
 
 
 def build_docs(ampache_url, ampache_api, ampache_user, api_format):
@@ -171,12 +182,7 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (song)." + api_format)
 
-    if api_format == 'xml':
-        for child in search_song:
-            if child.tag == 'song':
-                song_id = child.attrib['id']
-    else:
-        song_id = search_song['song'][0]['id']
+    song_id = get_value(api_format, 'song', 'id', search_song)
     song_title = "Dance with the Devil"
 
     search_rules = [['artist', 0, 'Synthetic']]
@@ -186,12 +192,7 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (album)." + api_format)
 
-    if api_format == 'xml':
-        for child in search_album:
-            if child.tag == 'album':
-                album_title = child.find('name').text
-    else:
-        album_title = search_album['album'][0]['name']
+    album_title = get_value(api_format, 'album', 'name', search_album)
 
     search_rules = [['artist', 2, 'CARN'], ['artist', 2, 'Synthetic']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/advanced_search%20\(artist\).xml)
@@ -545,7 +546,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/get_indexes%20\(playlist with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/get_indexes%20\(playlist with include\).xml)
-    ampacheConnection.get_indexes('playlist', False, False, False, False, True, offset, 1)
+    ampacheConnection.get_indexes('playlist', False, False, False, False, True, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (playlist with include)." + api_format)
@@ -1272,7 +1273,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/get_indexes%20\(playlist with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/get_indexes%20\(playlist with include\).xml)
-    ampacheConnection.get_indexes('playlist', False, False, False, False, True, offset, 1)
+    ampacheConnection.get_indexes('playlist', False, False, False, False, True, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (playlist with include)." + api_format)
@@ -1911,12 +1912,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.live_stream_create(stream_name, stream_url, stream_codec, catalog_id, stream_website)
 
     single_live_stream = ampacheConnection.live_streams(stream_name)
-    if api_format == 'xml':
-        for child in single_live_stream:
-            if child.tag == 'live_stream':
-                live_stream_new = child.attrib['id']
-    else:
-        live_stream_new = single_live_stream["live_stream"][0]['id']
+    live_stream_new = get_value(api_format, 'live_stream', 'id', single_live_stream)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/live_stream_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/live_stream_edit.xml)
@@ -2250,7 +2246,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/get_indexes%20\(playlist with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/get_indexes%20\(playlist with include\).xml)
-    ampacheConnection.get_indexes('playlist', False, False, False, False, True, offset, 1)
+    ampacheConnection.get_indexes('playlist', False, False, False, False, True, offset, limit)
     if os.path.isfile(docpath + "get_indexes." + api_format):
         shutil.move(docpath + "get_indexes." + api_format,
                     docpath + "get_indexes (playlist with include)." + api_format)
@@ -2350,7 +2346,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     else:
         artist_title = search_artist['artist'][0]['name']
 
-    search_rules = [['favorite', 0, '%'], ['title', 2, 'D']]
+    search_rules = [['favorite', 0, '%'], ['title', 0, 'd']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/search_group%20\(all\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/search_group%20\(all\).xml)]]
     ampacheConnection.search_group(search_rules, 'or', 'all', offset, limit, 0)
@@ -2366,7 +2362,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "search_group." + api_format,
                     docpath + "search_group (music)." + api_format)
 
-    search_rules = [['title', 2, 'D']]
+    search_rules = [['title', 0, 'D']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/search_group%20\(podcast\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/search_group%20\(podcast\).xml)]]
     ampacheConnection.search_group(search_rules, 'or', 'podcast', offset, limit, 0)
