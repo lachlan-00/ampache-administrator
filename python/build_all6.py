@@ -72,10 +72,19 @@ def get_id(api_format, key, data):
             if not result:
                 sys.exit('ERROR Failed to get id from ' + key)
         else:
+            if not data:
+                return False
             try:
                 result = data[key][0]['id']
-            except KeyError:
-                result = data['id']
+            except (KeyError, TypeError):
+                try:
+                    result = data[key]['id']
+                except (KeyError, TypeError):
+                    try:
+                        result = data['id']
+                    except TypeError:
+                        print(data)
+                        result = data[0]
 
         return result;
     except:
@@ -91,12 +100,20 @@ def get_value(api_format, key, value, data):
             if not result:
                 sys.exit('ERROR Failed to get ' + value + ' from ' + key)
         else:
+            if not data:
+                return False
             try:
                 result = data[key][0][value]
-            except KeyError:
-                result = data[value]
+            except (KeyError, TypeError):
+                try:
+                    result = data[key][value]
+                except (KeyError, TypeError):
+                    try:
+                        result = data[value]
+                    except TypeError:
+                        result = data[0][value]
 
-            return result;
+                return result;
     except:
         sys.exit('ERROR Failed to get ' + value + ' from ' + key)
 
@@ -306,15 +323,6 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/last_shouts.xml)
     ampacheConnection.last_shouts(ampache_user, limit)
 
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlists.xml)
-    ampacheConnection.playlists(False, False, offset, limit)
-
-    lookup = ampacheConnection.playlists('rename', False, offset, limit)
-    delete_id = get_id(api_format, 'playlist', lookup)
-
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_delete.xml)
-    ampacheConnection.playlist_delete(delete_id)
-
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
 
@@ -342,11 +350,14 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_songs.xml)
     ampacheConnection.playlist_songs(single_playlist, 0, offset, limit)
 
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlists.xml)
+    ampacheConnection.playlists(False, False, offset, limit)
+
+    lookup = ampacheConnection.playlists('rename', False, offset, limit)
+    delete_id = get_id(api_format, 'playlist', lookup)
+
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_delete.xml)
-    params = 65
-    if (api_format == 'xml'):
-        params = 66
-    ampacheConnection.playlist_delete(params)
+    ampacheConnection.playlist_delete(delete_id)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/rate.xml)
     ampacheConnection.rate('song', 93, 0)
@@ -763,25 +774,21 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/last_shouts.xml)
     ampacheConnection.last_shouts(ampache_user, limit)
 
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/playlists.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/playlists.xml)
-    ampacheConnection.playlists(False, False, offset, limit)
-
-    lookup = ampacheConnection.playlists('rename', False, offset, limit)
-    delete_id = get_id(api_format, 'playlist', lookup)
-
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_delete.xml)
-    ampacheConnection.playlist_delete(delete_id)
-
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/playlist_create.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/playlist_create.xml)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_create.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
 
     single_playlist = get_id(api_format, 'playlist', playlist_create)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/playlist_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/playlist_edit.xml)
-    ampacheConnection.playlist_edit(single_playlist, 'documentation', 'public')
+    ampacheConnection.playlist_edit(single_playlist, 'documentation ' + api_format, 'public')
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/playlists.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/playlists.xml)
+    ampacheConnection.playlists(False, False, offset, limit)
+
+    single_playlist = ampacheConnection.playlists('documentation ' + api_format, False, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/playlist_add_song.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/playlist_add_song.xml)
@@ -1426,16 +1433,6 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/last_shouts.xml)
     ampacheConnection.last_shouts(ampache_user, limit)
 
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/playlists.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/playlists.xml)
-    ampacheConnection.playlists(False, False, offset, limit)
-
-    lookup = ampacheConnection.playlists('rename', False, offset, limit)
-    delete_id = get_id(api_format, 'playlist', lookup)
-
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_delete.xml)
-    ampacheConnection.playlist_delete(delete_id)
-
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/playlist_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
@@ -1444,7 +1441,13 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/playlist_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/playlist_edit.xml)
-    ampacheConnection.playlist_edit(single_playlist, 'documentation', 'public')
+    ampacheConnection.playlist_edit(single_playlist, 'documentation ' + api_format, 'public')
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/playlists.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/playlists.xml)
+    ampacheConnection.playlists(False, False, offset, limit)
+
+    single_playlist = ampacheConnection.playlists('documentation ' + api_format, False, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/playlist_add_song.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/playlist_add_song.xml)
@@ -2430,16 +2433,6 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/last_shouts.xml)
     ampacheConnection.last_shouts(ampache_user, limit)
 
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlists.json)
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlists.xml)
-    ampacheConnection.playlists(False, False, offset, limit)
-
-    lookup = ampacheConnection.playlists('rename', False, offset, limit)
-    delete_id = get_id(api_format, 'playlist', lookup)
-
-    # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_delete.xml)
-    ampacheConnection.playlist_delete(delete_id)
-
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
@@ -2448,7 +2441,13 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_edit.xml)
-    ampacheConnection.playlist_edit(single_playlist, 'documentation', 'public')
+    ampacheConnection.playlist_edit(single_playlist, 'documentation ' + api_format, 'public')
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlists.json)
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlists.xml)
+    ampacheConnection.playlists(False, False, offset, limit)
+
+    single_playlist = ampacheConnection.playlists('documentation ' + api_format, False, offset, limit)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_add_song.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_add_song.xml)
@@ -3325,8 +3324,8 @@ def subsonic_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
 if APIVERSION == 6:
     api_version = api6_version
-    build_docs(url, api, user, 'xml')
     build_docs(url, api, user, 'json')
+    build_docs(url, api, user, 'xml')
 elif APIVERSION == 5:
     api_version = api5_version
     build_docs(url, api, user, 'json')
