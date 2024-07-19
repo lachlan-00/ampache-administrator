@@ -63,16 +63,42 @@ except IndexError:
         APIVERSION = 0
 
 
+def get_id(api_format, key, data):
+    try:
+        if api_format == 'xml':
+            for child in data:
+                if child.tag == key:
+                    result = child.attrib['id']
+            if not result:
+                sys.exit('ERROR Failed to get id from ' + key)
+        else:
+            try:
+                result = data[key][0]['id']
+            except KeyError:
+                result = data['id']
+
+        return result;
+    except:
+        sys.exit('ERROR Failed to get id from ' + key)
+
+
 def get_value(api_format, key, value, data):
-    if api_format == 'xml':
-        for child in data:
-            if child.tag == key:
-                result = child.attrib[value]
-    else:
-        result = data[key][0][value]
+    try:
+        if api_format == 'xml':
+            for child in data:
+                if child.tag == key:
+                    result = child.find(value).text
+            if not result:
+                sys.exit('ERROR Failed to get ' + value + ' from ' + key)
+        else:
+            try:
+                result = data[key][0][value]
+            except KeyError:
+                result = data[value]
 
-    return result;
-
+            return result;
+    except:
+        sys.exit('ERROR Failed to get ' + value + ' from ' + key)
 
 def build_docs(ampache_url, ampache_api, ampache_user, api_format):
     ampacheConnection = ampache.API()
@@ -182,7 +208,7 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (song)." + api_format)
 
-    song_id = get_value(api_format, 'song', 'id', search_song)
+    song_id = get_id(api_format, 'song', search_song)
     song_title = "Dance with the Devil"
 
     search_rules = [['artist', 0, 'Synthetic']]
@@ -192,12 +218,8 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (album)." + api_format)
 
-    if api_format == 'xml':
-        for child in search_album:
-            if child.tag == 'album':
-                album_title = child.find('name').text
-    else:
-        album_title = search_album['album'][0]['name']
+    album_title = get_value(api_format, 'album', 'name', search_album)
+    album_title = get_value(api_format, 'album', 'name', search_album)
 
     search_rules = [['artist', 2, 'CARN'], ['artist', 2, 'Synthetic']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/advanced_search%20\(artist\).xml)
@@ -288,27 +310,15 @@ def ampache3_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.playlists(False, False, offset, limit)
 
     lookup = ampacheConnection.playlists('rename', False, offset, limit)
-    if api_format == 'xml':
-        for child in lookup:
-            if child.tag == 'playlist':
-                ampacheConnection.playlist_delete(child.attrib['id'])
-    else:
-        try:
-            delete_id = lookup['playlist']['id']
-            ampacheConnection.playlist_delete(delete_id)
-        except IndexError:
-            pass
-        except TypeError:
-            pass
+    delete_id = get_id(api_format, 'playlist', lookup)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_delete.xml)
+    ampacheConnection.playlist_delete(delete_id)
+
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
-    if api_format == 'xml':
-        for child in playlist_create:
-            if child.tag == 'playlist':
-                tmp_playlist = child.attrib['id']
-                single_playlist = tmp_playlist
-    else:
-        single_playlist = playlist_create[0]['id']
+
+    single_playlist = get_id(api_format, 'playlist', playlist_create)
 
     ampacheConnection.playlist_add_song(single_playlist, 71, 0)
     ampacheConnection.playlist_add_song(single_playlist, 72, 0)
@@ -487,12 +497,8 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/user.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/user.xml)
     myuser = ampacheConnection.user('demo')
-    if api_format == 'xml':
-        for child in myuser:
-            if child.tag == 'user':
-                myuser = child.attrib['id']
-    else:
-        user_id = myuser['user']['id']
+
+    get_id(api_format, 'user', myuser)
 
     single_song = 54
     single_album = 12
@@ -593,12 +599,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (song)." + api_format)
 
-    if api_format == 'xml':
-        for child in search_song:
-            if child.tag == 'song':
-                song_id = child.attrib['id']
-    else:
-        song_id = search_song[0]['id']
+    song_id = get_id(api_format, 'song', search_song)
     song_title = "Dance with the Devil"
 
     search_rules = [['artist', 0, 'Synthetic']]
@@ -609,12 +610,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (album)." + api_format)
 
-    if api_format == 'xml':
-        for child in search_album:
-            if child.tag == 'album':
-                album_title = child.find('name').text
-    else:
-        album_title = search_album[0]['name']
+    album_title = get_value(api_format, 'album', 'name', search_album)
 
     search_rules = [['artist', 2, 'CARN'], ['artist', 2, 'Synthetic']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/advanced_search%20\(artist\).json)
@@ -624,12 +620,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (artist)." + api_format)
 
-    if api_format == 'xml':
-        for child in search_artist:
-            if child.tag == 'artist':
-                artist_title = child.find('name').text
-    else:
-        artist_title = search_artist[0]['name']
+    artist_title = get_value(api_format, 'artist', 'name', search_artist)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/album.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/album.xml)
@@ -640,12 +631,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     album = ampacheConnection.album(2, False)
 
-    if api_format == 'xml':
-        for child in album:
-            if child.tag == 'album':
-                album_title = child.find('name').text
-    else:
-        album_title = search_album[0]['name']
+    album_title = get_value(api_format, 'album', 'name', album)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/album_songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/album_songs.xml)
@@ -683,13 +669,8 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "stats." + api_format,
                     docpath + "stats (album)." + api_format)
 
-    if api_format == 'xml':
-        for child in stats:
-            if child.tag == 'album':
-                single_album = child.attrib['id']
-                album_title = child.find('name').text
-    else:
-        album_title = stats[0]['name']
+    single_album = get_id(api_format, 'album', stats)
+    album_title = get_value(api_format, 'album', 'name', stats)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/artist%20\(with include songs,albums\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/artist%20\(with include songs,albums\).xml)
@@ -787,29 +768,16 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.playlists(False, False, offset, limit)
 
     lookup = ampacheConnection.playlists('rename', False, offset, limit)
-    if api_format == 'xml':
-        for child in lookup:
-            if child.tag == 'playlist':
-                ampacheConnection.playlist_delete(child.attrib['id'])
-    else:
-        try:
-            delete_id = lookup['playlist']['id']
-            ampacheConnection.playlist_delete(delete_id)
-        except IndexError:
-            pass
-        except TypeError:
-            pass
+    delete_id = get_id(api_format, 'playlist', lookup)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_delete.xml)
+    ampacheConnection.playlist_delete(delete_id)
+
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/playlist_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
 
-    if api_format == 'xml':
-        for child in playlist_create:
-            if child.tag == 'playlist':
-                tmp_playlist = child.attrib['id']
-                single_playlist = tmp_playlist
-    else:
-        single_playlist = playlist_create[0]['id']
+    single_playlist = get_id(api_format, 'playlist', playlist_create)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/playlist_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/playlist_edit.xml)
@@ -896,14 +864,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/tags.xml)
     genre = ''
     tags = ampacheConnection.tags('D', False, offset, limit)
-    if api_format == 'xml':
-        for child in tags:
-            if child.tag == 'tag':
-                genre = child.attrib['id']
-    else:
-        for tag in tags[0]['tag']:
-            tmp_genre = tag['id']
-        genre = tmp_genre
+    genre = get_id(api_format, 'tag', tags)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/tag.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/tag.xml)
@@ -953,12 +914,8 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.podcast_episode(23)
 
     catalogs = ampacheConnection.catalogs('podcast')
-    if api_format == 'xml':
-        for child in catalogs:
-            if child.tag == 'catalog':
-                catalog_id = child.attrib['id']
-    else:
-        catalog_id = catalogs[0]['id']
+    catalog_id = get_id(api_format, 'catalog', catalogs)
+
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/podcast_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/podcast_create.xml)
     ampacheConnection.podcast_create('https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', catalog_id)
@@ -970,14 +927,8 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/podcast_delete.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/podcast_delete.xml)
     podcasts = ampacheConnection.podcasts('Trace', 1)
-    if api_format == 'xml':
-        for child in podcasts:
-            if child.tag == 'podcast':
-                podcast_id = child.attrib['id']
-    else:
-        for podcast in podcasts:
-            if podcast['name'] == "Trace":
-                podcast_id = podcast['id']
+    podcast_id = get_id(api_format, 'podcast', podcasts)
+
     try:
         ampacheConnection.podcast_delete(podcast_id)
     except UnboundLocalError:
@@ -994,12 +945,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/shares.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/shares.xml)
     shares = ampacheConnection.shares(False, False, offset, limit)
-    if api_format == 'xml':
-        for child in shares:
-            if child.tag == 'share':
-                share_id = child.attrib['id']
-    else:
-        share_id = shares[0]['id']
+    share_id = get_id(api_format, 'share', shares)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/share.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/share.xml)
@@ -1008,12 +954,7 @@ def ampache4_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/share_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/share_create.xml)
     share_create = ampacheConnection.share_create(single_song, 'song', False, 7)
-    if api_format == 'xml':
-        for child in share_create:
-            if child.tag == 'share':
-                share_new = child.attrib['id']
-    else:
-        share_new = share_create[0]['id']
+    share_new = get_id(api_format, 'share', shares)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/json-responses/share_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api4/docs/xml-responses/share_edit.xml)
@@ -1213,12 +1154,8 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/user.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/user.xml)
     myuser = ampacheConnection.user(ampache_user)
-    if api_format == 'xml':
-        for child in myuser:
-            if child.tag == 'user':
-                myuser = child.attrib['id']
-    else:
-        user_id = myuser['id']
+
+    get_id(api_format, 'user', myuser)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/get_indexes%20\(song\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/get_indexes%20\(song\).xml)
@@ -1321,12 +1258,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (song)." + api_format)
 
-    if api_format == 'xml':
-        for child in search_song:
-            if child.tag == 'song':
-                song_id = child.attrib['id']
-    else:
-        song_id = search_song['song'][0]['id']
+    song_id = get_id(api_format, 'song', search_song)
     song_title = "Dance with the Devil"
 
     search_rules = [['artist', 0, 'Synthetic']]
@@ -1337,12 +1269,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (album)." + api_format)
 
-    if api_format == 'xml':
-        for child in search_album:
-            if child.tag == 'album':
-                album_title = child.find('name').text
-    else:
-        album_title = search_album['album'][0]['name']
+    album_title = get_value(api_format, 'album', 'name', search_album)
 
     search_rules = [['artist', 2, 'CARN'], ['artist', 2, 'Synthetic']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/advanced_search%20\(artist\).json)
@@ -1352,12 +1279,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (artist)." + api_format)
 
-    if api_format == 'xml':
-        for child in search_artist:
-            if child.tag == 'artist':
-                artist_title = child.find('name').text
-    else:
-        artist_title = search_artist['artist'][0]['name']
+    artist_title = get_value(api_format, 'artist', 'name', search_artist)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/album%20\(with include\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/album%20\(with include\).xml)
@@ -1370,12 +1292,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/album.xml)
     album = ampacheConnection.album(2, False)
 
-    if api_format == 'xml':
-        for child in album:
-            if child.tag == 'album':
-                album_title = child.find('name').text
-    else:
-        album_title = search_album['album'][0]['name']
+    album_title = get_value(api_format, 'album', 'name', album)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/artist_songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/artist_songs.xml)
@@ -1415,13 +1332,8 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "stats." + api_format,
                     docpath + "stats (album)." + api_format)
 
-    if api_format == 'xml':
-        for child in stats:
-            if child.tag == 'album':
-                single_album = child.attrib['id']
-                album_title = child.find('name').text
-    else:
-        album_title = stats['album'][0]['name']
+    single_album = get_id(api_format, 'album', stats)
+    album_title = get_value(api_format, 'album', 'name', album)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/artist%20\(with include songs,albums\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/artist%20\(with include songs,albums\).xml)
@@ -1519,29 +1431,16 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.playlists(False, False, offset, limit)
 
     lookup = ampacheConnection.playlists('rename', False, offset, limit)
-    if api_format == 'xml':
-        for child in lookup:
-            if child.tag == 'playlist':
-                ampacheConnection.playlist_delete(child.attrib['id'])
-    else:
-        try:
-            delete_id = lookup['playlist']['id']
-            ampacheConnection.playlist_delete(delete_id)
-        except IndexError:
-            pass
-        except TypeError:
-            pass
+    delete_id = get_id(api_format, 'playlist', lookup)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_delete.xml)
+    ampacheConnection.playlist_delete(delete_id)
+
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/playlist_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
 
-    if api_format == 'xml':
-        for child in playlist_create:
-            if child.tag == 'playlist':
-                tmp_playlist = child.attrib['id']
-                single_playlist = tmp_playlist
-    else:
-        single_playlist = playlist_create['id']
+    single_playlist = get_id(api_format, 'playlist', playlist_create)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/playlist_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/playlist_edit.xml)
@@ -1630,14 +1529,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/genres.xml)
     genre = ''
     tags = ampacheConnection.genres('D', False, offset, limit)
-    if api_format == 'xml':
-        for child in tags:
-            if child.tag == 'genre':
-                genre = child.attrib['id']
-    else:
-        for tag in tags['genre']:
-            tmp_genre = tag['id']
-        genre = tmp_genre
+    genre = get_id(api_format, 'genre', tags)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/genre.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/genre.xml)
@@ -1699,12 +1591,8 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.podcast_episode(23)
 
     catalogs = ampacheConnection.catalogs('podcast')
-    if api_format == 'xml':
-        for child in catalogs:
-            if child.tag == 'catalog':
-                catalog_id = child.attrib['id']
-    else:
-        catalog_id = catalogs['catalog'][0]['id']
+    catalog_id = get_id(api_format, 'catalog', catalogs)
+
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/podcast_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/podcast_create.xml)
     ampacheConnection.podcast_create('https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', catalog_id)
@@ -1739,12 +1627,7 @@ def ampache5_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/share_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/share_create.xml)
     share_create = ampacheConnection.share_create(single_song, 'song', False, 7)
-    if api_format == 'xml':
-        for child in share_create:
-            if child.tag == 'share':
-                share_new = child.attrib['id']
-    else:
-        share_new = share_create['id']
+    share_new = get_id(api_format, 'share', share_create)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/json-responses/share_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api5/docs/xml-responses/share_edit.xml)
@@ -1917,7 +1800,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.live_stream_create(stream_name, stream_url, stream_codec, catalog_id, stream_website)
 
     single_live_stream = ampacheConnection.live_streams(stream_name)
-    live_stream_new = get_value(api_format, 'live_stream', 'id', single_live_stream)
+    live_stream_new = get_id(api_format, 'live_stream', single_live_stream)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/live_stream_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/live_stream_edit.xml)
@@ -2020,12 +1903,8 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/user.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/user.xml)
     myuser = ampacheConnection.user(ampache_user)
-    if api_format == 'xml':
-        for child in myuser:
-            if child.tag == 'user':
-                myuser = child.attrib['id']
-    else:
-        user_id = myuser['id']
+
+    get_id(api_format, 'user', myuser)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/user_playlists.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/user_playlists.xml)
@@ -2301,12 +2180,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (song)." + api_format)
 
-    if api_format == 'xml':
-        for child in search_song:
-            if child.tag == 'song':
-                song_id = child.attrib['id']
-    else:
-        song_id = search_song['song'][0]['id']
+    song_id = get_id(api_format, 'song', search_song)
     song_title = "Dance with the Devil"
 
     search_rules = [['artist', 0, 'Synthetic']]
@@ -2323,12 +2197,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (album)." + api_format)
 
-    if api_format == 'xml':
-        for child in search_album:
-            if child.tag == 'album':
-                album_title = child.find('name').text
-    else:
-        album_title = search_album['album'][0]['name']
+    album_title = get_value(api_format, 'album', 'name', search_album)
 
     search_rules = [['artist', 2, 'CARN'], ['artist', 2, 'Synthetic']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/search%20\(artist\).json)
@@ -2344,12 +2213,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "advanced_search." + api_format,
                     docpath + "advanced_search (artist)." + api_format)
 
-    if api_format == 'xml':
-        for child in search_artist:
-            if child.tag == 'artist':
-                artist_title = child.find('name').text
-    else:
-        artist_title = search_artist['artist'][0]['name']
+    artist_title = get_value(api_format, 'artist', 'name', search_artist)
 
     search_rules = [['favorite', 0, '%'], ['title', 0, 'd']]
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/search_group%20\(all\).json)
@@ -2386,12 +2250,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/album.xml)
     album = ampacheConnection.album(2, False)
 
-    if api_format == 'xml':
-        for child in album:
-            if child.tag == 'album':
-                album_title = child.find('name').text
-    else:
-        album_title = search_album['album'][0]['name']
+    album_title = get_value(api_format, 'album', 'name', album)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/artist_songs.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/artist_songs.xml)
@@ -2431,13 +2290,8 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
         shutil.move(docpath + "stats." + api_format,
                     docpath + "stats (album)." + api_format)
 
-    if api_format == 'xml':
-        for child in stats:
-            if child.tag == 'album':
-                single_album = child.attrib['id']
-                album_title = child.find('name').text
-    else:
-        album_title = stats['album'][0]['name']
+    single_album = get_id(api_format, 'album', stats)
+    album_title = get_value(api_format, 'album', 'name', stats)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/artist%20\(with include songs,albums\).json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/artist%20\(with include songs,albums\).xml)
@@ -2533,13 +2387,8 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     if os.path.isfile(docpath + "get_bookmark." + api_format):
         shutil.move(docpath + "get_bookmark." + api_format,
                     docpath + "get_bookmark (show all)." + api_format)
-    mybookmark = ampacheConnection.get_bookmark(54, 'song')
-    if api_format == 'xml':
-        for child in mybookmark:
-            if child.tag == 'bookmark':
-                mybookmark = child.attrib['id']
-    else:
-        mybookmark = mybookmark['id']
+    bookmark = ampacheConnection.get_bookmark(54, 'song')
+    mybookmark = get_id(api_format, 'bookmark', bookmark)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/bookmark_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/bookmark_edit.xml)
@@ -2586,29 +2435,16 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.playlists(False, False, offset, limit)
 
     lookup = ampacheConnection.playlists('rename', False, offset, limit)
-    if api_format == 'xml':
-        for child in lookup:
-            if child.tag == 'playlist':
-                ampacheConnection.playlist_delete(child.attrib['id'])
-    else:
-        try:
-            delete_id = lookup['playlist'][0]['id']
-            ampacheConnection.playlist_delete(delete_id)
-        except IndexError:
-            pass
-        except TypeError:
-            pass
+    delete_id = get_id(api_format, 'playlist', lookup)
+
+    # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/playlist_delete.xml)
+    ampacheConnection.playlist_delete(delete_id)
+
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_create.xml)
     playlist_create = ampacheConnection.playlist_create('rename', 'private')
 
-    if api_format == 'xml':
-        for child in playlist_create:
-            if child.tag == 'playlist':
-                tmp_playlist = child.attrib['id']
-                single_playlist = tmp_playlist
-    else:
-        single_playlist = playlist_create['id']
+    single_playlist = get_id(api_format, 'playlist', playlist_create)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/playlist_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/playlist_edit.xml)
@@ -2705,14 +2541,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/genres.xml)
     genre = ''
     tags = ampacheConnection.genres('D', False, offset, limit)
-    if api_format == 'xml':
-        for child in tags:
-            if child.tag == 'genre':
-                genre = child.attrib['id']
-    else:
-        for tag in tags['genre']:
-            tmp_genre = tag['id']
-        genre = tmp_genre
+    genre = get_id(api_format, 'genre', tags)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/genre.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/genre.xml)
@@ -2774,12 +2603,8 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.podcast_episode(23)
 
     catalogs = ampacheConnection.catalogs('podcast')
-    if api_format == 'xml':
-        for child in catalogs:
-            if child.tag == 'catalog':
-                catalog_id = child.attrib['id']
-    else:
-        catalog_id = catalogs['catalog'][0]['id']
+    catalog_id = get_id(api_format, 'catalog', catalogs)
+
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/podcast_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/podcast_create.xml)
     ampacheConnection.podcast_create('https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', catalog_id)
@@ -2814,12 +2639,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/share_create.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/share_create.xml)
     share_create = ampacheConnection.share_create(single_song, 'song', False, 7)
-    if api_format == 'xml':
-        for child in share_create:
-            if child.tag == 'share':
-                share_new = child.attrib['id']
-    else:
-        share_new = share_create['id']
+    share_new = get_id(api_format, 'share', share_create)
 
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/share_edit.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/share_edit.xml)
@@ -3505,8 +3325,8 @@ def subsonic_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
 if APIVERSION == 6:
     api_version = api6_version
-    build_docs(url, api, user, 'json')
     build_docs(url, api, user, 'xml')
+    build_docs(url, api, user, 'json')
 elif APIVERSION == 5:
     api_version = api5_version
     build_docs(url, api, user, 'json')
