@@ -176,22 +176,22 @@ sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php83s.log\"/g"
 echo
 echo "Testing $RELEASEVERSION ampache82"
 #release-test-testampache82
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test7.py http://${LOCALIP}:18280 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18280 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18280 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache82_squashed"
 #release-test-testampache82_squashed
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test7.py http://${LOCALIP}:18281 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18281 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18281 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache83"
 #release-test-testampache83
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test7.py http://${LOCALIP}:18380 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18380 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18380 $DEMOPASSWORD admin 1
 echo
 echo "Testing $RELEASEVERSION ampache83_squashed"
 #release-test-testampache83_squashed
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test7.py http://${LOCALIP}:18381 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18381 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18381 $DEMOPASSWORD admin 1
 
 
