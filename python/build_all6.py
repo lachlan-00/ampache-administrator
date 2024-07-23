@@ -11,10 +11,15 @@ import time
 import ampache
 
 ampache_dir = os.getcwd()
-file_path = os.path.join(ampache_dir, '../ampache-patch6/src/Config/Init/InitializationHandlerConfig.php')
 
-with open(file_path, 'r') as file:
-    file_content = file.read()
+try:
+    file_path = os.path.join(ampache_dir, '../ampache-patch6/src/Config/Init/InitializationHandlerConfig.php')
+    with open(file_path, 'r') as file:
+        file_content = file.read()
+except FileNotFoundError:
+    file_path = os.path.join(ampache_dir, 'ampache-patch6/src/Config/Init/InitializationHandlerConfig.php')
+    with open(file_path, 'r') as file:
+        file_content = file.read()
 
 release_version = re.search(r'[0-9]+\.[0-9]+\.[0-9]+', file_content).group()
 

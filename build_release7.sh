@@ -43,6 +43,21 @@ if [ ! -d $AMPACHEDIR/releases/7/generic_squashed ]; then
   git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git generic_squashed
 fi
 
+if [ ! -d $AMPACHEDIR/releases/7/php82 ]; then
+  git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php82
+fi
+if [ ! -f $AMPACHEDIR/releases/7/php82/index.php ]; then
+  rm -rf $AMPACHEDIR/releases/7/php82
+  git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php82
+fi
+if [ ! -d $AMPACHEDIR/releases/7/php82_squashed ]; then
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php82_squashed
+fi
+if [ ! -f $AMPACHEDIR/releases/7/php82_squashed/index.php ]; then
+  rm -rf $AMPACHEDIR/releases/7/php82_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php82_squashed
+fi
+
 if [ ! -d $AMPACHEDIR/releases/7/php83 ]; then
   git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php83
 fi
@@ -83,10 +98,10 @@ rm -rf ./composer.lock ./package-lock.json vendor/* public/lib/components/* && p
 npm install
 npm run build
 find . -xtype l -exec rm {} \;
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
+#cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
+#cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
 #cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
-cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
+#cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php82_squashed
@@ -94,10 +109,10 @@ rm -rf ./composer.lock ./package-lock.json vendor/* ./lib/components/* ./docker/
 npm install
 npm run build
 find . -xtype l -exec rm {} \;
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
+#cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
+#cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
 #cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
-cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
+#cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 # php 8.3
@@ -105,20 +120,20 @@ cd $AMPACHEDIR/releases/7/php83
 rm -rf ./composer.lock ./package-lock.json vendor/* public/lib/components/* && php8.3 $COMPOSERPATH install
 php8.3 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
+#cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
+#cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
 #cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
-cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
+#cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php83_squashed
 rm -rf ./composer.lock ./package-lock.json vendor/* ./lib/components/* ./docker/ && php8.3 $COMPOSERPATH install
 php8.3 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
-cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
+#cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
+#cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
 #cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
-cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
+#cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 # remove possible old release files before building the new one
