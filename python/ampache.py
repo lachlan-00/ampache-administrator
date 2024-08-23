@@ -2,7 +2,7 @@
 
 
 """
-Copyright (C)2023 Ampache.org
+Copyright (C)2024 Ampache.org
 --------------------------------------------
 Ampache XML and JSON Api library for python3
 --------------------------------------------
@@ -37,6 +37,7 @@ class API(object):
 
     def __init__(self):
         self.AMPACHE_API = 'xml'
+        self.AMPACHE_VERSION = '6.6.0'
         self.AMPACHE_SERVER = ''
         self.AMPACHE_DEBUG = False
         self.DOCS_PATH = 'docs/'
@@ -96,6 +97,23 @@ class API(object):
         """
         self.DOCS_PATH = path_string
 
+    def set_version(self, myversion: str):
+        """ set_version
+
+            Allow forcing a default API version
+
+            api3 = '390001'
+            api4 = '443000'
+            api5 = '5.5.6'
+            api6 = '6.6.0'
+
+            INPUTS
+            * myversion = (string) '6.6.0'|'390001'
+        """
+        if self.AMPACHE_DEBUG:
+            print('AMPACHE_VERSION set to ' + myversion)
+        self.AMPACHE_VERSION = myversion
+
     def set_user(self, myuser: str):
         """ set_user
 
@@ -104,6 +122,8 @@ class API(object):
             INPUTS
             * myuser = (string) ''
         """
+        if self.AMPACHE_DEBUG:
+            print('AMPACHE_USER set to ' + myuser)
         self.AMPACHE_USER = myuser
 
     def set_key(self, mykey: str):
@@ -114,6 +134,8 @@ class API(object):
             INPUTS
             * mykey = (string) ''
         """
+        if self.AMPACHE_DEBUG:
+            print('AMPACHE_KEY set to ' + mykey)
         self.AMPACHE_KEY = mykey
 
     def set_url(self, myurl: str):
@@ -124,6 +146,8 @@ class API(object):
             INPUTS
             * myurl = (string) ''
         """
+        if self.AMPACHE_DEBUG:
+            print('AMPACHE_URL set to ' + myurl)
         self.AMPACHE_URL = myurl
 
     def set_config_path(self, path: str):
@@ -242,12 +266,12 @@ class API(object):
                 id_list.append(data['id'])
         else:
             try:
-                if data[0][0][attribute]:
+                if data[attribute]:
                     try:
-                        if data[0][0][attribute]['id']:
-                            id_list.append(data[0][0][attribute]['id'])
+                        if data[attribute]['id']:
+                            id_list.append(data[attribute]['id'])
                     except (KeyError, TypeError):
-                        for data_object in data[0][0][attribute]:
+                        for data_object in data[attribute]:
                             try:
                                 id_list.append(data_object[0]['id'])
                             except (KeyError, TypeError):
@@ -266,24 +290,22 @@ class API(object):
                                     id_list.append(data_object['id'])
                 except (KeyError, TypeError):
                     try:
-                        if data[attribute]:
+                        if data[0][0][attribute]:
                             try:
-                                if data[attribute]['id']:
-                                    id_list.append(data[attribute]['id'])
+                                if data[0][0][attribute]['id']:
+                                    id_list.append(data[0][0][attribute]['id'])
                             except (KeyError, TypeError):
-                                for data_object in data[attribute]:
+                                for data_object in data[0][0][attribute]:
                                     try:
                                         id_list.append(data_object[0]['id'])
                                     except (KeyError, TypeError):
                                         id_list.append(data_object['id'])
+                                    try:
+                                        id_list.append(data[0]['id'])
+                                    except (KeyError, TypeError):
+                                        id_list.append(data['id'])
                     except (KeyError, TypeError):
-                        try:
-                            try:
-                                id_list.append(data[0]['id'])
-                            except (KeyError, TypeError):
-                                id_list.append(data['id'])
-                        except (KeyError, TypeError):
-                            id_list.append(data)
+                        pass
 
         return id_list
 
@@ -316,7 +338,7 @@ class API(object):
                             id_list.append(data_object)
                     except (KeyError, TypeError):
                         id_list.append(data)
-        
+
         return id_list
 
     @staticmethod
@@ -599,7 +621,7 @@ class API(object):
                 $username;
                 $key = hash('sha256', 'email');
                 auth = hash('sha256', $username . $key);
-              ) 
+              )
         """
         ampache_url = self.AMPACHE_URL + '/server/' + self.AMPACHE_API + '.server.php'
         data = {'action': 'goodbye',
@@ -1255,7 +1277,8 @@ class API(object):
             returns a single song
 
             INPUTS
-            * filter_id = (integer) $song_id
+            * filter_id  = (integer) $song_id
+            * get_lyrics = (integer) 0,1, if true fetch lyrics or try to find them using plugins //optional
         """
         ampache_url = self.AMPACHE_URL + '/server/' + self.AMPACHE_API + '.server.php'
         data = {'action': 'song',
@@ -2676,7 +2699,7 @@ class API(object):
             return False
         return self.return_data(ampache_response)
 
-    def flag(self, object_type, object_id, flagbool):
+    def flag(self, object_type, object_id, flagbool, date=False):
         """ flag
             MINIMUM_API_VERSION=400001
 
@@ -2689,6 +2712,7 @@ class API(object):
             * object_type = (string) 'song'|'album'|'artist'
             * object_id   = (integer) $object_id
             * flagbool    = (boolean|integer) (True,False | 0|1)
+            * date        = (integer) UNIXTIME() //optional
         """
         if bool(flagbool):
             flag_state = 1
@@ -2699,7 +2723,10 @@ class API(object):
                 'auth': self.AMPACHE_SESSION,
                 'type': object_type,
                 'id': object_id,
-                'flag': flag_state}
+                'flag': flag_state,
+                'date': date}
+        if not date:
+            data.pop('date')
         data = urllib.parse.urlencode(data)
         full_url = ampache_url + '?' + data
         ampache_response = self.fetch_url(full_url, self.AMPACHE_API, 'flag')
@@ -2707,7 +2734,7 @@ class API(object):
             return False
         return self.return_data(ampache_response)
 
-    def record_play(self, object_id, user_id, client='python3-ampache'):
+    def record_play(self, object_id, user_id=False, client='python3-ampache', date=False):
         """ record_play
             MINIMUM_API_VERSION=400001
 
@@ -2716,15 +2743,21 @@ class API(object):
 
             INPUTS
             * object_id   = (integer) $object_id
-            * user_id     = (integer) $user_id
+            * user_id     = (integer) $user_id //optional
             * client      = (string) $agent //optional
+            * date        = (integer) UNIXTIME() //optional
         """
         ampache_url = self.AMPACHE_URL + '/server/' + self.AMPACHE_API + '.server.php'
         data = {'action': 'record_play',
                 'auth': self.AMPACHE_SESSION,
                 'id': object_id,
                 'user': user_id,
-                'client': client}
+                'client': client,
+                'date': date}
+        if not user_id:
+            data.pop('user')
+        if not date:
+            data.pop('date')
         data = urllib.parse.urlencode(data)
         full_url = ampache_url + '?' + data
         ampache_response = self.fetch_url(full_url, self.AMPACHE_API, 'record_play')
@@ -3704,11 +3737,14 @@ class API(object):
                 'type': object_type,
                 'position': position,
                 'client': client,
-                'date': date}
+                'date': date,
+                'include': include}
         if not client:
             data.pop('client')
         if not date:
             data.pop('date')
+        if not include:
+            data.pop('include')
         data = urllib.parse.urlencode(data)
         full_url = ampache_url + '?' + data
         ampache_response = self.fetch_url(full_url, self.AMPACHE_API, 'bookmark_edit')
@@ -3989,3 +4025,27 @@ class API(object):
                               website, state, city, disable, maxbitrate,
                               fullname_public, reset_apikey, reset_streamtoken, clear_stats)
 
+    def execute(self, method: str, params=None):
+        if params is None:
+            params = {}
+        match method:
+            case 'handshake':
+                if not "version" in params:
+                    params["version"] = self.AMPACHE_VERSION
+                if not "ampache_url" in params:
+                    params["ampache_url"] = self.AMPACHE_URL
+                if not "ampache_api" in params:
+                    params["ampache_api"] = self.AMPACHE_KEY
+                if not "ampache_user" in params:
+                    params["ampache_user"] = self.AMPACHE_USER
+                if not "timestamp" in params or params["timestamp"] == 0:
+                    return self.handshake(params["ampache_url"], self.encrypt_string(params["ampache_api"], params["ampache_user"]), False,
+                                          False, params["version"])
+                return self.handshake(params["ampache_url"], self.encrypt_password(params["ampache_api"], int(params["timestamp"])), params["ampache_user"],
+                                   int(params["timestamp"]), params["version"])
+            case 'ping':
+                if not "ampache_url" in params:
+                    params["ampache_url"] = self.AMPACHE_URL
+                if not "ampache_api" in params:
+                    params["ampache_api"] = self.AMPACHE_KEY
+                return self.ping(params["ampache_url"], params["ampache_api"])

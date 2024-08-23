@@ -166,6 +166,10 @@ def build_docs(ampache_url, ampache_api, ampache_user, api_format, api_version):
     """
     ampacheConnection.set_debug(ENABLEDEBUG)
     ampacheConnection.set_format(api_format)
+    ampacheConnection.set_version(api_version)
+    ampacheConnection.set_url(ampache_url)
+    ampacheConnection.set_key(ampache_api)
+    ampacheConnection.set_user(ampache_user)
 
     if (api_version == api3_version):
         ampacheConnection.set_debug_path("python3-ampache3/docs/" + api_format + "-responses/")
@@ -1522,7 +1526,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                     docpath + "get_indexes (song)." + api_format)
     single_song = ampacheConnection.get_id_list(songs, 'song')[0]
     #print(ampacheConnection.get_object_list(songs, 'song'))
-    
+
     tempusername = 'temp_user'
     ampacheConnection.user_create(tempusername, 'supoersecretpassword', 'email@gmail.com', False, False)
     ampacheConnection.user(tempusername)
@@ -1643,7 +1647,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     if os.path.isfile(docpath + "index." + api_format):
         shutil.move(docpath + "index." + api_format,
                     docpath + "index (catalog)." + api_format)
-    
+
     ampacheConnection.index('song', False, False, False, False, False, offset, limit)
     if os.path.isfile(docpath + "index." + api_format):
         shutil.move(docpath + "index." + api_format,
@@ -1698,7 +1702,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     if os.path.isfile(docpath + "index." + api_format):
         shutil.move(docpath + "index." + api_format,
                     docpath + "index (catalog with include)." + api_format)
-    
+
     ampacheConnection.index('song', False, False, False, False, 1, offset, limit)
     if os.path.isfile(docpath + "index." + api_format):
         shutil.move(docpath + "index." + api_format,
@@ -2046,7 +2050,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
                     docpath + "playlist_add_song (error)." + api_format)
     ampacheConnection.playlist_add_song(single_playlist, single_song, 1)
     ampacheConnection.playlist_add_song(single_playlist, single_song, 0)
-    
+
     ampacheConnection.playlist_add(single_playlist, 2, 'playlist')
 
     ampacheConnection.playlist_remove_song(single_playlist, False, 1)
