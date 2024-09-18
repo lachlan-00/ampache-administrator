@@ -121,8 +121,8 @@ sudo chmod 775 $AMPACHEDIR/release-test/php83_client
 # ReLaunch all the containers
 
 docker-compose -p "release-test" \
- -f docker/test-docker-compose82.yml -f docker/test-docker-compose82_squashed.yml -f docker/test-docker-compose82_client.yml \
- -f docker/test-docker-compose83.yml -f docker/test-docker-compose83_squashed.yml -f docker/test-docker-compose83_client.yml \
+ -f docker/test7-docker-compose82.yml -f docker/test7-docker-compose82_squashed.yml -f docker/test7-docker-compose82_client.yml \
+ -f docker/test7-docker-compose83.yml -f docker/test7-docker-compose83_squashed.yml -f docker/test7-docker-compose83_client.yml \
  up -d --build
 
 # Install DB and add the admin user

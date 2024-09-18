@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  test7ampache83_squashed:
+    build:
+      context: .
+      dockerfile: Dockerfilephp83
+    restart: on-failure
+    ports:
+      - "18381:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ../release-test/php83_squashed:/var/www/html/public
+      - ./log:/var/log/ampache
+      - ./media:/media
+      - ./art:/mnt/art
+      - ./music:/mnt/music
+      - ./podcast:/mnt/podcast
+      - ./upload:/mnt/upload
+      - ./video:/mnt/video
+

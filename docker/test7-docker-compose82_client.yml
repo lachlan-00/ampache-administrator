@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  testampache82_client:
+  test7ampache82_client:
     build:
       context: .
       dockerfile: Dockerfilephp82
