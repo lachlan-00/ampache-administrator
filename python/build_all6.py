@@ -39,22 +39,26 @@ offset = 0
 api3_version = '390001'
 api4_version = '443000'
 api5_version = '5.5.6'
-api6_version = '6.6.1'
+api6_version = '6.6.2'
 subsonic_api = '1.16.1'
 doc_path = build_dir + SLASH + "docs" + SLASH
 song_url = url + '/play/index.php?ssid=eeb9f1b6056246a7d563f479f518bb34&type=song&oid=60&uid=4&player=api&name=Synthetic%20-%20BrownSmoke.wma'
 APIVERSION = 0
 ENABLEDEBUG = True
 try:
-    if sys.argv[1]:
+    length = len(sys.argv)
+    print(sys.argv)
+    if 1 < length:
         url = sys.argv[1]
-    if sys.argv[2]:
+    if 2 < length:
         api = sys.argv[2]
-    if sys.argv[3]:
+    if 3 < length:
         user = sys.argv[3]
-    if sys.argv[4]:
+    if 4 < length:
         if sys.argv[4] == '1':
             ENABLEDEBUG = False
+    if 5 < length:
+        release_version = sys.argv[5]
 except IndexError:
     if os.path.isfile(os.path.join(os.pardir, 'ampache.conf')):
         conf = configparser.RawConfigParser()

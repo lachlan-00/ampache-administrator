@@ -5,7 +5,8 @@ CLIENTBRANCH="client"
 AMPACHEDIR=$PWD
 COMPOSERPATH="/usr/local/bin/composer"
 LOCALIP=$(ip addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v '127.0.0.1' | head -n 1)
-DATABASE="ampachetest"
+DATABASE="ampachetest7"
+AMPACHEPASSWORD="]@zRGb_Rs2i'XVc"
 
 if [ ! -f $COMPOSERPATH ]; then
   COMPOSERPATH="$AMPACHEDIR/docker/composer"
@@ -17,10 +18,6 @@ RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' $AMPACHEDIR/ampache-patch7/src
 if [ ! $# -eq 0 ]; then
   RELEASEVERSION=$1
 fi
-
-LOCALIP=$(ip addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v '127.0.0.1' | head -n 1)
-DATABASE="ampachetest"
-AMPACHEPASSWORD="]@zRGb_Rs2i'XVc"
 
 echo "Enter your local database user:"
 read DATABASEUSER
@@ -222,42 +219,49 @@ sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php83/
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php83_squashed/config/ampache.cfg.php
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php83_client/config/ampache.cfg.php
 
-sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php82.log\"/g"   $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
-sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php82s.log\"/g"   $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
-sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php82c.log\"/g"   $AMPACHEDIR/release-test/php82_client/config/ampache.cfg.php
-sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php83.log\"/g"   $AMPACHEDIR/release-test/php83/config/ampache.cfg.php
-sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php83s.log\"/g"   $AMPACHEDIR/release-test/php83_squashed/config/ampache.cfg.php
-sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php83c.log\"/g"   $AMPACHEDIR/release-test/php83_client/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php82.log\"/g"   $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php82s.log\"/g"   $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php82c.log\"/g"   $AMPACHEDIR/release-test/php82_client/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php83.log\"/g"   $AMPACHEDIR/release-test/php83/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php83s.log\"/g"   $AMPACHEDIR/release-test/php83_squashed/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php83c.log\"/g"   $AMPACHEDIR/release-test/php83_client/config/ampache.cfg.php
+
+sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
+sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
+sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/php82_client/config/ampache.cfg.php
+sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/php83/config/ampache.cfg.php
+sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/php83_squashed/config/ampache.cfg.php
+sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/php83_client/config/ampache.cfg.php
 
 echo
 echo "Testing $RELEASEVERSION ampache82"
 #release-test-testampache82
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18280 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18280 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18280 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION ampache82_squashed"
 #release-test-testampache82_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18281 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18281 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18281 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION php82_client"
 #release-test-testphp82_client
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18282 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18282 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18282 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION ampache83"
 #release-test-testampache83
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18380 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18380 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18380 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION ampache83_squashed"
 #release-test-testampache83_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18381 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18381 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18381 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION php83_client"
 #release-test-testphp83_client
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18382 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18382 $DEMOPASSWORD admin 1
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18382 $DEMOPASSWORD admin 1 $RELEASEVERSION
 
 
