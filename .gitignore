@@ -20,8 +20,10 @@ python3-ampache3/*
 python3-ampache4*
 python3-ampache5/*
 python3-ampache6/*
+php83_client/
 php83_squashed/
 php83/
+php82_client/
 php82_squashed/
 php82/
 php81_squashed/
