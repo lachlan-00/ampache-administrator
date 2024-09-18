@@ -215,9 +215,9 @@ def self_check(ampache_url, ampache_api, ampache_session, docpath):
         newdata = re.sub(url_text, "music.com.au", filedata)
         newdata = re.sub(r"CDATA/\[/media/", "CDATA[/mnt/files-music/ampache-test/", newdata)
         newdata = re.sub("\\/media\\/", "/mnt/files-music/ampache-test/", newdata)
-        newdata = re.sub(url_text.replace("/", "\\/"), "music.com.au", newdata)
+        #newdata = re.sub(url_text.replace("/", "\\/"), "music.com.au", newdata)
         newdata = re.sub("http://music.com.au", "https://music.com.au", newdata)
-        newdata = re.sub("http:\\/\\/music.com.au", "https:\\/\\/music.com.au", newdata)
+        newdata = re.sub(r"https:\\/\\/music.com.au", "https://music.com.au", newdata)
         newdata = re.sub("\"session_expire\": \"*.*\"*", "\"session_expire\": \"2022-08-17T06:21:00+00:00\",", newdata)
         newdata = re.sub("<session_expire>.*</session_expire>",
                          "<session_expire><![CDATA[2022-08-17T04:34:55+00:00]]></session_expire>", newdata)
