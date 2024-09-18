@@ -168,15 +168,15 @@ UPDATEDBCOMMAND="php /var/www/html/bin/cli admin:updateDatabase -e"
 
 echo "INSTALLING CLIENT AMPACHE on PHP8.2"
 
-INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}82s -p $DATABASE -d $DATABASE"
-docker exec -u root -it release-test-testampache82_client-1 ${INSTALLCOMMAND}82s
+INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}82c -p $DATABASE -d $DATABASE"
+docker exec -u root -it release-test-testampache82_client-1 ${INSTALLCOMMAND}82c
 docker exec -u root -it release-test-testampache82_client-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache82_client-1 ${UPDATEDBCOMMAND}
 
 echo "INSTALLING CLIENT AMPACHE on PHP8.3"
 
-INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}83s -p $DATABASE -d $DATABASE"
-docker exec -u root -it release-test-testampache83_client-1 ${INSTALLCOMMAND}83s
+INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}83c -p $DATABASE -d $DATABASE"
+docker exec -u root -it release-test-testampache83_client-1 ${INSTALLCOMMAND}83c
 docker exec -u root -it release-test-testampache83_client-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache83_client-1 ${UPDATEDBCOMMAND}
 
@@ -224,10 +224,10 @@ sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/php83_
 
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php82.log\"/g"   $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php82s.log\"/g"   $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
-sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php82s.log\"/g"   $AMPACHEDIR/release-test/php82_client/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php82c.log\"/g"   $AMPACHEDIR/release-test/php82_client/config/ampache.cfg.php
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php83.log\"/g"   $AMPACHEDIR/release-test/php83/config/ampache.cfg.php
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php83s.log\"/g"   $AMPACHEDIR/release-test/php83_squashed/config/ampache.cfg.php
-sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php83s.log\"/g"   $AMPACHEDIR/release-test/php83_client/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"php83c.log\"/g"   $AMPACHEDIR/release-test/php83_client/config/ampache.cfg.php
 
 echo
 echo "Testing $RELEASEVERSION ampache82"
