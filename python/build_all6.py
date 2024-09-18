@@ -19,7 +19,8 @@ else:
     SLASH = '/'
 
 try:
-    file_path = os.path.join(ampache_dir, '..', 'ampache-patch6', 'src', 'Config', 'Init', 'InitializationHandlerConfig.php')
+    file_path = os.path.join(ampache_dir, '..', 'ampache-patch6', 'src', 'Config', 'Init',
+                             'InitializationHandlerConfig.php')
     with open(file_path, 'r') as file:
         file_content = file.read()
 except FileNotFoundError:
@@ -83,7 +84,7 @@ except IndexError:
         APIVERSION = 0
 
 
-def get_id(api_format, key, data, exit_file = True):
+def get_id(api_format, key, data, exit_file=True):
     try:
         if api_format == 'xml':
             result = False
@@ -212,13 +213,14 @@ def self_check(ampache_url, ampache_api, ampache_session, docpath):
         url_text = ampache_url.replace("https://", "")
         url_text = url_text.replace("http://", "")
         newdata = re.sub(url_text, "music.com.au", filedata)
-        newdata = re.sub("CDATA\[\/media\/", "CDATA[/mnt/files-music/ampache-test/", newdata)
-        newdata = re.sub("\\\/media\\\/", "\\\/mnt\\\/files-music\\\/ampache-test\\\/", newdata)
-        newdata = re.sub(url_text.replace("/", "\\\/"), "music.com.au", newdata)
+        newdata = re.sub(r"CDATA/\[/media/", "CDATA[/mnt/files-music/ampache-test/", newdata)
+        newdata = re.sub("\\/media\\/", "/mnt/files-music/ampache-test/", newdata)
+        newdata = re.sub(url_text.replace("/", "\\/"), "music.com.au", newdata)
         newdata = re.sub("http://music.com.au", "https://music.com.au", newdata)
-        newdata = re.sub("http:\\\/\\\/music.com.au", "https:\\\/\\\/music.com.au", newdata)
+        newdata = re.sub("http:\\/\\/music.com.au", "https:\\/\\/music.com.au", newdata)
         newdata = re.sub("\"session_expire\": \"*.*\"*", "\"session_expire\": \"2022-08-17T06:21:00+00:00\",", newdata)
-        newdata = re.sub("<session_expire>.*</session_expire>", "<session_expire><![CDATA[2022-08-17T04:34:55+00:00]]></session_expire>", newdata)
+        newdata = re.sub("<session_expire>.*</session_expire>",
+                         "<session_expire><![CDATA[2022-08-17T04:34:55+00:00]]></session_expire>", newdata)
         newdata = re.sub("\"addition_time\": [0-9]*", "\"addition_time\": 1675665915", newdata)
         newdata = re.sub("<addition_time>.*</addition_time>", "<addition_time>1675665915</addition_time>", newdata)
         newdata = re.sub("\"delete_time\": [0-9]*", "\"delete_time\": 1670202698", newdata)
@@ -231,7 +233,8 @@ def self_check(ampache_url, ampache_api, ampache_session, docpath):
         newdata = re.sub("\"secret\": \"*.*\"*", "\"secret\": \"GJ7EzBPT\",", newdata)
         newdata = re.sub("<secret>.*</secret>", "<secret><![CDATA[GJ7EzBPT]]></secret>", newdata)
         newdata = re.sub("\"sync_date\": \"*.*\"*", "\"sync_date\": \"2022-08-17T05:07:11+00:00\",", newdata)
-        newdata = re.sub("<sync_date>.*</sync_date>", "<sync_date><![CDATA[2022-08-17T05:07:11+00:00]]></sync_date>", newdata)
+        newdata = re.sub("<sync_date>.*</sync_date>", "<sync_date><![CDATA[2022-08-17T05:07:11+00:00]]></sync_date>",
+                         newdata)
         newdata = re.sub(ampache_api, "eeb9f1b6056246a7d563f479f518bb34", newdata)
         newdata = re.sub(ampache_session, "cfj3f237d563f479f5223k23189dbb34", newdata)
         newdata = re.sub('auth=[a-z0-9]*', "auth=eeb9f1b6056246a7d563f479f518bb34", newdata)
@@ -494,7 +497,6 @@ def ampache3_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/user.xml)
     ampache_connection.user('user')
 
-
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/videos.xml)
     videos = ampache_connection.videos(False, False, 0, 0)
     single_video = 1
@@ -743,7 +745,6 @@ def ampache4_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
                     docpath + "artist (with include albums)." + api_format)
     artist = ampache_connection.artist(19, False)
 
-
     ampache_connection.artist_albums(single_artist, offset, limit)
 
     ampache_connection.artist_songs(2, offset, limit)
@@ -766,7 +767,6 @@ def ampache4_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
     if os.path.isfile(docpath + "catalog_action." + api_format):
         shutil.move(docpath + "catalog_action." + api_format,
                     docpath + "catalog_action (error)." + api_format)
-
 
     ampache_connection.flag('song', 93, False)
     ampache_connection.flag('song', 93, True)
@@ -835,13 +835,13 @@ def ampache4_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
                     docpath + "playlist_generate (id)." + api_format)
 
     ampache_connection.scrobble('Hear. Life. Spoken', 'Sub Atari Knives', 'Sub Atari Knives', False, False, False,
-                               int(time.time()), 'debug')
+                                int(time.time()), 'debug')
     if os.path.isfile(docpath + "scrobble." + api_format):
         shutil.move(docpath + "scrobble." + api_format,
                     docpath + "scrobble (error)." + api_format)
 
     ampache_connection.scrobble('Sensorisk Deprivation', 'IOK-1', 'Sensorisk Deprivation', False, False, False,
-                               int(time.time()), 'debug')
+                                int(time.time()), 'debug')
     ampache_connection.record_play(93, ampache_user, 'debug')
 
     ampache_connection.search_songs(song_title, offset, limit)
@@ -876,7 +876,8 @@ def ampache4_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
     delete_id = get_id(api_format, 'podcast', lookup, False)
     ampache_connection.podcast_delete(delete_id)
 
-    podcast_create = ampache_connection.podcast_create('https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', catalog_id)
+    podcast_create = ampache_connection.podcast_create(
+        'https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', catalog_id)
     podcast_id = get_id(api_format, 'podcast', podcast_create)
 
     ampache_connection.podcast_edit(podcast_id)
@@ -1327,16 +1328,15 @@ def ampache5_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
                     docpath + "playlist_generate (id)." + api_format)
 
     ampache_connection.scrobble('Hear. Life. Spoken', 'Sub Atari Knives', 'Sub Atari Knives', False, False, False,
-                               int(time.time()), 'debug')
+                                int(time.time()), 'debug')
     if os.path.isfile(docpath + "scrobble." + api_format):
         shutil.move(docpath + "scrobble." + api_format,
                     docpath + "scrobble (error)." + api_format)
 
     ampache_connection.scrobble('Sensorisk Deprivation', 'IOK-1', 'Sensorisk Deprivation', False, False, False,
-                               int(time.time()), 'debug')
+                                int(time.time()), 'debug')
 
     ampache_connection.record_play(93, ampache_user, 'debug')
-
 
     ampache_connection.search_songs(song_title, offset, limit)
 
@@ -1376,7 +1376,8 @@ def ampache5_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
     delete_id = get_id(api_format, 'podcast', lookup, False)
     ampache_connection.podcast_delete(delete_id)
 
-    podcast_create = ampache_connection.podcast_create('https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', catalog_id)
+    podcast_create = ampache_connection.podcast_create(
+        'https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', catalog_id)
     podcast_id = get_id(api_format, 'podcast', podcast_create)
 
     ampache_connection.podcast_edit(podcast_id)
@@ -1447,7 +1448,8 @@ def ampache5_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
     self_check(ampache_url, ampache_api, ampache_session, docpath)
 
 
-def ampache6_methods(ampache_connection, ampache_url, ampache_api, ampache_user, api_format, api_version, docpath):
+def ampache6_methods(ampache_connection: ampache.API, ampache_url, ampache_api, ampache_user, api_format,
+                     api_version, docpath):
     #TODO undocumented methods
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/json-responses/catalog_file.json)
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api6/docs/xml-responses/catalog_file.xml)
@@ -1481,23 +1483,25 @@ def ampache6_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
     # BINARY METHOD
     #ampache_connection.get_art(93, 'song', (os.path.join(os.getcwd(), 'get_art.jpg')))
 
-
     # send a bad ping
     ampache_connection.ping(ampache_url, False, api_version)
     if os.path.isfile(docpath + "ping." + api_format):
         shutil.move(docpath + "ping." + api_format,
                     docpath + "ping (no auth)." + api_format)
 
-    encrypted_key = ampache_connection.encrypt_string(ampache_api, ampache_user)
+    ampache_connection.set_version(api6_version)
+    ampache_connection.set_url(ampache_url)
+    ampache_connection.set_key(ampache_api)
+    ampache_connection.set_user(ampache_user)
 
     ampache_connection.handshake(ampache_url, 'badkey', '', 0, api_version)
     if os.path.isfile(docpath + "handshake." + api_format):
         shutil.move(docpath + "handshake." + api_format,
                     docpath + "handshake (error)." + api_format)
     # use correct details
-    ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, '', 0, api_version)
+    # ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, '', 0, api_version)
+    ampache_session = ampache_connection.execute('handshake')
     if not ampache_session:
-        print(encrypted_key)
         sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
     if not ampache_connection.AMPACHE_SERVER == release_version:
@@ -1561,7 +1565,8 @@ def ampache6_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
     delete_id = get_id(api_format, 'podcast', lookup, False)
     ampache_connection.podcast_delete(delete_id)
 
-    podcast_create = ampache_connection.podcast_create('https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', catalog_id)
+    podcast_create = ampache_connection.podcast_create(
+        'https://www.abc.net.au/radio/programs/trace/feed/8597522/podcast.xml', catalog_id)
     podcast_id = get_id(api_format, 'podcast', podcast_create)
 
     share_create = ampache_connection.share_create(single_song, 'song', False, 7)
@@ -1995,7 +2000,6 @@ def ampache6_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
         shutil.move(docpath + "catalog_action." + api_format,
                     docpath + "catalog_action (error)." + api_format)
 
-
     ampache_connection.get_bookmark(54, 'song', 1)
     if os.path.isfile(docpath + "get_bookmark." + api_format):
         shutil.move(docpath + "get_bookmark." + api_format,
@@ -2085,16 +2089,15 @@ def ampache6_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
                     docpath + "playlist_generate (id)." + api_format)
 
     ampache_connection.scrobble('Hear. Life. Spoken', 'Sub Atari Knives', 'Sub Atari Knives', False, False, False,
-                               int(time.time()), 'debug')
+                                int(time.time()), 'debug')
     if os.path.isfile(docpath + "scrobble." + api_format):
         shutil.move(docpath + "scrobble." + api_format,
                     docpath + "scrobble (error)." + api_format)
 
     ampache_connection.scrobble('Sensorisk Deprivation', 'IOK-1', 'Sensorisk Deprivation', False, False, False,
-                               int(time.time()), 'debug')
+                                int(time.time()), 'debug')
 
     ampache_connection.record_play(93, ampache_user, 'debug')
-
 
     ampache_connection.search_songs(song_title, offset, limit)
 
@@ -2232,7 +2235,6 @@ def subsonic_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
     action = "getGenres"
     fetch_url = base_url + action + base_parameters
     ampache_connection.fetch_url(fetch_url, api_format, action)
-
 
     action = "getArtists"
     # musicFolderId (optional)
@@ -2639,13 +2641,13 @@ def subsonic_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
     ampache_connection.fetch_url(fetch_url, api_format, action)
     if os.path.isfile(docpath + "jukeboxControl." + api_format):
         shutil.move(docpath + "jukeboxControl." + api_format,
-            docpath + "jukeboxControl (status)." + api_format)
+                    docpath + "jukeboxControl (status)." + api_format)
     params = '&action=get'
     fetch_url = base_url + action + base_parameters + params
     ampache_connection.fetch_url(fetch_url, api_format, action)
     if os.path.isfile(docpath + "jukeboxControl." + api_format):
         shutil.move(docpath + "jukeboxControl." + api_format,
-            docpath + "jukeboxControl (get)." + api_format)
+                    docpath + "jukeboxControl (get)." + api_format)
 
     action = "getInternetRadioStations"
     fetch_url = base_url + action + base_parameters
@@ -2805,6 +2807,7 @@ def subsonic_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
     fetch_url = base_url + action + base_parameters
     ampache_connection.fetch_url(fetch_url, api_format, action)
 
+
 if APIVERSION == 6:
     build_docs(url, api, user, 'json', api6_version)
     build_docs(url, api, user, 'xml', api6_version)
@@ -2831,4 +2834,3 @@ else:
     build_docs(url, api, user, 'xml', subsonic_api)
 
 print("build_all6.py COMPLETED")
-
