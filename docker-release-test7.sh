@@ -130,7 +130,7 @@ docker-compose -p "release-test" \
 USERCOMMAND="php /var/www/html/bin/cli admin:addUser admin -p $AMPACHEPASSWORD -e admin@ampache.dev -l 100"
 UPDATEDBCOMMAND="php /var/www/html/bin/cli admin:updateDatabase -e"
 
-echo "INSTALLING AMPACHE on PHP8.2"
+echo "INSTALLING PUBLIC AMPACHE on PHP8.2"
 
 # php8.2
 INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}82 -p $DATABASE -d $DATABASE"
@@ -138,7 +138,7 @@ docker exec -u root -it release-test-testampache82-1 ${INSTALLCOMMAND}82
 docker exec -u root -it release-test-testampache82-1 ${USERCOMMAND}
 docker exec -u root -it release-test-testampache82-1 ${UPDATEDBCOMMAND}
 
-echo "INSTALLING AMPACHE on PHP8.3"
+echo "INSTALLING PUBLIC AMPACHE on PHP8.3"
 
 # php8.3
 INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}83 -p $DATABASE -d $DATABASE"

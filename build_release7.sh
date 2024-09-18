@@ -120,29 +120,24 @@ find . -name "*.map.1" -exec rm {} \;
 
 # php 8.2
 cd $AMPACHEDIR/releases/7/php82
-rm -rf ./composer.lock ./package-lock.json vendor/* public/lib/components/* && php8.2 $COMPOSERPATH install
+rm -rf ./composer.lock ./package-lock.json vendor/* public/lib/components/*
+php8.2 $COMPOSERPATH install
 npm install
 npm run build
 find . -xtype l -exec rm {} \;
-#cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
-#cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
-#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
-#cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php82_squashed
-rm -rf ./composer.lock ./package-lock.json vendor/* ./lib/components/* ./docker/ && php8.2 $COMPOSERPATH install
+rm -rf ./composer.lock ./package-lock.json vendor/* ./lib/components/* ./docker/
+php8.2 $COMPOSERPATH install
 npm install
 npm run build
 find . -xtype l -exec rm {} \;
-#cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
-#cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
-#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
-#cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php82_client
-rm -rf ./composer.lock ./package-lock.json vendor/* public/client/lib/components/* && php8.2 $COMPOSERPATH install
+rm -rf ./composer.lock ./package-lock.json vendor/* public/client/lib/components/*
+php8.2 $COMPOSERPATH install
 npm install
 npm run build
 find . -xtype l -exec rm {} \;
@@ -150,28 +145,26 @@ find . -name "*.map.1" -exec rm {} \;
 
 # php 8.3
 cd $AMPACHEDIR/releases/7/php83
-rm -rf ./composer.lock ./package-lock.json vendor/* public/lib/components/* && php8.3 $COMPOSERPATH install
+rm -rf ./composer.lock ./package-lock.json vendor/* public/lib/components/*
 php8.3 $COMPOSERPATH install
+npm install
+npm run build
 find . -xtype l -exec rm {} \;
-#cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./public/lib/components/jquery-contextmenu/dist/
-#cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./public/lib/components/jquery-contextmenu/dist/
-#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
-#cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php83_squashed
-rm -rf ./composer.lock ./package-lock.json vendor/* ./lib/components/* ./docker/ && php8.3 $COMPOSERPATH install
+rm -rf ./composer.lock ./package-lock.json vendor/* ./lib/components/* ./docker/
 php8.3 $COMPOSERPATH install
+npm install
+npm run build
 find . -xtype l -exec rm {} \;
-#cp $AMPACHEDIR/extras/jquery.contextMenu.min.js.map ./lib/components/jquery-contextmenu/dist/
-#cp $AMPACHEDIR/extras/jquery.contextMenu.min.css.map ./lib/components/jquery-contextmenu/dist/
-#cp $AMPACHEDIR/extras/StringReader.php ./vendor/gettext/gettext/src/Utils/
-#cp -rf $AMPACHEDIR/extras/prettyphoto/* ./lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php83_client
-rm -rf ./composer.lock ./package-lock.json vendor/* public/client/lib/components/* && php8.3 $COMPOSERPATH install
+rm -rf ./composer.lock ./package-lock.json vendor/* public/client/lib/components/*
 php8.3 $COMPOSERPATH install
+npm install
+npm run build
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
