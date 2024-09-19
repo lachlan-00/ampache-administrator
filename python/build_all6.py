@@ -47,7 +47,6 @@ APIVERSION = 0
 ENABLEDEBUG = True
 try:
     length = len(sys.argv)
-    print(sys.argv)
     if 1 < length:
         url = sys.argv[1]
     if 2 < length:
@@ -207,8 +206,7 @@ def build_docs(ampache_url, ampache_api, ampache_user, api_format, api_version):
 def self_check(ampache_url, ampache_api, ampache_session, docpath):
     if not os.path.isdir(docpath):
         return
-    if ENABLEDEBUG:
-        print("Checking files in " + docpath + " for private strings")
+    print("Checking files in " + docpath + " for private strings")
     for files in os.listdir(docpath):
         f = open(os.path.join(docpath, files), 'r', encoding="utf-8")
         filedata = f.read()

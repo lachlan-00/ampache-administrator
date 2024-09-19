@@ -19,6 +19,11 @@ if [ ! $# -eq 0 ]; then
   RELEASEVERSION=$1
 fi
 
+APIVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' $AMPACHEDIR/ampache-patch7/src/Module/Api/Api.php`
+if [ ! $# -eq 0 ]; then
+  APIVERSION=$1
+fi
+
 echo "Enter your local database user:"
 read DATABASEUSER
 echo "Enter your local database password:"
@@ -131,17 +136,17 @@ echo "INSTALLING PUBLIC AMPACHE on PHP8.2"
 
 # php8.2
 INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}82 -p $DATABASE -d $DATABASE"
-docker exec -u root -it release-test-testampache82-1 ${INSTALLCOMMAND}82
-docker exec -u root -it release-test-testampache82-1 ${USERCOMMAND}
-docker exec -u root -it release-test-testampache82-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-test7ampache82-1 ${INSTALLCOMMAND}82
+docker exec -u root -it release-test-test7ampache82-1 ${USERCOMMAND}
+docker exec -u root -it release-test-test7ampache82-1 ${UPDATEDBCOMMAND}
 
 echo "INSTALLING PUBLIC AMPACHE on PHP8.3"
 
 # php8.3
 INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}83 -p $DATABASE -d $DATABASE"
-docker exec -u root -it release-test-testampache83-1 ${INSTALLCOMMAND}83
-docker exec -u root -it release-test-testampache83-1 ${USERCOMMAND}
-docker exec -u root -it release-test-testampache83-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-test7ampache83-1 ${INSTALLCOMMAND}83
+docker exec -u root -it release-test-test7ampache83-1 ${USERCOMMAND}
+docker exec -u root -it release-test-test7ampache83-1 ${UPDATEDBCOMMAND}
 
 USERCOMMAND="php /var/www/html/public/bin/cli admin:addUser admin -p $AMPACHEPASSWORD -e admin@ampache.dev -l 100"
 UPDATEDBCOMMAND="php /var/www/html/public/bin/cli admin:updateDatabase -e"
@@ -149,16 +154,16 @@ UPDATEDBCOMMAND="php /var/www/html/public/bin/cli admin:updateDatabase -e"
 echo "INSTALLING SQUASHED AMPACHE on PHP8.2"
 
 INSTALLCOMMAND="php /var/www/html/public/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}82s -p $DATABASE -d $DATABASE"
-docker exec -u root -it release-test-testampache82_squashed-1 ${INSTALLCOMMAND}82s
-docker exec -u root -it release-test-testampache82_squashed-1 ${USERCOMMAND}
-docker exec -u root -it release-test-testampache82_squashed-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-test7ampache82_squashed-1 ${INSTALLCOMMAND}82s
+docker exec -u root -it release-test-test7ampache82_squashed-1 ${USERCOMMAND}
+docker exec -u root -it release-test-test7ampache82_squashed-1 ${UPDATEDBCOMMAND}
 
 echo "INSTALLING SQUASHED AMPACHE on PHP8.3"
 
 INSTALLCOMMAND="php /var/www/html/public/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}83s -p $DATABASE -d $DATABASE"
-docker exec -u root -it release-test-testampache83_squashed-1 ${INSTALLCOMMAND}83s
-docker exec -u root -it release-test-testampache83_squashed-1 ${USERCOMMAND}
-docker exec -u root -it release-test-testampache83_squashed-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-test7ampache83_squashed-1 ${INSTALLCOMMAND}83s
+docker exec -u root -it release-test-test7ampache83_squashed-1 ${USERCOMMAND}
+docker exec -u root -it release-test-test7ampache83_squashed-1 ${UPDATEDBCOMMAND}
 
 USERCOMMAND="php /var/www/html/bin/cli admin:addUser admin -p $AMPACHEPASSWORD -e admin@ampache.dev -l 100"
 UPDATEDBCOMMAND="php /var/www/html/bin/cli admin:updateDatabase -e"
@@ -166,16 +171,16 @@ UPDATEDBCOMMAND="php /var/www/html/bin/cli admin:updateDatabase -e"
 echo "INSTALLING CLIENT AMPACHE on PHP8.2"
 
 INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}82c -p $DATABASE -d $DATABASE"
-docker exec -u root -it release-test-testampache82_client-1 ${INSTALLCOMMAND}82c
-docker exec -u root -it release-test-testampache82_client-1 ${USERCOMMAND}
-docker exec -u root -it release-test-testampache82_client-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-test7ampache82_client-1 ${INSTALLCOMMAND}82c
+docker exec -u root -it release-test-test7ampache82_client-1 ${USERCOMMAND}
+docker exec -u root -it release-test-test7ampache82_client-1 ${UPDATEDBCOMMAND}
 
 echo "INSTALLING CLIENT AMPACHE on PHP8.3"
 
 INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}83c -p $DATABASE -d $DATABASE"
-docker exec -u root -it release-test-testampache83_client-1 ${INSTALLCOMMAND}83c
-docker exec -u root -it release-test-testampache83_client-1 ${USERCOMMAND}
-docker exec -u root -it release-test-testampache83_client-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test-test7ampache83_client-1 ${INSTALLCOMMAND}83c
+docker exec -u root -it release-test-test7ampache83_client-1 ${USERCOMMAND}
+docker exec -u root -it release-test-test7ampache83_client-1 ${UPDATEDBCOMMAND}
 
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php82/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/php82_squashed/config/ampache.cfg.php
@@ -235,33 +240,33 @@ sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACH
 
 echo
 echo "Testing $RELEASEVERSION ampache82"
-#release-test-testampache82
+#release-test-test7ampache82
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18280 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18280 $DEMOPASSWORD admin 1 $RELEASEVERSION
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18280 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 echo "Testing $RELEASEVERSION ampache82_squashed"
-#release-test-testampache82_squashed
+#release-test-test7ampache82_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18281 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18281 $DEMOPASSWORD admin 1 $RELEASEVERSION
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18281 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 echo "Testing $RELEASEVERSION php82_client"
-#release-test-testphp82_client
+#release-test-test7php82_client
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18282 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18282 $DEMOPASSWORD admin 1 $RELEASEVERSION
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18282 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 echo "Testing $RELEASEVERSION ampache83"
-#release-test-testampache83
+#release-test-test7ampache83
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18380 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18380 $DEMOPASSWORD admin 1 $RELEASEVERSION
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18380 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 echo "Testing $RELEASEVERSION ampache83_squashed"
-#release-test-testampache83_squashed
+#release-test-test7ampache83_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18381 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18381 $DEMOPASSWORD admin 1 $RELEASEVERSION
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18381 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 echo "Testing $RELEASEVERSION php83_client"
-#release-test-testphp83_client
+#release-test-test7php83_client
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18382 admin $AMPACHEPASSWORD)
-python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18382 $DEMOPASSWORD admin 1 $RELEASEVERSION
+python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18382 $DEMOPASSWORD admin 1 $APIVERSION
 
 
