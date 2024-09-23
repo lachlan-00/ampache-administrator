@@ -18,11 +18,11 @@ if [ ! -f $AMPACHEDIR/ampache-patch7/index.php ]; then
   git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git ampache-patch7
 fi
 if [ ! -d $AMPACHEDIR/ampache-client ]; then
-  git clone -b client https://github.com/ampache/ampache.git ampache-client
+  git clone -b client7 https://github.com/ampache/ampache.git ampache-client
 fi
 if [ ! -f $AMPACHEDIR/ampache-client/index.php ]; then
   rm -rf $AMPACHEDIR/ampache-client
-  git clone -b client https://github.com/ampache/ampache.git ampache-client
+  git clone -b client7 https://github.com/ampache/ampache.git ampache-client
 fi
 if [ ! -d $AMPACHEDIR/ampache-client/public/client/captcha ]; then
   mkdir $AMPACHEDIR/ampache-client/public/client/captcha

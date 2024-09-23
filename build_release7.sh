@@ -2,7 +2,7 @@
 
 RELEASEBRANCH="patch7"
 SQUASHBRANCH="squashed7"
-CLIENTBRANCH="client"
+CLIENTBRANCH="client7"
 AMPACHEDIR=$PWD
 COMPOSERPATH="/usr/local/bin/composer"
 
