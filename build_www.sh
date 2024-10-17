@@ -58,9 +58,9 @@ cp $AMPACHEDIR/www/ampache.org-api/docs/api-errors.md $AMPACHEDIR/ampache-develo
 cp $AMPACHEDIR/www/ampache.org-api/docs/api-acls.md $AMPACHEDIR/ampache-develop/docs/API-acls.md
 cp $AMPACHEDIR/www/ampache.org-api/docs/subsonic.md $AMPACHEDIR/ampache-develop/docs/API-subsonic.md
 
-cp $AMPACHEDIR/www/ampache.org-api/docs/api-5/api-5.md $AMPACHEDIR/ampache-master/docs/API.md
-cp $AMPACHEDIR/www/ampache.org-api/docs/api-5/api-json-methods.md $AMPACHEDIR/ampache-master/docs/API-JSON-methods.md
-cp $AMPACHEDIR/www/ampache.org-api/docs/api-5/api-xml-methods.md $AMPACHEDIR/ampache-master/docs/API-XML-methods.md
-cp $AMPACHEDIR/www/ampache.org-api/docs/api-5/api-advanced-search.md $AMPACHEDIR/ampache-master/docs/API-advanced-search.md
-cp $AMPACHEDIR/www/ampache.org-api/docs/api-5/api-errors.md $AMPACHEDIR/ampache-master/docs/API-Errors.md
-cp $AMPACHEDIR/www/ampache.org-api/docs/api-acls.md $AMPACHEDIR/ampache-master/docs/API-acls.md
+#cp $AMPACHEDIR/www/ampache.org-api/docs/api-5/api-5.md $AMPACHEDIR/ampache-master/docs/API.md
+#cp $AMPACHEDIR/www/ampache.org-api/docs/api-5/api-json-methods.md $AMPACHEDIR/ampache-master/docs/API-JSON-methods.md
+#cp $AMPACHEDIR/www/ampache.org-api/docs/api-5/api-xml-methods.md $AMPACHEDIR/ampache-master/docs/API-XML-methods.md
+#cp $AMPACHEDIR/www/ampache.org-api/docs/api-5/api-advanced-search.md $AMPACHEDIR/ampache-master/docs/API-advanced-search.md
+#cp $AMPACHEDIR/www/ampache.org-api/docs/api-5/api-errors.md $AMPACHEDIR/ampache-master/docs/API-Errors.md
+#cp $AMPACHEDIR/www/ampache.org-api/docs/api-acls.md $AMPACHEDIR/ampache-master/docs/API-acls.md
