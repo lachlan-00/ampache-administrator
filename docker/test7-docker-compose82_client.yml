@@ -11,7 +11,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ../release-test/php82_client:/var/www/html
+      - ../release-test/7/php82_client:/var/www/html
       - ./log:/var/log/ampache
       - ./media:/media
       - ./media/art:/mnt/art
