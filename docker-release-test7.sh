@@ -189,6 +189,13 @@ docker exec -u root -it release-test7-test7ampache83_client-1 ${INSTALLCOMMAND}8
 docker exec -u root -it release-test7-test7ampache83_client-1 ${USERCOMMAND}
 docker exec -u root -it release-test7-test7ampache83_client-1 ${UPDATEDBCOMMAND}
 
+sed -i "s/session_name = \"ampache\"/session_name = \"7php82\"/g"  $AMPACHEDIR/release-test/7/php82/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"7php82squashed\"/g"  $AMPACHEDIR/release-test/7/php82_squashed/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"7php82client\"/g"  $AMPACHEDIR/release-test/7/php82_client/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"7php83\"/g"  $AMPACHEDIR/release-test/7/php83/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"7php83squashed\"/g"  $AMPACHEDIR/release-test/7/php83_squashed/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"7php83client\"/g"  $AMPACHEDIR/release-test/7/php83_client/config/ampache.cfg.php
+
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php82/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php82_squashed/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php82_client/config/ampache.cfg.php

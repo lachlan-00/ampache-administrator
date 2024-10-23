@@ -274,6 +274,17 @@ docker exec -u root -it release-test6-testampache83_squashed-1 ${INSTALLCOMMAND}
 docker exec -u root -it release-test6-testampache83_squashed-1 ${USERCOMMAND}
 docker exec -u root -it release-test6-testampache83_squashed-1 ${UPDATEDBCOMMAND}
 
+sed -i "s/session_name = \"ampache\"/session_name = \"6php74\"/g"  $AMPACHEDIR/release-test/6/php74/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"6php74_squashed\"/g"  $AMPACHEDIR/release-test/6/php74_squashed/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"6php80\"/g"  $AMPACHEDIR/release-test/6/php80/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"6php80_squashed\"/g"  $AMPACHEDIR/release-test/6/php80_squashed/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"6php81\"/g"  $AMPACHEDIR/release-test/6/php81/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"6php81_squashed\"/g"  $AMPACHEDIR/release-test/6/php81_squashed/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"6php82\"/g"  $AMPACHEDIR/release-test/6/php82/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"6php82_squashed\"/g"  $AMPACHEDIR/release-test/6/php82_squashed/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"6php83\"/g"  $AMPACHEDIR/release-test/6/php83/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"6php83_squashed\"/g"  $AMPACHEDIR/release-test/6/php83_squashed/config/ampache.cfg.php
+
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/6/php74/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/6/php74_squashed/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/6/php80/config/ampache.cfg.php
