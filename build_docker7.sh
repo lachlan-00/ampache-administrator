@@ -7,7 +7,7 @@ if [ ! $# -eq 0 ]; then
 fi
 
 
-if [ $BRANCH = "master" ] || [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
+if [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
   RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-develop/src/Config/Init/InitializationHandlerConfig.php`
   status=$(curl --head --silent https://github.com/ampache/ampache/releases/download/${RELEASEVERSION}/ampache-${RELEASEVERSION}_all_php8.2.zip | head -n 1)
   if echo "$status" | grep -q 404; then
@@ -20,7 +20,7 @@ if [ ! -d $AMPACHEDIR/docker ]; then
 fi
 
 # MASTER
-if [ $BRANCH = "master" ] || [ $BRANCH = "all" ]; then
+if [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "all" ]; then
   if [ ! -d $AMPACHEDIR/docker/ampache-docker/ ]; then
     cd $AMPACHEDIR/docker && git clone -b master https://github.com/ampache/ampache-docker.git ampache-docker
   fi
@@ -32,7 +32,7 @@ if [ $BRANCH = "master" ] || [ $BRANCH = "all" ]; then
 fi
 
 # NOSQL
-if [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
+if [ $BRANCH = "nosql" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "all" ]; then
   if [ ! -d $AMPACHEDIR/docker/ampache-docker-nosql/ ]; then
     cd $AMPACHEDIR/docker && git clone -b nosql https://github.com/ampache/ampache-docker.git ampache-docker-nosql
   fi
