@@ -43,6 +43,26 @@ if [ ! -f $AMPACHEDIR/php83_squashed/index.php ]; then
   git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php83_squashed
 fi
 
-# Launch all the containers
-docker-compose -f docker/docker-compose74.yml -f docker/docker-compose82.yml -f docker/docker-compose82_squashed.yml  -f docker/docker-compose83.yml -f docker/docker-compose83_squashed.yml up -d --build
+# php8.4
+if [ ! -d $AMPACHEDIR/php84 ]; then
+  git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php84
+fi
+if [ ! -f $AMPACHEDIR/php84/index.php ]; then
+  rm -rf $AMPACHEDIR/php84
+  git clone -b $RELEASEBRANCH https://github.com/ampache/ampache.git php84
+fi
+if [ ! -d $AMPACHEDIR/php84_squashed ]; then
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php84_squashed
+fi
+if [ ! -f $AMPACHEDIR/php84_squashed/index.php ]; then
+  rm -rf $AMPACHEDIR/php84_squashed
+  git clone -b $SQUASHBRANCH https://github.com/ampache/ampache.git php84_squashed
+fi
 
+
+# Launch all the containers
+docker-compose -p "ampache77" \
+ -f docker/docker-compose82.yml -f docker/docker-compose82_squashed.yml -f docker/docker-compose82_client.yml \
+ -f docker/docker-compose83.yml -f docker/docker-compose83_squashed.yml -f docker/docker-compose83_client.yml \
+ -f docker/docker-compose84.yml -f docker/docker-compose84_squashed.yml -f docker/docker-compose84_client.yml \
+ up -d --build
