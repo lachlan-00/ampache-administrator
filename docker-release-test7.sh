@@ -202,9 +202,6 @@ docker exec -u root -it release-test7-test7ampache83-1 ${INSTALLCOMMAND}83
 docker exec -u root -it release-test7-test7ampache83-1 ${USERCOMMAND}
 docker exec -u root -it release-test7-test7ampache83-1 ${UPDATEDBCOMMAND}
 
-USERCOMMAND="php /var/www/html/public/bin/cli admin:addUser admin -p $AMPACHEPASSWORD -e admin@ampache.dev -l 100"
-UPDATEDBCOMMAND="php /var/www/html/public/bin/cli admin:updateDatabase -e"
-
 echo "INSTALLING PUBLIC AMPACHE on PHP8.4"
 
 # php8.4
@@ -230,8 +227,6 @@ docker exec -u root -it release-test7-test7ampache83_squashed-1 ${INSTALLCOMMAND
 docker exec -u root -it release-test7-test7ampache83_squashed-1 ${USERCOMMAND}
 docker exec -u root -it release-test7-test7ampache83_squashed-1 ${UPDATEDBCOMMAND}
 
-USERCOMMAND="php /var/www/html/bin/cli admin:addUser admin -p $AMPACHEPASSWORD -e admin@ampache.dev -l 100"
-UPDATEDBCOMMAND="php /var/www/html/bin/cli admin:updateDatabase -e"
 
 echo "INSTALLING SQUASHED AMPACHE on PHP8.4"
 
