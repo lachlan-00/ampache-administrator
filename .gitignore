@@ -33,6 +33,7 @@ php80/
 php74_squashed/
 php74/
 releases/*
+release-test/*
 www/ampache.org-api/
 www/ampache.github.io/
 docker/composer
