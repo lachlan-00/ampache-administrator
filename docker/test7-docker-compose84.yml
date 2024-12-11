@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  test7ampache84:
+    build:
+      context: .
+      dockerfile: Dockerfilephp84
+    restart: on-failure
+    ports:
+      - "18384:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ../release-test/7/php84:/var/www/html
+      - ./log:/var/log/ampache
+      - ./media:/media
+      - ./media/art:/mnt/art
+      - ./media/music:/mnt/music
+      - ./media/podcast:/mnt/podcast
+      - ./media/upload:/mnt/upload
+      - ./media/video:/mnt/video
+
