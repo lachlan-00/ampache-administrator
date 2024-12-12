@@ -18,19 +18,20 @@ offset = 0
 api3_version = '391000'
 api4_version = '443000'
 api5_version = '5.5.7'
-api6_version = '6.0.0'
+api6_version = '6.6.5'
 subsonic_api = '1.16.1'
 docpath = "docs/"
 song_url = 'https://music.com.au/play/index.php?ssid=eeb9f1b6056246a7d563f479f518bb34&type=song&oid=60&uid=4&player=api&name=Synthetic%20-%20BrownSmoke.wma'
 APIVERSION = 0
 try:
-    if sys.argv[1]:
+    length = len(sys.argv)
+    if 1 < length:
         url = sys.argv[1]
-    if sys.argv[2]:
+    if 2 < length:
         user = sys.argv[2]
-    if sys.argv[3]:
+    if 3 < length:
         api = sys.argv[3]
-    if sys.argv[4]:
+    if 4 < length:
         APIVERSION = sys.argv[4]
 except IndexError:
     APIVERSION = 0
@@ -100,13 +101,13 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
     ampacheConnection.bookmark_create(64, 'song', 10, 'client')
     ampacheConnection.bookmark_create(54, 'song', 0, 'client1')
     ampacheConnection.bookmark_create(64, 'song', 10, 'client')
-    
+
     # return the api key to run build_all
     user = ampacheConnection.user('admin')
     if not user['auth']:
         print()
         sys.exit('ERROR: NO AUTH KEY')
-    
+
     print(user['auth'])
 
 api_version = api6_version
