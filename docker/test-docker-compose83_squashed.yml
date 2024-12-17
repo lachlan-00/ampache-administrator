@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfilephp83
     restart: on-failure
     ports:
-      - "18381:80"
+      - "28381:80"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
