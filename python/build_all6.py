@@ -32,19 +32,20 @@ release_version = re.search(r'[0-9]+\.[0-9]+\.[0-9]+', file_content).group()
 
 # user variables
 url = 'https://develop.ampache.dev'
-api = 'demo'
-user = 'demodemo'
+api = 'demodemo'
+user = 'demo'
 limit = 4
 offset = 0
 api3_version = '390001'
 api4_version = '443000'
 api5_version = '5.5.6'
-api6_version = '6.6.2'
+api6_version = '6.6.7'
 subsonic_api = '1.16.1'
 doc_path = build_dir + SLASH + "docs" + SLASH
 song_url = url + '/play/index.php?ssid=eeb9f1b6056246a7d563f479f518bb34&type=song&oid=60&uid=4&player=api&name=Synthetic%20-%20BrownSmoke.wma'
 APIVERSION = 0
 ENABLEDEBUG = True
+ampache_connection = ampache.API()
 try:
     length = len(sys.argv)
     if 1 < length:
@@ -59,32 +60,14 @@ try:
     if 5 < length:
         release_version = sys.argv[5]
 except IndexError:
-    if os.path.isfile(os.path.join(os.pardir, 'ampache.conf')):
-        conf = configparser.RawConfigParser()
-        conf.read(os.path.join(os.pardir, 'ampache.conf'))
-        url = conf.get('conf', 'ampache_url')
-        api = conf.get('conf', 'ampache_apikey')
-        user = conf.get('conf', 'ampache_user')
-    elif os.path.isfile('ampache.conf'):
-        conf = configparser.RawConfigParser()
-        conf.read(os.path.join('ampache.conf'))
-        url = conf.get('conf', 'ampache_url')
-        api = conf.get('conf', 'ampache_apikey')
-        user = conf.get('conf', 'ampache_user')
-    elif os.path.isfile(doc_path + 'examples' + SLASH + 'ampyche.conf'):
-        conf = configparser.RawConfigParser()
-        conf.read(doc_path + 'examples' + SLASH + 'ampyche.conf')
-        url = conf.get('conf', 'ampache_url')
-        api = conf.get('conf', 'ampache_apikey')
-        user = conf.get('conf', 'ampache_user')
-    else:
-        print()
-        sys.exit('ERROR docs' + SLASH + 'examples' + SLASH + 'ampyche.conf not found and no arguments set')
     try:
         if sys.argv[1]:
             APIVERSION = int(sys.argv[1])
     except IndexError:
         APIVERSION = 0
+    if not ampache_connection.get_config():
+        print()
+        sys.exit('ERROR docs' + SLASH + 'examples' + SLASH + 'ampache.json not found and no arguments set')
 
 
 def get_id(api_format, key, data, exit_file=True):
@@ -169,7 +152,6 @@ def get_value(api_format, key, value, data):
 
 
 def build_docs(ampache_url, ampache_api, ampache_user, api_format, api_version):
-    ampache_connection = ampache.API()
 
     """ def set_debug(boolean):
         This function can be used to enable/disable debugging messages
@@ -215,11 +197,11 @@ def self_check(ampache_url, ampache_api, ampache_session, docpath):
         url_text = ampache_url.replace("https://", "")
         url_text = url_text.replace("http://", "")
         newdata = re.sub(url_text, "music.com.au", filedata)
-        newdata = re.sub(r"CDATA/\[/media/", "CDATA[/mnt/files-music/ampache-test/", newdata)
-        newdata = re.sub("\\/media\\/", "/mnt/files-music/ampache-test/", newdata)
+        newdata = re.sub(r"CDATA\[/media/", "CDATA[/mnt/files-music/ampache-test/", newdata)
+        newdata = re.sub(r"\\/media\\/", "\\/mnt\\/files-music\\/ampache-test\\/", newdata)
         #newdata = re.sub(url_text.replace("/", "\\/"), "music.com.au", newdata)
         newdata = re.sub("http://music.com.au", "https://music.com.au", newdata)
-        newdata = re.sub(r"https:\\/\\/music.com.au", "https://music.com.au", newdata)
+        newdata = re.sub(r"http:\\/\\/music.com.au", "https:\\/\\/music.com.au", newdata)
         newdata = re.sub("\"session_expire\": \"*.*\"*", "\"session_expire\": \"2022-08-17T06:21:00+00:00\",", newdata)
         newdata = re.sub("<session_expire>.*</session_expire>",
                          "<session_expire><![CDATA[2022-08-17T04:34:55+00:00]]></session_expire>", newdata)
