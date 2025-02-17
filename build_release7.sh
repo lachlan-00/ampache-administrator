@@ -194,24 +194,30 @@ find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
 # php 8.4
+sed -i 's/"scn\/phptal": "\^4"/"scn\/phptal": "dev-master"/g' $AMPACHEDIR/releases/7/php84/composer.json
 cd $AMPACHEDIR/releases/7/php84
 rm -rf ./composer.lock ./package-lock.json vendor/* public/lib/components/*
+php8.4 $COMPOSERPATH update
 php8.4 $COMPOSERPATH install
 npm install
 npm run build
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
+sed -i 's/"scn\/phptal": "\^4"/"scn\/phptal": "dev-master"/g' $AMPACHEDIR/releases/7/php84_squashed/composer.json
 cd $AMPACHEDIR/releases/7/php84_squashed
 rm -rf ./composer.lock ./package-lock.json vendor/* ./lib/components/* ./docker/
+php8.4 $COMPOSERPATH update
 php8.4 $COMPOSERPATH install
 npm install
 npm run build
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
+sed -i 's/"scn\/phptal": "\^4"/"scn\/phptal": "dev-master"/g' $AMPACHEDIR/releases/7/php84_client/composer.json
 cd $AMPACHEDIR/releases/7/php84_client
 rm -rf ./composer.lock ./package-lock.json vendor/* public/client/lib/components/*
+php8.4 $COMPOSERPATH update
 php8.4 $COMPOSERPATH install
 npm install
 npm run build
@@ -231,29 +237,29 @@ fi
 if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2.zip ]; then
   rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2.zip
 fi
-if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip ]; then
-  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2_squashed.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2_squashed.zip
 fi
-if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_client_php8.2.zip ]; then
-  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_client_php8.2.zip
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2_client.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2_client.zip
 fi
 if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3.zip ]; then
   rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3.zip
 fi
-if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.3.zip ]; then
-  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.3.zip
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3_squashed.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3_squashed.zip
 fi
-if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_client_php8.3.zip ]; then
-  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_client_php8.3.zip
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3_client.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3_client.zip
 fi
 if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4.zip ]; then
   rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4.zip
 fi
-if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.4.zip ]; then
-  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.4.zip
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_squashed.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_squashed.zip
 fi
-if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_client_php8.4.zip ]; then
-  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_client_php8.4.zip
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_client.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_client.zip
 fi
 
 # Build Releases
@@ -265,18 +271,18 @@ cd $AMPACHEDIR/releases/7/generic_client && zip -r -q -u -9 --exclude=./config/a
 
 ## php 8.2
 cd $AMPACHEDIR/releases/7/php82 && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../..//ampache-${RELEASEVERSION}_all_php8.2.zip ./
-cd $AMPACHEDIR/releases/7/php82_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../../ampache-${RELEASEVERSION}_all_squashed_php8.2.zip ./
-cd $AMPACHEDIR/releases/7/php82_client && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../..//ampache-${RELEASEVERSION}_all_client_php8.2.zip ./
+cd $AMPACHEDIR/releases/7/php82_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../../ampache-${RELEASEVERSION}_all_php8.2_squashed.zip ./
+cd $AMPACHEDIR/releases/7/php82_client && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../..//ampache-${RELEASEVERSION}_all_php8.2_client.zip ./
 
 ## php 8.3
 cd $AMPACHEDIR/releases/7/php83 && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../..//ampache-${RELEASEVERSION}_all_php8.3.zip ./
-cd $AMPACHEDIR/releases/7/php83_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../../ampache-${RELEASEVERSION}_all_squashed_php8.3.zip ./
-cd $AMPACHEDIR/releases/7/php83_client && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../..//ampache-${RELEASEVERSION}_all_client_php8.3.zip ./
+cd $AMPACHEDIR/releases/7/php83_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../../ampache-${RELEASEVERSION}_all_php8.3_squashed.zip ./
+cd $AMPACHEDIR/releases/7/php83_client && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../..//ampache-${RELEASEVERSION}_all_php8.3_client.zip ./
 
 ## php 8.4
 cd $AMPACHEDIR/releases/7/php84 && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../..//ampache-${RELEASEVERSION}_all_php8.4.zip ./
-cd $AMPACHEDIR/releases/7/php84_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../../ampache-${RELEASEVERSION}_all_squashed_php8.4.zip ./
-cd $AMPACHEDIR/releases/7/php84_client && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../..//ampache-${RELEASEVERSION}_all_client_php8.4.zip ./
+cd $AMPACHEDIR/releases/7/php84_squashed && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./rest/.htaccess --exclude=./play/.htaccess --exclude=./channel/.htaccess ./../../ampache-${RELEASEVERSION}_all_php8.4_squashed.zip ./
+cd $AMPACHEDIR/releases/7/php84_client && zip -r -q -u -9 --exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./.git/* --exclude=./.github/* --exclude=./.tx/* --exclude=./.idea/* --exclude=.gitignore --exclude=.gitattributes --exclude=.scrutinizer.yml --exclude=CNAME --exclude=.codeclimate.yml --exclude=.php* --exclude=.tgitconfig --exclude=.travis.yml --exclude=./public/rest/.htaccess --exclude=./public/play/.htaccess --exclude=./public/channel/.htaccess ./../..//ampache-${RELEASEVERSION}_all_php8.4_client.zip ./
 
 # go back
 cd $AMPACHEDIR
@@ -293,29 +299,29 @@ fi
 if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2.zip ]; then
   echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2.zip
 fi
-if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip ]; then
-  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.2.zip
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2_squashed.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2_squashed.zip
 fi
-if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_client_php8.2.zip ]; then
-  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_client_php8.2.zip
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2_client.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2_client.zip
 fi
 if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3.zip ]; then
   echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3.zip
 fi
-if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.3.zip ]; then
-  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.3.zip
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3_squashed.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3_squashed.zip
 fi
-if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_client_php8.3.zip ]; then
-  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_client_php8.3.zip
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3_client.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3_client.zip
 fi
 if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4.zip ]; then
   echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4.zip
 fi
-if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.4.zip ]; then
-  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_squashed_php8.4.zip
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_squashed.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_squashed.zip
 fi
-if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_client_php8.4.zip ]; then
-  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_client_php8.4.zip
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_client.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_client.zip
 fi
 
 cd $AMPACHEDIR/releases
@@ -325,20 +331,20 @@ echo "# ${RELEASEVERSION}"
 echo
 echo "php8.4"
 md5sum ./ampache-${RELEASEVERSION}_all_php8.4.zip
-md5sum ./ampache-${RELEASEVERSION}_all_squashed_php8.4.zip
-md5sum ./ampache-${RELEASEVERSION}_all_client_php8.4.zip
+md5sum ./ampache-${RELEASEVERSION}_all_php8.4_squashed.zip
+md5sum ./ampache-${RELEASEVERSION}_all_php8.4_client.zip
 echo
 echo "php8.3"
 md5sum ./ampache-${RELEASEVERSION}_all_php8.3.zip
-md5sum ./ampache-${RELEASEVERSION}_all_squashed_php8.3.zip
-md5sum ./ampache-${RELEASEVERSION}_all_client_php8.3.zip
+md5sum ./ampache-${RELEASEVERSION}_all_php8.3_squashed.zip
+md5sum ./ampache-${RELEASEVERSION}_all_php8.3_client.zip
 echo
 echo "php8.2"
 md5sum ./ampache-${RELEASEVERSION}_all_php8.2.zip
-md5sum ./ampache-${RELEASEVERSION}_all_squashed_php8.2.zip
-md5sum ./ampache-${RELEASEVERSION}_all_client_php8.2.zip
+md5sum ./ampache-${RELEASEVERSION}_all_php8.2_squashed.zip
+md5sum ./ampache-${RELEASEVERSION}_all_php8.2_client.zip
 echo
-echo "**UNSUPPORTED** Code only release. (Requires composer install)"
+echo "**UNSUPPORTED** Code only release. (Requires composer and npm install)"
 md5sum ./ampache-${RELEASEVERSION}_public.zip
 md5sum ./ampache-${RELEASEVERSION}_squashed.zip
 md5sum ./ampache-${RELEASEVERSION}_client.zip
