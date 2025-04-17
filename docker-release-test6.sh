@@ -375,51 +375,61 @@ sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACH
 sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/6/php83_squashed/config/ampache.cfg.php
 echo
 echo "Testing $RELEASEVERSION ampache74"
+cat /dev/null > $AMPACHEDIR/docker/log/6php74.log
 #release-test6-testampache74
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:27480 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/release_test_build.py http://${LOCALIP}:27480 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION ampache74_squashed"
+cat /dev/null > $AMPACHEDIR/docker/log/6php74s.log
 #release-test6-testampache74_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:27481 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/release_test_build.py http://${LOCALIP}:27481 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION ampache80"
+cat /dev/null > $AMPACHEDIR/docker/log/6php80.log
 #release-test6-testampache80
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:28080 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/release_test_build.py http://${LOCALIP}:28080 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION ampache80_squashed"
+cat /dev/null > $AMPACHEDIR/docker/log/6php80s.log
 #release-test6-testampache80_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:28081 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/release_test_build.py http://${LOCALIP}:28081 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION ampache81"
+cat /dev/null > $AMPACHEDIR/docker/log/6php81.log
 #release-test6-testampache81
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:28180 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/release_test_build.py http://${LOCALIP}:28180 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION ampache81_squashed"
+cat /dev/null > $AMPACHEDIR/docker/log/6php81s.log
 #release-test6-testampache81_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:28181 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/release_test_build.py http://${LOCALIP}:28181 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION ampache82"
+cat /dev/null > $AMPACHEDIR/docker/log/6php82.log
 #release-test6-testampache82
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:28280 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/release_test_build.py http://${LOCALIP}:28280 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION ampache82_squashed"
+cat /dev/null > $AMPACHEDIR/docker/log/6php82s.log
 #release-test6-testampache82_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:28281 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/release_test_build.py http://${LOCALIP}:28281 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION ampache83"
+cat /dev/null > $AMPACHEDIR/docker/log/6php83.log
 #release-test6-testampache83
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:28380 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/release_test_build.py http://${LOCALIP}:28380 $DEMOPASSWORD admin 1 $RELEASEVERSION
 echo
 echo "Testing $RELEASEVERSION ampache83_squashed"
+cat /dev/null > $AMPACHEDIR/docker/log/6php83s.log
 #release-test6-testampache83_squashed
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:28381 admin $AMPACHEPASSWORD)
 python3 $AMPACHEDIR/python/release_test_build.py http://${LOCALIP}:28381 $DEMOPASSWORD admin 1 $RELEASEVERSION
