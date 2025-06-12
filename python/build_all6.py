@@ -2181,7 +2181,13 @@ def ampache6_methods(ampache_connection: ampache.API, ampache_url, ampache_api, 
 def subsonic_methods(ampache_connection, ampache_url, ampache_api, ampache_user, api_format, api_version, docpath):
     # Base subsonic url data
     base_url = ampache_url + "/rest/"
-    base_parameters = ".view?u=" + ampache_user + "&p=" + ampache_api + "&v=1.16.1&c=Ampache&f=" + api_format
+
+    #token auth
+    if hasattr(ampache_connection, 'AMPACHE_BEARER_TOKEN') and ampache_connection.AMPACHE_BEARER_TOKEN:
+        headers['Authorization'] = f'Bearer {self.AMPACHE_BEARER_TOKEN}'
+        base_parameters = ".view?&v=1.16.1&c=Ampache&f=" + api_format
+    else:
+        base_parameters = ".view?u=" + ampache_user + "&p=" + ampache_api + "&v=1.16.1&c=Ampache&f=" + api_format
 
     # Returns an empty <subsonic-response> element on success.
     action = "ping"
