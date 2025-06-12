@@ -2087,6 +2087,8 @@ def ampache6_methods(ampache_connection: ampache.API, ampache_url, ampache_api, 
 
     ampache_connection.song(single_song)
 
+    ampache_connection.song_tags(single_song)
+
     ampache_connection.songs(False, False, False, False, offset, limit)
 
     genre = ''
