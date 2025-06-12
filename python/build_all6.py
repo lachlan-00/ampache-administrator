@@ -251,9 +251,9 @@ def ampache3_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
         print(encrypted_key)
         sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
-    if not ampache_connection.AMPACHE_SERVER == api3_version:
-        print(ampache_connection.AMPACHE_SERVER)
-        sys.exit(release_version + ' ERROR incorrect server api version ' + ampache_connection.AMPACHE_SERVER)
+    #if not ampache_connection.AMPACHE_SERVER == api3_version:
+    #    print(ampache_connection.AMPACHE_SERVER)
+    #    sys.exit(release_version + ' ERROR incorrect server api version ' + ampache_connection.AMPACHE_SERVER)
 
     my_ping = ampache_connection.ping(ampache_url, ampache_session, api_version)
     if not my_ping:
@@ -521,9 +521,9 @@ def ampache4_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
         print(encrypted_key)
         sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
-    if not ampache_connection.AMPACHE_SERVER == api4_version:
-        print(ampache_connection.AMPACHE_SERVER)
-        sys.exit(release_version + ' ERROR incorrect server api version ' + ampache_connection.AMPACHE_SERVER)
+    #if not ampache_connection.AMPACHE_SERVER == api4_version:
+    #    print(ampache_connection.AMPACHE_SERVER)
+    #    sys.exit(release_version + ' ERROR incorrect server api version ' + ampache_connection.AMPACHE_SERVER)
 
     my_ping = ampache_connection.ping(ampache_url, ampache_session, api_version)
     if not my_ping:
@@ -986,9 +986,9 @@ def ampache5_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
         print(encrypted_key)
         sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
-    if not ampache_connection.AMPACHE_SERVER == api5_version:
-        print(ampache_connection.AMPACHE_SERVER)
-        sys.exit(release_version + ' ERROR incorrect server api version ' + ampache_connection.AMPACHE_SERVER)
+    #if not ampache_connection.AMPACHE_SERVER == api5_version:
+    #    print(ampache_connection.AMPACHE_SERVER)
+    #    sys.exit(release_version + ' ERROR incorrect server api version ' + ampache_connection.AMPACHE_SERVER)
 
     my_ping = ampache_connection.ping(ampache_url, ampache_session, api_version)
     if not my_ping:
@@ -1488,9 +1488,9 @@ def ampache6_methods(ampache_connection: ampache.API, ampache_url, ampache_api, 
     if not ampache_session:
         sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
-    if not ampache_connection.AMPACHE_SERVER == release_version:
-        print(ampache_connection.AMPACHE_SERVER)
-        sys.exit(release_version + ' ERROR incorrect server api version ' + ampache_connection.AMPACHE_SERVER)
+    #if not ampache_connection.AMPACHE_SERVER == release_version:
+    #    print(ampache_connection.AMPACHE_SERVER)
+    #    sys.exit(release_version + ' ERROR incorrect server api version ' + ampache_connection.AMPACHE_SERVER)
 
     my_ping = ampache_connection.ping(ampache_url, ampache_session, api_version)
     if not my_ping:
