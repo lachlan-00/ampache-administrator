@@ -2185,8 +2185,9 @@ def subsonic_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
     base_url = ampache_url + "/rest/"
 
     #token auth
-    if hasattr(ampache_connection, 'AMPACHE_BEARER_TOKEN') and ampache_connection.AMPACHE_BEARER_TOKEN:
-        headers['Authorization'] = f'Bearer {self.AMPACHE_BEARER_TOKEN}'
+    if ampache_connection.AMPACHE_BEARER_TOKEN:
+        headers = {}
+        headers['Authorization'] = f'Bearer {ampache_connection.AMPACHE_BEARER_TOKEN}'
         base_parameters = ".view?&v=1.16.1&c=Ampache&f=" + api_format
     else:
         base_parameters = ".view?u=" + ampache_user + "&p=" + ampache_api + "&v=1.16.1&c=Ampache&f=" + api_format
