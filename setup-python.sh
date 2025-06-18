@@ -5,8 +5,10 @@ COMPOSERPATH="/usr/local/bin/composer"
 
 if [ ! -f $COMPOSERPATH ]; then
   COMPOSERPATH="$AMPACHEDIR/docker/composer"
-  wget -q -O $COMPOSERPATH https://getcomposer.org/download/latest-stable/composer.phar
-  chmod +x $COMPOSERPATH
+  if [ ! -f $COMPOSERPATH ]; then
+    wget -q -O $COMPOSERPATH https://getcomposer.org/download/latest-stable/composer.phar
+    chmod +x $COMPOSERPATH
+  fi
 fi
 
 if [ ! -d $AMPACHEDIR/python ]; then
