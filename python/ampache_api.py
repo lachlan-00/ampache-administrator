@@ -239,7 +239,7 @@ class AmpacheRunner:
         self.songid = response['song'][0]['id']
         self.songid2 = response['song'][1]['id']
         self.songfilepath = response['song'][0]['filename']
-        self.songdirpath = os.path.dirname(self.songfilename)
+        self.songdirpath = os.path.dirname(self.songfilepath)
         self.scrobblesong = urllib.parse.quote_plus(response['song'][2]['title'])
         self.scrobblealbum = urllib.parse.quote_plus(response['song'][2]['album']['name'])
         self.scrobbleartist = urllib.parse.quote_plus(response['song'][2]['artist']['name'])
