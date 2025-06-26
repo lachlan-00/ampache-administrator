@@ -18,9 +18,12 @@ else:
 
 # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/collection.bru
 MYUSERNAME = '' # filled in by setup_ampache
-TOKEN = 'YOURTOKEN'
-URL = 'https://develop.ampache.dev'
-DEMOPASSWORD = 'demodemo'
+TOKEN = 'dca53349768c8c9f5442b4de9f1611e86ac8e08a6b7b84a7dcfec1f7476601c2'
+URL = 'https://ampache.lachlandewaard.org'
+DEMOPASSWORD = '*Su$]Qr6~w"Vs@f'
+#TOKEN = '31cf2a285fe139abef86e7f49728b0e6c8da5b828bf742445451a631ba8ad7d0'
+#URL = 'http://localhost:8989'
+#DEMOPASSWORD = 'demodemo'
 
 CATALOGACTION = 'add_to_catalog'
 

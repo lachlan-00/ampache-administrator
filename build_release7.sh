@@ -129,23 +129,23 @@ cd $AMPACHEDIR/releases/7/php84_client && git fetch origin $CLIENTBRANCH && git 
 
 # GENERIC (No composer packages installed)
 cd $AMPACHEDIR/releases/7/generic
-rm -rf ./composer.lock ./package-lock.json vendor/* public/lib/components/*
+rm -rf vendor/* public/lib/components/*
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/generic_squashed
-rm -rf ./composer.lock ./package-lock.json vendor/* ./lib/components/* ./docker/
+rm -rf vendor/* ./lib/components/* ./docker/
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/generic_client
-rm -rf ./composer.lock ./package-lock.json vendor/* public/client/lib/components/*
+rm -rf vendor/* public/client/lib/components/*
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
 # php 8.2
 cd $AMPACHEDIR/releases/7/php82
-rm -rf ./composer.lock ./package-lock.json vendor/* public/lib/components/*
+rm -rf vendor/* public/lib/components/*
 php8.2 $COMPOSERPATH install
 npm install
 npm run build
@@ -153,7 +153,7 @@ find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php82_squashed
-rm -rf ./composer.lock ./package-lock.json vendor/* ./lib/components/* ./docker/
+rm -rf vendor/* ./lib/components/* ./docker/
 php8.2 $COMPOSERPATH install
 npm install
 npm run build
@@ -161,7 +161,7 @@ find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php82_client
-rm -rf ./composer.lock ./package-lock.json vendor/* public/client/lib/components/*
+rm -rf vendor/* public/client/lib/components/*
 php8.2 $COMPOSERPATH install
 npm install
 npm run build
@@ -170,7 +170,7 @@ find . -name "*.map.1" -exec rm {} \;
 
 # php 8.3
 cd $AMPACHEDIR/releases/7/php83
-rm -rf ./composer.lock ./package-lock.json vendor/* public/lib/components/*
+rm -rf vendor/* public/lib/components/*
 php8.3 $COMPOSERPATH install
 npm install
 npm run build
@@ -178,7 +178,7 @@ find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php83_squashed
-rm -rf ./composer.lock ./package-lock.json vendor/* ./lib/components/* ./docker/
+rm -rf vendor/* ./lib/components/* ./docker/
 php8.3 $COMPOSERPATH install
 npm install
 npm run build
@@ -186,7 +186,7 @@ find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php83_client
-rm -rf ./composer.lock ./package-lock.json vendor/* public/client/lib/components/*
+rm -rf vendor/* public/client/lib/components/*
 php8.3 $COMPOSERPATH install
 npm install
 npm run build
@@ -196,7 +196,7 @@ find . -name "*.map.1" -exec rm {} \;
 # php 8.4
 sed -i 's/"scn\/phptal": "\^4"/"scn\/phptal": "dev-master"/g' $AMPACHEDIR/releases/7/php84/composer.json
 cd $AMPACHEDIR/releases/7/php84
-rm -rf ./composer.lock ./package-lock.json vendor/* public/lib/components/*
+rm -rf vendor/* public/lib/components/*
 php8.4 $COMPOSERPATH update
 php8.4 $COMPOSERPATH install
 npm install
@@ -206,7 +206,7 @@ find . -name "*.map.1" -exec rm {} \;
 
 sed -i 's/"scn\/phptal": "\^4"/"scn\/phptal": "dev-master"/g' $AMPACHEDIR/releases/7/php84_squashed/composer.json
 cd $AMPACHEDIR/releases/7/php84_squashed
-rm -rf ./composer.lock ./package-lock.json vendor/* ./lib/components/* ./docker/
+rm -rf vendor/* ./lib/components/* ./docker/
 php8.4 $COMPOSERPATH update
 php8.4 $COMPOSERPATH install
 npm install
@@ -216,7 +216,7 @@ find . -name "*.map.1" -exec rm {} \;
 
 sed -i 's/"scn\/phptal": "\^4"/"scn\/phptal": "dev-master"/g' $AMPACHEDIR/releases/7/php84_client/composer.json
 cd $AMPACHEDIR/releases/7/php84_client
-rm -rf ./composer.lock ./package-lock.json vendor/* public/client/lib/components/*
+rm -rf vendor/* public/client/lib/components/*
 php8.4 $COMPOSERPATH update
 php8.4 $COMPOSERPATH install
 npm install
@@ -349,7 +349,9 @@ md5sum ./ampache-${RELEASEVERSION}_public.zip
 md5sum ./ampache-${RELEASEVERSION}_squashed.zip
 md5sum ./ampache-${RELEASEVERSION}_client.zip
 echo
+echo "## Zip Version information"
 echo
+echo "If you aren't familiar which the project make sure you know [which zip](https://github.com/ampache/ampache/wiki/which-zip) you need to download."
 echo
 
 # go home
