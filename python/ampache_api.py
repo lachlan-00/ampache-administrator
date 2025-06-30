@@ -625,7 +625,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-album.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}include=songs&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-album_songs.bru
@@ -678,6 +678,10 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-artists.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-artists.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-bookmarks.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=bookmarks&version={api_version}"
@@ -1062,6 +1066,9 @@ class AmpacheRunner:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-localplay.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=stop&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-localplay.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=status&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (status)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-democratic.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=democratic&method=playlist&version={api_version}"
@@ -1187,8 +1194,8 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=system_preferences&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-system_preferences=.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_loadversion={api_version}"
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-system_preference.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-system_update.bru
@@ -1569,7 +1576,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-album.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}include=songs&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-album_songs.bru
@@ -1622,6 +1629,10 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-artists.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-artists.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-bookmarks.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=bookmarks&version={api_version}"
@@ -2006,6 +2017,9 @@ class AmpacheRunner:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-localplay.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=stop&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-localplay.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=status&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (status)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-democratic.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=democratic&method=playlist&version={api_version}"
@@ -2131,8 +2145,8 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=system_preferences&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-system_preferences=.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_loadversion={api_version}"
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-system_preference.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-system_update.bru
@@ -2507,7 +2521,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-album.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}include=songs&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-album_songs.bru
@@ -2560,6 +2574,10 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-artists.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-artists.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-bookmarks.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=bookmarks&version={api_version}"
@@ -2944,6 +2962,9 @@ class AmpacheRunner:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-localplay.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=stop&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-localplay.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=status&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (status)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-democratic.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=democratic&method=playlist&version={api_version}"
@@ -3069,8 +3090,8 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=system_preferences&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-system_preferences=.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_loadversion={api_version}"
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-system_preference.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-system_update.bru
@@ -3449,7 +3470,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-album.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}include=songs&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-album_songs.bru
@@ -3502,6 +3523,10 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-artists.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-artists.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-bookmarks.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=bookmarks&version={api_version}"
@@ -3886,6 +3911,9 @@ class AmpacheRunner:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-localplay.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=stop&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-localplay.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=status&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (status)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-democratic.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=democratic&method=playlist&version={api_version}"
@@ -4011,8 +4039,8 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=system_preferences&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-system_preferences=.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_loadversion={api_version}"
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-system_preference.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-system_update.bru
@@ -4387,7 +4415,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-album.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}include=songs&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-album_songs.bru
@@ -4440,6 +4468,10 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-artists.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-artists.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-bookmarks.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=bookmarks&version={api_version}"
@@ -4824,6 +4856,9 @@ class AmpacheRunner:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-localplay.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=stop&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-localplay.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=status&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (status)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-democratic.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=democratic&method=playlist&version={api_version}"
@@ -4949,8 +4984,8 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=system_preferences&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-system_preferences=.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_loadversion={api_version}"
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-system_preference.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-system_update.bru
@@ -5092,7 +5127,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, 'json', f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), 'json')
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-preference_edit (DISABLE VIDEO).bru
-        api_url = f"{URL}/server/json.server.php?action=preference_edit&filter=video&value=0&version={api_version}"
+        api_url = f"{URL}/server/json.server.php?action=preference_edit&filter=allow_video&value=0&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, 'json', f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), 'json')
 
         self.ampache_connection.set_debug(True)
@@ -5104,7 +5139,7 @@ class AmpacheRunner:
         self.ampache_connection.set_debug(False)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-preference_edit (ENABLE VIDEO).bru
-        api_url = f"{URL}/server/json.server.php?action=preference_edit&filter=video&value=1"
+        api_url = f"{URL}/server/json.server.php?action=preference_edit&filter=allow_video&value=1"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, 'json', f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), 'json')
 
         self.ampache_connection.set_debug(True)
@@ -5407,7 +5442,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-album.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}include=songs&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-album_songs.bru
@@ -5460,6 +5495,10 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-artists.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-artists.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-bookmarks.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=bookmarks&version={api_version}"
@@ -5844,6 +5883,9 @@ class AmpacheRunner:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-localplay.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=stop&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-localplay.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=status&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (status)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-democratic.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=democratic&method=playlist&version={api_version}"
@@ -5969,8 +6011,8 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=system_preferences&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-system_preferences=.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_loadversion={api_version}"
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-system_preference.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-system_update.bru
@@ -6108,7 +6150,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, 'json', f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), 'json')
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-preference_edit (DISABLE VIDEO).bru
-        api_url = f"{URL}/server/json.server.php?action=preference_edit&filter=video&value=0&version={api_version}"
+        api_url = f"{URL}/server/json.server.php?action=preference_edit&filter=allow_video&value=0&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, 'json', f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), 'json')
 
         self.ampache_connection.set_debug(True)
@@ -6120,7 +6162,7 @@ class AmpacheRunner:
         self.ampache_connection.set_debug(False)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-preference_edit (ENABLE VIDEO).bru
-        api_url = f"{URL}/server/json.server.php?action=preference_edit&filter=video&value=1"
+        api_url = f"{URL}/server/json.server.php?action=preference_edit&filter=allow_video&value=1"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, 'json', f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), 'json')
 
         self.ampache_connection.set_debug(True)
@@ -6408,7 +6450,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-album.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}include=songs&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-album_songs.bru
@@ -6461,6 +6503,10 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-artists.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-artists.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artists&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-bookmarks.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=bookmarks&version={api_version}"
@@ -6845,6 +6891,9 @@ class AmpacheRunner:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-localplay.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=stop&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-localplay.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=status&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (status)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-democratic.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=democratic&method=playlist&version={api_version}"
@@ -6970,8 +7019,8 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=system_preferences&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-system_preferences=.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_loadversion={api_version}"
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-system_preference.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-system_update.bru
@@ -7339,7 +7388,10 @@ class AmpacheRunner:
         if self.localplayenabled:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/json-jukeboxControl.bru
             api_url = f"{URL}/rest/jukeboxControl.view?v=1.16.1&c=Ampache&f={api_format}&action=get"
-            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)} (get)", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/json-jukeboxControl.bru
+            api_url = f"{URL}/rest/jukeboxControl.view?v=1.16.1&c=Ampache&f={api_format}&action=status"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)} (status)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/json-ping.bru
         api_url = f"{URL}/rest/ping.view?v=1.16.1&c=Ampache&f={api_format}&apiKey={TOKEN}"
@@ -7670,7 +7722,10 @@ class AmpacheRunner:
         if self.localplayenabled:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/xml-jukeboxControl.bru
             api_url = f"{URL}/rest/jukeboxControl.view?v=1.16.1&c=Ampache&f={api_format}&action=get"
-            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)} (get)", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/xml-jukeboxControl.bru
+            api_url = f"{URL}/rest/jukeboxControl.view?v=1.16.1&c=Ampache&f={api_format}&action=status"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)} (status)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/xml-ping.bru
         api_url = f"{URL}/rest/ping.view?v=1.16.1&c=Ampache&f={api_format}"
@@ -8027,7 +8082,10 @@ class AmpacheRunner:
         if self.localplayenabled:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/json-jukeboxControl.bru
             api_url = f"{URL}/rest/jukeboxControl.view?v=1.16.1&c=Ampache&f={api_format}&action=get"
-            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)} (get)", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/json-jukeboxControl.bru
+            api_url = f"{URL}/rest/jukeboxControl.view?v=1.16.1&c=Ampache&f={api_format}&action=status"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)} (status)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/json-ping.bru
         api_url = f"{URL}/rest/ping.view?v=1.16.1&c=Ampache&f={api_format}&apiKey={TOKEN}"
@@ -8355,7 +8413,10 @@ class AmpacheRunner:
         if self.localplayenabled:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-jukeboxControl.bru
             api_url = f"{URL}/rest/jukeboxControl.view?v=1.16.1&c=Ampache&f={api_format}&action=get"
-            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)} (get)", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-jukeboxControl.bru
+            api_url = f"{URL}/rest/jukeboxControl.view?v=1.16.1&c=Ampache&f={api_format}&action=status"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)} (status)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-ping.bru
         api_url = f"{URL}/rest/ping.view?v=1.16.1&c=Ampache&f={api_format}"
