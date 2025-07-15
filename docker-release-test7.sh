@@ -24,6 +24,17 @@ if [ ! $# -eq 0 ]; then
   APIVERSION=$1
 fi
 
+
+cat /dev/null > $AMPACHEDIR/docker/log/7php82.log
+cat /dev/null > $AMPACHEDIR/docker/log/7php82s.log
+cat /dev/null > $AMPACHEDIR/docker/log/7php82c.log
+cat /dev/null > $AMPACHEDIR/docker/log/7php83.log
+cat /dev/null > $AMPACHEDIR/docker/log/7php83s.log
+cat /dev/null > $AMPACHEDIR/docker/log/7php83c.log
+cat /dev/null > $AMPACHEDIR/docker/log/7php84.log
+cat /dev/null > $AMPACHEDIR/docker/log/7php84s.log
+cat /dev/null > $AMPACHEDIR/docker/log/7php84c.log
+
 echo "Enter your local database user:"
 read DATABASEUSER
 echo "Enter your local database password:"
@@ -403,4 +414,37 @@ cat /dev/null > $AMPACHEDIR/docker/log/7php84c.log
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18482 admin $AMPACHEPASSWORD)
 echo "Testing $RELEASEVERSION php84_client $DEMOPASSWORD"
 python3 $AMPACHEDIR/python/build_all6.py http://${LOCALIP}:18482 $DEMOPASSWORD admin 1 $APIVERSION
+
+echo "PRINT ERRORS"
+cat $AMPACHEDIR/docker/log/7*.log | grep Error
+
+echo
+echo "DOCKER APACHE ERRORS LOG"
+echo
+echo "test7ampache82"
+docker exec -u root -it release-test7-test7ampache82-1 cat /var/log/apache2/error.log
+echo
+echo "test7ampache83"
+docker exec -u root -it release-test7-test7ampache83-1 cat /var/log/apache2/error.log
+echo
+echo "test7ampache84"
+docker exec -u root -it release-test7-test7ampache84-1 cat /var/log/apache2/error.log
+echo
+echo "test7ampache82_squashed"
+docker exec -u root -it release-test7-test7ampache82_squashed-1 cat /var/log/apache2/error.log
+echo
+echo "test7ampache83_squashed"
+docker exec -u root -it release-test7-test7ampache83_squashed-1 cat /var/log/apache2/error.log
+echo
+echo "test7ampache84_squashed"
+docker exec -u root -it release-test7-test7ampache84_squashed-1 cat /var/log/apache2/error.log
+echo
+echo "test7ampache82_client"
+docker exec -u root -it release-test7-test7ampache82_client-1 cat /var/log/apache2/error.log
+echo
+echo "test7ampache83_client"
+docker exec -u root -it release-test7-test7ampache83_client-1 cat /var/log/apache2/error.log
+echo
+echo "test7ampache84_client"
+docker exec -u root -it release-test7-test7ampache84_client-1 cat /var/log/apache2/error.log
 
