@@ -251,7 +251,7 @@ def ampache3_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
         ## try time handshake
         mytime = int(time.time())
         encrypted_key = ampache_connection.encrypt_password(ampache_api, mytime)
-        ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, ampache_user, mytime)
+        ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, ampache_user, mytime, api_version)
         if not ampache_session:
             sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
@@ -525,7 +525,7 @@ def ampache4_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
         ## try time handshake
         mytime = int(time.time())
         encrypted_key = ampache_connection.encrypt_password(ampache_api, mytime)
-        ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, ampache_user, mytime)
+        ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, ampache_user, mytime, api_version)
         if not ampache_session:
             sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
@@ -994,7 +994,7 @@ def ampache5_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
         ## try time handshake
         mytime = int(time.time())
         encrypted_key = ampache_connection.encrypt_password(ampache_api, mytime)
-        ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, ampache_user, mytime)
+        ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, ampache_user, mytime, api_version)
         if not ampache_session:
             sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
@@ -1501,7 +1501,7 @@ def ampache6_methods(ampache_connection: ampache.API, ampache_url, ampache_api, 
         ## try time handshake
         mytime = int(time.time())
         encrypted_key = ampache_connection.encrypt_password(ampache_api, mytime)
-        ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, ampache_user, mytime)
+        ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, ampache_user, mytime, api_version)
         if not ampache_session:
             sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
