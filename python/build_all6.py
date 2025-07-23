@@ -19,12 +19,12 @@ else:
     SLASH = '/'
 
 try:
-    file_path = os.path.join(ampache_dir, '..', 'ampache-patch6', 'src', 'Config', 'Init',
+    file_path = os.path.join(ampache_dir, '..', 'ampache-patch7', 'src', 'Config', 'Init',
                              'InitializationHandlerConfig.php')
     with open(file_path, 'r') as file:
         file_content = file.read()
 except FileNotFoundError:
-    file_path = os.path.join(ampache_dir, 'ampache-patch6', 'src', 'Config', 'Init', 'InitializationHandlerConfig.php')
+    file_path = os.path.join(ampache_dir, 'ampache-patch7', 'src', 'Config', 'Init', 'InitializationHandlerConfig.php')
     with open(file_path, 'r') as file:
         file_content = file.read()
 
@@ -39,7 +39,7 @@ offset = 0
 api3_version = '390001'
 api4_version = '443000'
 api5_version = '5.5.6'
-api6_version = '6.6.7'
+api6_version = '6.9.0'
 subsonic_api = '1.16.1'
 doc_path = build_dir + SLASH + "docs" + SLASH
 song_url = url + '/play/index.php?ssid=eeb9f1b6056246a7d563f479f518bb34&type=song&oid=60&uid=4&player=api&name=Synthetic%20-%20BrownSmoke.wma'
@@ -248,8 +248,12 @@ def ampache3_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
     # (https://raw.githubusercontent.com/ampache/python3-ampache/api3/docs/xml-responses/handshake.xml)
     ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, '', 0, api_version)
     if not ampache_session:
-        print(encrypted_key)
-        sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
+        ## try time handshake
+        mytime = int(time.time())
+        encrypted_key = ampache_connection.encrypt_password(ampache_api, mytime)
+        ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, ampache_user, mytime)
+        if not ampache_session:
+            sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
     #if not ampache_connection.AMPACHE_SERVER == api3_version:
     #    print(ampache_connection.AMPACHE_SERVER)
@@ -518,8 +522,12 @@ def ampache4_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
 
     ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, '', 0, api_version)
     if not ampache_session:
-        print(encrypted_key)
-        sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
+        ## try time handshake
+        mytime = int(time.time())
+        encrypted_key = ampache_connection.encrypt_password(ampache_api, mytime)
+        ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, ampache_user, mytime)
+        if not ampache_session:
+            sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
     #if not ampache_connection.AMPACHE_SERVER == api4_version:
     #    print(ampache_connection.AMPACHE_SERVER)
@@ -983,8 +991,12 @@ def ampache5_methods(ampache_connection, ampache_url, ampache_api, ampache_user,
     # use correct details
     ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, '', 0, api_version)
     if not ampache_session:
-        print(encrypted_key)
-        sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
+        ## try time handshake
+        mytime = int(time.time())
+        encrypted_key = ampache_connection.encrypt_password(ampache_api, mytime)
+        ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, ampache_user, mytime)
+        if not ampache_session:
+            sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
 
     #if not ampache_connection.AMPACHE_SERVER == api5_version:
     #    print(ampache_connection.AMPACHE_SERVER)
@@ -1486,7 +1498,13 @@ def ampache6_methods(ampache_connection: ampache.API, ampache_url, ampache_api, 
     # ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, '', 0, api_version)
     ampache_session = ampache_connection.execute('handshake')
     if not ampache_session:
-        sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
+        ## try time handshake
+        mytime = int(time.time())
+        encrypted_key = ampache_connection.encrypt_password(ampache_api, mytime)
+        ampache_session = ampache_connection.handshake(ampache_url, encrypted_key, ampache_user, mytime)
+        if not ampache_session:
+            sys.exit(api_version + ' ERROR Failed to connect to ' + ampache_url)
+
 
     #if not ampache_connection.AMPACHE_SERVER == release_version:
     #    print(ampache_connection.AMPACHE_SERVER)
