@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  test7ampache85_client:
+    build:
+      context: .
+      dockerfile: Dockerfilephp85
+    restart: on-failure
+    ports:
+      - "18582:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ../release-test/7/php85_client:/var/www/html
+      - ./log:/var/log/ampache
+      - ./media:/media
+      - ./art:/mnt/art
+      - ./music:/mnt/music
+      - ./podcast:/mnt/podcast
+      - ./upload:/mnt/upload
+      - ./video:/mnt/video
+
