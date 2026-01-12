@@ -26,6 +26,11 @@ cd $AMPACHEDIR/ampache-test && docker-compose up -d --build
 
 echo "wake up ampache-test!"
 sleep 7
+
+# Clean up the log files
+docker exec -u root -it ampache-test-ampachetest-1 cat /dev/null > /var/log/apache2/error.log
+docker exec -u root -it ampache-test-ampachetest-1 cat /dev/null > /var/log/ampache/ampache-test.log
+
 mysql -uroot ampachetest < $AMPACHEDIR/ampache-test/docker/data/sql/ampache-test.sql
 cd $AMPACHEDIR/python/
 if [ ! $BRANCH -eq 0 ]; then
@@ -83,6 +88,15 @@ echo "RESET THE DATABASE"
 mysql -uroot ampachetest < $AMPACHEDIR/ampache-test/docker/data/sql/ampache-test.sql
 docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
 
+echo
+echo "DOCKER APACHE ERRORS LOG"
+docker exec -u root -it ampache-test-ampachetest-1 cat /var/log/apache2/error.log
+
+echo
+echo "DOCKER Ampache log errors"
+docker exec -u root -it ampache-test-ampachetest-1 cat /var/log/ampache/ampache-test.log | grep Error
+
+cat $AMPACHEDIR/ampache-test/docker/log/apache2/error.log
 # go home
 cd $AMPACHEDIR
 
