@@ -51,22 +51,22 @@ if [ ! -d $AMPACHEDIR/release-test/7 ]; then
 fi
 
 # remove the old release
-rm -rf $AMPACHEDIR/release-test/7/php*
+sudo rm -rf $AMPACHEDIR/release-test/7/php*
 
 # php8.2
-unzip -qq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2.zip -d $AMPACHEDIR/release-test/7/php82
-unzip -qq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2_squashed.zip -d $AMPACHEDIR/release-test/7/php82_squashed
-unzip -qq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2_client.zip -d $AMPACHEDIR/release-test/7/php82_client
+unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2.zip -d $AMPACHEDIR/release-test/7/php82
+unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2_squashed.zip -d $AMPACHEDIR/release-test/7/php82_squashed
+unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.2_client.zip -d $AMPACHEDIR/release-test/7/php82_client
 
 # php8.3
-unzip -qq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3.zip -d $AMPACHEDIR/release-test/7/php83
-unzip -qq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3_squashed.zip -d $AMPACHEDIR/release-test/7/php83_squashed
-unzip -qq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3_client.zip -d $AMPACHEDIR/release-test/7/php83_client
+unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3.zip -d $AMPACHEDIR/release-test/7/php83
+unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3_squashed.zip -d $AMPACHEDIR/release-test/7/php83_squashed
+unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.3_client.zip -d $AMPACHEDIR/release-test/7/php83_client
 
 # php8.4
-unzip -qq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4.zip -d $AMPACHEDIR/release-test/7/php84
-unzip -qq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_squashed.zip -d $AMPACHEDIR/release-test/7/php84_squashed
-unzip -qq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_client.zip -d $AMPACHEDIR/release-test/7/php84_client
+unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4.zip -d $AMPACHEDIR/release-test/7/php84
+unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_squashed.zip -d $AMPACHEDIR/release-test/7/php84_squashed
+unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_client.zip -d $AMPACHEDIR/release-test/7/php84_client
 
 # reset perms
 
@@ -237,7 +237,6 @@ docker exec -u root -it release-test7-test7ampache83_squashed-1 ${INSTALLCOMMAND
 docker exec -u root -it release-test7-test7ampache83_squashed-1 ${USERCOMMAND}
 docker exec -u root -it release-test7-test7ampache83_squashed-1 ${UPDATEDBCOMMAND}
 
-
 echo "INSTALLING SQUASHED AMPACHE on PHP8.4"
 
 INSTALLCOMMAND="php /var/www/html/public/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}84s -p $DATABASE -d $DATABASE"
@@ -364,21 +363,21 @@ echo
 cat /dev/null > $AMPACHEDIR/docker/log/7php82.log
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18280 admin $AMPACHEPASSWORD)
 echo "Testing $RELEASEVERSION ampache82 $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $AMPACHEPASSWORD admin 1 $APIVERSION"
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18280 $AMPACHEPASSWORD admin 1 $APIVERSION"
 python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18280 $AMPACHEPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7ampache82_squashed
 cat /dev/null > $AMPACHEDIR/docker/log/7php82s.log
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18281 admin $AMPACHEPASSWORD)
 echo "Testing $RELEASEVERSION ampache82_squashed $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $AMPACHEPASSWORD admin 1 $APIVERSION"
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18281 $AMPACHEPASSWORD admin 1 $APIVERSION"
 python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18281 $AMPACHEPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7php82_client
 cat /dev/null > $AMPACHEDIR/docker/log/7php82c.log
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18282 admin $AMPACHEPASSWORD)
 echo "Testing $RELEASEVERSION php82_client $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $AMPACHEPASSWORD admin 1 $APIVERSION"
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18282 $AMPACHEPASSWORD admin 1 $APIVERSION"
 python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18282 $AMPACHEPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7ampache83
@@ -391,14 +390,14 @@ echo
 cat /dev/null > $AMPACHEDIR/docker/log/7php83s.log
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18381 admin $AMPACHEPASSWORD)
 echo "Testing $RELEASEVERSION ampache83_squashed $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $AMPACHEPASSWORD admin 1 $APIVERSION"
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18381 $AMPACHEPASSWORD admin 1 $APIVERSION"
 python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18381 $AMPACHEPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7php83_client
 cat /dev/null > $AMPACHEDIR/docker/log/7php83c.log
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18382 admin $AMPACHEPASSWORD)
 echo "Testing $RELEASEVERSION php83_client $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $AMPACHEPASSWORD admin 1 $APIVERSION"
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18382 $AMPACHEPASSWORD admin 1 $APIVERSION"
 python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18382 $AMPACHEPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7ampache84
