@@ -50,13 +50,21 @@ cd $AMPACHEDIR/www/ampache.github.io && git pull
 cd $AMPACHEDIR/www/ampache.org-api && git pull
 cd $AMPACHEDIR/www/ampache.org-docs && git pull
 
+if [ -d $AMPACHEDIR/www/ampache.github.io ] && [ ! -d $AMPACHEDIR/www/ampache.github.io/api ]; then
+  mkdir $AMPACHEDIR/www/ampache.github.io/api
+fi
+
+if [ -d $AMPACHEDIR/www/ampache.github.io ] && [ ! -d $AMPACHEDIR/www/ampache.github.io/docs ]; then
+  mkdir $AMPACHEDIR/www/ampache.github.io/docs
+fi
+
 # remove the builds each time
 rm -rf $AMPACHEDIR/www/ampache.org-api/build/*
 rm -rf $AMPACHEDIR/www/ampache.org-docs/build/*
 rm -rf $AMPACHEDIR/www/ampache.github.io/api/*
 rm -rf $AMPACHEDIR/www/ampache.github.io/docs/*
 
-# rebuild and copy to the api site
+# rebuild and copy to the site
 cd $AMPACHEDIR/www/ampache.org-api && npm run build && cp -rfv ./build/* $AMPACHEDIR/www/ampache.github.io/api/
 cd $AMPACHEDIR/www/ampache.org-docs && npm run build && cp -rfv ./build/* $AMPACHEDIR/www/ampache.github.io/docs/
 
