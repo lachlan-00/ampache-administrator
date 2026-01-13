@@ -35,6 +35,7 @@ php74/
 releases/*
 release-test/*
 www/ampache.org-api/
+www/ampache.org-docs/
 www/ampache.github.io/
 docker/composer
 open-subsonic-api/
