@@ -100,8 +100,10 @@ sed -i'' '/^---$/,/^#/c\
 # Ampache Access Control Lists' "$AMPACHEDIR/ampache-develop/docs/API-acls.md"
 sed -i'' '/^---$/,/^#/c\
 # API Advanced Search' "$AMPACHEDIR/ampache-develop/docs/API-advanced-search.md"
-sed -i'' '/^---$/,/^#/c\
-# Subsonic API Support' "$AMPACHEDIR/ampache-develop/docs/API-subsonic.md"
+sed -i'' '/^---$/,/^<\/div>$/c\
+# ampache-docker\
+\
+Docker image for Ampache, a web based audio/video streaming application and file manager allowing you to access your music & videos from anywhere, using almost any internet enabled device.' "$AMPACHEDIR/docker/ampache-docker/README.md"
 
 #cp $AMPACHEDIR/www/ampache.org-docs/docs/api-5/api-5.md $AMPACHEDIR/ampache-master/docs/API.md
 #cp $AMPACHEDIR/www/ampache.org-docs/docs/api-5/api-json-methods.md $AMPACHEDIR/ampache-master/docs/API-JSON-methods.md
