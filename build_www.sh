@@ -83,6 +83,26 @@ cp $AMPACHEDIR/www/ampache.org-docs/docs/docs/development/TRANSLATIONS.md $AMPAC
 
 cp $AMPACHEDIR/www/ampache.org-docs/docs/docker.md $AMPACHEDIR/docker/ampache-docker/README.md
 
+# Fix up the weirdness
+sed -i'' '/^---$/,/^#/c\
+# Contributing to Ampache' "$AMPACHEDIR/ampache-develop/CONTRIBUTING.md"
+sed -i'' '/^---$/,/^#/c\
+# API Errors' "$AMPACHEDIR/ampache-develop/docs/API-Errors.md"
+sed -i'' '/^---$/,/^#/c\
+# API JSON Methods' "$AMPACHEDIR/ampache-develop/docs/API-JSON-methods.md"
+sed -i'' '/^---$/,/^#/c\
+# API XML Methods' "$AMPACHEDIR/ampache-develop/docs/API-XML-methods.md"
+sed -i'' '/^---$/,/^#/c\
+# Ampache Translation Guide' "$AMPACHEDIR/ampache-develop/locale/base/TRANSLATIONS.md"
+sed -i'' '/^---$/,/^#/c\
+# Ampache API' "$AMPACHEDIR/ampache-develop/docs/API.md"
+sed -i'' '/^---$/,/^#/c\
+# Ampache Access Control Lists' "$AMPACHEDIR/ampache-develop/docs/API-acls.md"
+sed -i'' '/^---$/,/^#/c\
+# API Advanced Search' "$AMPACHEDIR/ampache-develop/docs/API-advanced-search.md"
+sed -i'' '/^---$/,/^#/c\
+# Subsonic API Support' "$AMPACHEDIR/ampache-develop/docs/API-subsonic.md"
+
 #cp $AMPACHEDIR/www/ampache.org-docs/docs/api-5/api-5.md $AMPACHEDIR/ampache-master/docs/API.md
 #cp $AMPACHEDIR/www/ampache.org-docs/docs/api-5/api-json-methods.md $AMPACHEDIR/ampache-master/docs/API-JSON-methods.md
 #cp $AMPACHEDIR/www/ampache.org-docs/docs/api-5/api-xml-methods.md $AMPACHEDIR/ampache-master/docs/API-XML-methods.md
