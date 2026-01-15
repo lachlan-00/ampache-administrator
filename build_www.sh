@@ -104,6 +104,8 @@ sed -i'' '/^---$/,/^<\/div>$/c\
 # ampache-docker\
 \
 Docker image for Ampache, a web based audio/video streaming application and file manager allowing you to access your music & videos from anywhere, using almost any internet enabled device.' "$AMPACHEDIR/docker/ampache-docker/README.md"
+sed -i'' '/^---$/,/^#/c\
+# Subsonic API Support' "$AMPACHEDIR/ampache-develop/docs/API-subsonic.md"
 
 #cp $AMPACHEDIR/www/ampache.org-docs/docs/api-5/api-5.md $AMPACHEDIR/ampache-master/docs/API.md
 #cp $AMPACHEDIR/www/ampache.org-docs/docs/api-5/api-json-methods.md $AMPACHEDIR/ampache-master/docs/API-JSON-methods.md
