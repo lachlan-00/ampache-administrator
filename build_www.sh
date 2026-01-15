@@ -16,7 +16,7 @@ fi
 #  rm -rf $AMPACHEDIR/ampache-master
 #  git clone -b master https://github.com/ampache/ampache.git ampache-master
 #fi
-if [ ! -d $AMPACHEDIR/ampache-docker ]; then
+if [ ! -d $AMPACHEDIR/docker/ampache-docker ]; then
   git clone -b master https://github.com/ampache/ampache-docker.git ampache-docker
 fi
 
@@ -39,7 +39,7 @@ if [ ! -d $AMPACHEDIR/www/ampache.github.io ]; then
   cd $AMPACHEDIR/www && git clone -b master https://github.com/ampache/ampache.github.io.git ampache.github.io
 fi
 if [ ! -f $AMPACHEDIR/www/ampache.github.io/index.html ] && [ ! -f $AMPACHEDIR/www/ampache.github.io/old/index.html ]; then
-  rm -rf ./ampache.github.io
+  rm -rf $AMPACHEDIR/www/ampache.github.io
   cd $AMPACHEDIR/www && git clone -b master https://github.com/ampache/ampache.github.io.git ampache.github.io
 fi
 if [ ! -f $AMPACHEDIR/www/ampache.github.io/index.html ] && [ ! -f $AMPACHEDIR/www/ampache.github.io/old/index.html ]; then
@@ -54,13 +54,12 @@ cd $AMPACHEDIR/www/ampache.github.io && git pull
 #cd $AMPACHEDIR/www/ampache.org-api && git pull
 cd $AMPACHEDIR/www/ampache.org-docs && git pull
 
-if [ -d $AMPACHEDIR/www/ampache.github.io ] && [ ! -d $AMPACHEDIR/www/ampache.github.io/api ]; then
-  mkdir $AMPACHEDIR/www/ampache.github.io/api
-fi
-
-if [ -d $AMPACHEDIR/www/ampache.github.io ] && [ ! -d $AMPACHEDIR/www/ampache.github.io/docs ]; then
-  mkdir $AMPACHEDIR/www/ampache.github.io/docs
-fi
+#if [ -d $AMPACHEDIR/www/ampache.github.io ] && [ ! -d $AMPACHEDIR/www/ampache.github.io/api ]; then
+#  mkdir $AMPACHEDIR/www/ampache.github.io/api
+#fi
+#if [ -d $AMPACHEDIR/www/ampache.github.io ] && [ ! -d $AMPACHEDIR/www/ampache.github.io/docs ]; then
+#  mkdir $AMPACHEDIR/www/ampache.github.io/docs
+#fi
 
 # remove the builds each time
 #rm -rf $AMPACHEDIR/www/ampache.org-api/build/*
@@ -68,21 +67,21 @@ rm -rf $AMPACHEDIR/www/ampache.org-docs/build/*
 rm -rf $AMPACHEDIR/www/ampache.github.io/*
 
 # rebuild and copy to the site
-cd $AMPACHEDIR/www/ampache.org-api && npm run build && cp -rfv ./build/* $AMPACHEDIR/www/ampache.github.io/api/
+#cd $AMPACHEDIR/www/ampache.org-api && npm run build && cp -rfv ./build/* $AMPACHEDIR/www/ampache.github.io/api/
 cd $AMPACHEDIR/www/ampache.org-docs && npm run build && cp -rfv ./build/* $AMPACHEDIR/www/ampache.github.io/
 
-cp $AMPACHEDIR/www/ampache.org-docs/docs/index.md $AMPACHEDIR/ampache-develop/docs/API.md
-cp $AMPACHEDIR/www/ampache.org-docs/docs/api-json-methods.md $AMPACHEDIR/ampache-develop/docs/API-JSON-methods.md
-cp $AMPACHEDIR/www/ampache.org-docs/docs/api-xml-methods.md $AMPACHEDIR/ampache-develop/docs/API-XML-methods.md
-cp $AMPACHEDIR/www/ampache.org-docs/docs/api-advanced-search.md $AMPACHEDIR/ampache-develop/docs/API-advanced-search.md
-cp $AMPACHEDIR/www/ampache.org-docs/docs/api-errors.md $AMPACHEDIR/ampache-develop/docs/API-Errors.md
-cp $AMPACHEDIR/www/ampache.org-docs/docs/api-acls.md $AMPACHEDIR/ampache-develop/docs/API-acls.md
-cp $AMPACHEDIR/www/ampache.org-docs/docs/subsonic.md $AMPACHEDIR/ampache-develop/docs/API-subsonic.md
+cp $AMPACHEDIR/www/ampache.org-docs/docs/api/index.md $AMPACHEDIR/ampache-develop/docs/API.md
+cp $AMPACHEDIR/www/ampache.org-docs/docs/api/api-json-methods.md $AMPACHEDIR/ampache-develop/docs/API-JSON-methods.md
+cp $AMPACHEDIR/www/ampache.org-docs/docs/api/api-xml-methods.md $AMPACHEDIR/ampache-develop/docs/API-XML-methods.md
+cp $AMPACHEDIR/www/ampache.org-docs/docs/api/api-advanced-search.md $AMPACHEDIR/ampache-develop/docs/API-advanced-search.md
+cp $AMPACHEDIR/www/ampache.org-docs/docs/api/api-errors.md $AMPACHEDIR/ampache-develop/docs/API-Errors.md
+cp $AMPACHEDIR/www/ampache.org-docs/docs/docs/configuration/acl.md $AMPACHEDIR/ampache-develop/docs/API-acls.md
+cp $AMPACHEDIR/www/ampache.org-docs/docs/api/subsonic.md $AMPACHEDIR/ampache-develop/docs/API-subsonic.md
 
 cp $AMPACHEDIR/www/ampache.org-docs/docs/docs/development/CONTRIBUTING.md $AMPACHEDIR/ampache-develop/CONTRIBUTING.md
-cp $AMPACHEDIR/www/ampache.org-docs/docs/docs/development/TRANSLATIONS.md $AMPACHEDIR/ampache-develop/docs/locale/baseTRANSLATIONS.md
+cp $AMPACHEDIR/www/ampache.org-docs/docs/docs/development/TRANSLATIONS.md $AMPACHEDIR/ampache-develop/locale/base/TRANSLATIONS.md
 
-cp $AMPACHEDIR/www/ampache.org-docs/docs/docker.md $AMPACHEDIR/ampache-docker/README.md
+cp $AMPACHEDIR/www/ampache.org-docs/docs/docker.md $AMPACHEDIR/docker/ampache-docker/README.md
 
 #cp $AMPACHEDIR/www/ampache.org-docs/docs/api-5/api-5.md $AMPACHEDIR/ampache-master/docs/API.md
 #cp $AMPACHEDIR/www/ampache.org-docs/docs/api-5/api-json-methods.md $AMPACHEDIR/ampache-master/docs/API-JSON-methods.md
