@@ -17,7 +17,7 @@ fi
 #  git clone -b master https://github.com/ampache/ampache.git ampache-master
 #fi
 if [ ! -d $AMPACHEDIR/docker/ampache-docker ]; then
-  git clone -b master https://github.com/ampache/ampache-docker.git ampache-docker
+  cd $AMPACHEDIR/docker && git clone -b master https://github.com/ampache/ampache-docker.git ampache-docker
 fi
 
 if [ ! -d $AMPACHEDIR/www ]; then
