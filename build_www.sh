@@ -16,6 +16,9 @@ fi
 #  rm -rf $AMPACHEDIR/ampache-master
 #  git clone -b master https://github.com/ampache/ampache.git ampache-master
 #fi
+if [ ! -d $AMPACHEDIR/ampache-docker ]; then
+  git clone -b master https://github.com/ampache/ampache-docker.git ampache-docker
+fi
 
 if [ ! -d $AMPACHEDIR/www ]; then
   mkdir $AMPACHEDIR/www
@@ -78,6 +81,8 @@ cp $AMPACHEDIR/www/ampache.org-docs/docs/subsonic.md $AMPACHEDIR/ampache-develop
 
 cp $AMPACHEDIR/www/ampache.org-docs/docs/docs/development/CONTRIBUTING.md $AMPACHEDIR/ampache-develop/CONTRIBUTING.md
 cp $AMPACHEDIR/www/ampache.org-docs/docs/docs/development/TRANSLATIONS.md $AMPACHEDIR/ampache-develop/docs/locale/baseTRANSLATIONS.md
+
+cp $AMPACHEDIR/www/ampache.org-docs/docs/docker.md $AMPACHEDIR/ampache-docker/README.md
 
 #cp $AMPACHEDIR/www/ampache.org-docs/docs/api-5/api-5.md $AMPACHEDIR/ampache-master/docs/API.md
 #cp $AMPACHEDIR/www/ampache.org-docs/docs/api-5/api-json-methods.md $AMPACHEDIR/ampache-master/docs/API-JSON-methods.md
