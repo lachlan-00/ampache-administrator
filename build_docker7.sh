@@ -5,7 +5,7 @@ BRANCH="all"
 if [ ! $# -eq 0 ]; then
   BRANCH=$1
 fi
-
+START=$(date)
 
 if [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
   RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-develop/src/Config/Init/InitializationHandlerConfig.php`
@@ -115,4 +115,7 @@ fi
 
 # go home
 cd $AMPACHEDIR
+
+echo $START
+date
 

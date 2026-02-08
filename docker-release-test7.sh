@@ -33,9 +33,9 @@ cat /dev/null > $AMPACHEDIR/docker/log/7php83c.log
 cat /dev/null > $AMPACHEDIR/docker/log/7php84.log
 cat /dev/null > $AMPACHEDIR/docker/log/7php84s.log
 cat /dev/null > $AMPACHEDIR/docker/log/7php84c.log
-#cat /dev/null > $AMPACHEDIR/docker/log/7php85.log
-#cat /dev/null > $AMPACHEDIR/docker/log/7php85s.log
-#cat /dev/null > $AMPACHEDIR/docker/log/7php85c.log
+cat /dev/null > $AMPACHEDIR/docker/log/7php85.log
+cat /dev/null > $AMPACHEDIR/docker/log/7php85s.log
+cat /dev/null > $AMPACHEDIR/docker/log/7php85c.log
 
 echo "Enter your local database user:"
 read DATABASEUSER
@@ -72,9 +72,9 @@ unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_squashed.zip
 unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_client.zip -d $AMPACHEDIR/release-test/7/php84_client
 
 # php8.5
-#unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4.zip -d $AMPACHEDIR/release-test/7/php85
-#unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_squashed.zip -d $AMPACHEDIR/release-test/7/php85_squashed
-#unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_client.zip -d $AMPACHEDIR/release-test/7/php85_client
+unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4.zip -d $AMPACHEDIR/release-test/7/php85
+unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_squashed.zip -d $AMPACHEDIR/release-test/7/php85_squashed
+unzip -oq $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.4_client.zip -d $AMPACHEDIR/release-test/7/php85_client
 
 # reset perms
 
@@ -192,45 +192,45 @@ sudo chown $UID:33 $AMPACHEDIR/release-test/7/php84_client
 sudo chmod 775 $AMPACHEDIR/release-test/7/php84_client
 
 # php8.5
-#sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85/composer.json
-#sudo chmod 775 $AMPACHEDIR/release-test/7/php85/composer.json
-#sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85/config
-#sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85/config
-#sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85/vendor/
-#sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85/vendor/
-#sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85/public/
-#sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85/public/
+sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85/composer.json
+sudo chmod 775 $AMPACHEDIR/release-test/7/php85/composer.json
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85/config
+sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85/config
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85/vendor/
+sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85/vendor/
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85/public/
+sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85/public/
 
-#sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85_squashed/composer.json
-#sudo chmod 775 $AMPACHEDIR/release-test/7/php85_squashed/composer.json
-#sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85_squashed/config
-#sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85_squashed/config
-#sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85_squashed/vendor/
-#sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85_squashed/vendor/
-#sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85_squashed/
-#sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85_squashed/
+sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85_squashed/composer.json
+sudo chmod 775 $AMPACHEDIR/release-test/7/php85_squashed/composer.json
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85_squashed/config
+sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85_squashed/config
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85_squashed/vendor/
+sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85_squashed/vendor/
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85_squashed/
+sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85_squashed/
 
-#sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85_client/composer.json
-#sudo chmod 775 $AMPACHEDIR/release-test/7/php85_client/composer.json
-#sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85_client/config
-#sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85_client/config
-#sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85_client/vendor/
-#sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85_client/vendor/
-#sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85_client/
-#sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85_client/
+sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85_client/composer.json
+sudo chmod 775 $AMPACHEDIR/release-test/7/php85_client/composer.json
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85_client/config
+sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85_client/config
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85_client/vendor/
+sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85_client/vendor/
+sudo chown -R $UID:33 $AMPACHEDIR/release-test/7/php85_client/
+sudo chmod -R 775 $AMPACHEDIR/release-test/7/php85_client/
 
-#sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85
-#sudo chmod 775 $AMPACHEDIR/release-test/7/php85
-#sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85_squashed
-#sudo chmod 775 $AMPACHEDIR/release-test/7/php85_squashed
-#sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85_client
-#sudo chmod 775 $AMPACHEDIR/release-test/7/php85_client
-#sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85
-#sudo chmod 775 $AMPACHEDIR/release-test/7/php85
-#sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85_squashed
-#sudo chmod 775 $AMPACHEDIR/release-test/7/php85_squashed
-#sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85_client
-#sudo chmod 775 $AMPACHEDIR/release-test/7/php85_client
+sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85
+sudo chmod 775 $AMPACHEDIR/release-test/7/php85
+sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85_squashed
+sudo chmod 775 $AMPACHEDIR/release-test/7/php85_squashed
+sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85_client
+sudo chmod 775 $AMPACHEDIR/release-test/7/php85_client
+sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85
+sudo chmod 775 $AMPACHEDIR/release-test/7/php85
+sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85_squashed
+sudo chmod 775 $AMPACHEDIR/release-test/7/php85_squashed
+sudo chown $UID:33 $AMPACHEDIR/release-test/7/php85_client
+sudo chmod 775 $AMPACHEDIR/release-test/7/php85_client
 
 # ReLaunch all the containers
 
@@ -238,8 +238,8 @@ docker-compose -p "release-test7" \
  -f docker/test7-docker-compose82.yml -f docker/test7-docker-compose82_squashed.yml -f docker/test7-docker-compose82_client.yml \
  -f docker/test7-docker-compose83.yml -f docker/test7-docker-compose83_squashed.yml -f docker/test7-docker-compose83_client.yml \
  -f docker/test7-docker-compose84.yml -f docker/test7-docker-compose84_squashed.yml -f docker/test7-docker-compose84_client.yml \
+ -f docker/test7-docker-compose85.yml -f docker/test7-docker-compose85_squashed.yml -f docker/test7-docker-compose85_client.yml \
  up -d --build
- #-f docker/test7-docker-compose85.yml -f docker/test7-docker-compose85_squashed.yml -f docker/test7-docker-compose85_client.yml \
 
 # Install DB and add the admin user
 
@@ -273,10 +273,10 @@ docker exec -u root -it release-test7-test7ampache84-1 ${UPDATEDBCOMMAND}
 echo "INSTALLING PUBLIC AMPACHE on PHP8.5"
 
 # php8.5
-#INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}85 -p $DATABASE -d $DATABASE"
-#docker exec -u root -it release-test7-test7ampache85-1 ${INSTALLCOMMAND}85
-#docker exec -u root -it release-test7-test7ampache85-1 ${USERCOMMAND}
-#docker exec -u root -it release-test7-test7ampache85-1 ${UPDATEDBCOMMAND}
+INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}85 -p $DATABASE -d $DATABASE"
+docker exec -u root -it release-test7-test7ampache85-1 ${INSTALLCOMMAND}85
+docker exec -u root -it release-test7-test7ampache85-1 ${USERCOMMAND}
+docker exec -u root -it release-test7-test7ampache85-1 ${UPDATEDBCOMMAND}
 
 USERCOMMAND="php /var/www/html/public/bin/cli admin:addUser admin -p $AMPACHEPASSWORD -e admin@ampache.dev -l 100"
 UPDATEDBCOMMAND="php /var/www/html/public/bin/cli admin:updateDatabase -e"
@@ -305,9 +305,9 @@ docker exec -u root -it release-test7-test7ampache84_squashed-1 ${UPDATEDBCOMMAN
 echo "INSTALLING SQUASHED AMPACHE on PHP8.5"
 
 #INSTALLCOMMAND="php /var/www/html/public/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}85s -p $DATABASE -d $DATABASE"
-#docker exec -u root -it release-test7-test7ampache85_squashed-1 ${INSTALLCOMMAND}85s
-#docker exec -u root -it release-test7-test7ampache85_squashed-1 ${USERCOMMAND}
-#docker exec -u root -it release-test7-test7ampache85_squashed-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test7-test7ampache85_squashed-1 ${INSTALLCOMMAND}85s
+docker exec -u root -it release-test7-test7ampache85_squashed-1 ${USERCOMMAND}
+docker exec -u root -it release-test7-test7ampache85_squashed-1 ${UPDATEDBCOMMAND}
 
 USERCOMMAND="php /var/www/html/bin/cli admin:addUser admin -p $AMPACHEPASSWORD -e admin@ampache.dev -l 100"
 UPDATEDBCOMMAND="php /var/www/html/bin/cli admin:updateDatabase -e"
@@ -336,9 +336,9 @@ docker exec -u root -it release-test7-test7ampache84_client-1 ${UPDATEDBCOMMAND}
 echo "INSTALLING CLIENT AMPACHE on PHP8.5"
 
 #INSTALLCOMMAND="php /var/www/html/bin/installer install -f -U $DATABASEUSER -P $DATABASEPASSWORD -H $LOCALIP -u ${DATABASE}85c -p $DATABASE -d $DATABASE"
-#docker exec -u root -it release-test7-test7ampache85_client-1 ${INSTALLCOMMAND}85c
-#docker exec -u root -it release-test7-test7ampache85_client-1 ${USERCOMMAND}
-#docker exec -u root -it release-test7-test7ampache85_client-1 ${UPDATEDBCOMMAND}
+docker exec -u root -it release-test7-test7ampache85_client-1 ${INSTALLCOMMAND}85c
+docker exec -u root -it release-test7-test7ampache85_client-1 ${USERCOMMAND}
+docker exec -u root -it release-test7-test7ampache85_client-1 ${UPDATEDBCOMMAND}
 
 sed -i "s/session_name = \"ampache\"/session_name = \"7php82\"/g"  $AMPACHEDIR/release-test/7/php82/config/ampache.cfg.php
 sed -i "s/session_name = \"ampache\"/session_name = \"7php82squashed\"/g"  $AMPACHEDIR/release-test/7/php82_squashed/config/ampache.cfg.php
@@ -349,9 +349,9 @@ sed -i "s/session_name = \"ampache\"/session_name = \"7php83client\"/g"  $AMPACH
 sed -i "s/session_name = \"ampache\"/session_name = \"7php84\"/g"  $AMPACHEDIR/release-test/7/php84/config/ampache.cfg.php
 sed -i "s/session_name = \"ampache\"/session_name = \"7php84squashed\"/g"  $AMPACHEDIR/release-test/7/php84_squashed/config/ampache.cfg.php
 sed -i "s/session_name = \"ampache\"/session_name = \"7php84client\"/g"  $AMPACHEDIR/release-test/7/php84_client/config/ampache.cfg.php
-#sed -i "s/session_name = \"ampache\"/session_name = \"7php85\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
-#sed -i "s/session_name = \"ampache\"/session_name = \"7php85squashed\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
-#sed -i "s/session_name = \"ampache\"/session_name = \"7php85client\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"7php85\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"7php85squashed\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
+sed -i "s/session_name = \"ampache\"/session_name = \"7php85client\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
 
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php82/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php82_squashed/config/ampache.cfg.php
@@ -362,9 +362,9 @@ sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"tr
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php84/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_squashed/config/ampache.cfg.php
 sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_client/config/ampache.cfg.php
-#sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
-#sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
-#sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
+sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
+sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
+sed -i "s/;allow_public_registration = \"true\"/allow_public_registration = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
 
 sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/7/php82/config/ampache.cfg.php
 sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/7/php82_squashed/config/ampache.cfg.php
@@ -375,9 +375,9 @@ sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g" 
 sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/7/php84/config/ampache.cfg.php
 sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_squashed/config/ampache.cfg.php
 sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_client/config/ampache.cfg.php
-#sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
-#sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
-#sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
+sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
+sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
+sed -i "s/;user_no_email_confirm = \"true\"/user_no_email_confirm = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
 
 sed -i "s/;captcha_public_reg = \"true\"/captcha_public_reg = \"true\"/g"  $AMPACHEDIR/release-test/7/php82/config/ampache.cfg.php
 sed -i "s/;captcha_public_reg = \"true\"/captcha_public_reg = \"true\"/g"  $AMPACHEDIR/release-test/7/php82_squashed/config/ampache.cfg.php
@@ -388,9 +388,9 @@ sed -i "s/;captcha_public_reg = \"true\"/captcha_public_reg = \"true\"/g"  $AMPA
 sed -i "s/;captcha_public_reg = \"true\"/captcha_public_reg = \"true\"/g"  $AMPACHEDIR/release-test/7/php84/config/ampache.cfg.php
 sed -i "s/;captcha_public_reg = \"true\"/captcha_public_reg = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_squashed/config/ampache.cfg.php
 sed -i "s/;captcha_public_reg = \"true\"/captcha_public_reg = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_client/config/ampache.cfg.php
-#sed -i "s/;captcha_public_reg = \"true\"/captcha_public_reg = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
-#sed -i "s/;captcha_public_reg = \"true\"/captcha_public_reg = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
-#sed -i "s/;captcha_public_reg = \"true\"/captcha_public_reg = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
+sed -i "s/;captcha_public_reg = \"true\"/captcha_public_reg = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
+sed -i "s/;captcha_public_reg = \"true\"/captcha_public_reg = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
+sed -i "s/;captcha_public_reg = \"true\"/captcha_public_reg = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
 
 sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/7/php82/config/ampache.cfg.php
 sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/7/php82_squashed/config/ampache.cfg.php
@@ -401,9 +401,9 @@ sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-tes
 sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/7/php84/config/ampache.cfg.php
 sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_squashed/config/ampache.cfg.php
 sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_client/config/ampache.cfg.php
-#sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
-#sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
-#sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
+sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
+sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
+sed -i "s/;licensing = \"true\"/licensing = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
 
 sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/7/php82/config/ampache.cfg.php
 sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/7/php82_squashed/config/ampache.cfg.php
@@ -414,9 +414,22 @@ sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/7/php8
 sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/7/php84/config/ampache.cfg.php
 sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_squashed/config/ampache.cfg.php
 sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_client/config/ampache.cfg.php
-#sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
-#sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
-#sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
+sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
+sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
+sed -i "s/;label = \"true\"/label = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
+
+sed -i "s/;show_similar = \"true\"/show_similar = \"true\"/g"  $AMPACHEDIR/release-test/7/php82/config/ampache.cfg.php
+sed -i "s/;show_similar = \"true\"/show_similar = \"true\"/g"  $AMPACHEDIR/release-test/7/php82_squashed/config/ampache.cfg.php
+sed -i "s/;show_similar = \"true\"/show_similar = \"true\"/g"  $AMPACHEDIR/release-test/7/php82_client/config/ampache.cfg.php
+sed -i "s/;show_similar = \"true\"/show_similar = \"true\"/g"  $AMPACHEDIR/release-test/7/php83/config/ampache.cfg.php
+sed -i "s/;show_similar = \"true\"/show_similar = \"true\"/g"  $AMPACHEDIR/release-test/7/php83_squashed/config/ampache.cfg.php
+sed -i "s/;show_similar = \"true\"/show_similar = \"true\"/g"  $AMPACHEDIR/release-test/7/php83_client/config/ampache.cfg.php
+sed -i "s/;show_similar = \"true\"/show_similar = \"true\"/g"  $AMPACHEDIR/release-test/7/php84/config/ampache.cfg.php
+sed -i "s/;show_similar = \"true\"/show_similar = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_squashed/config/ampache.cfg.php
+sed -i "s/;show_similar = \"true\"/show_similar = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_client/config/ampache.cfg.php
+sed -i "s/;show_similar = \"true\"/show_similar = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
+sed -i "s/;show_similar = \"true\"/show_similar = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
+sed -i "s/;show_similar = \"true\"/show_similar = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
 
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/7/php82/config/ampache.cfg.php
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/7/php82_squashed/config/ampache.cfg.php
@@ -427,9 +440,9 @@ sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/7/php8
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/7/php84/config/ampache.cfg.php
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_squashed/config/ampache.cfg.php
 sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_client/config/ampache.cfg.php
-#sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
-#sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
-#sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
+sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
+sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
+sed -i "s/;debug = \"true\"/debug = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
 
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php82.log\"/g"   $AMPACHEDIR/release-test/7/php82/config/ampache.cfg.php
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php82s.log\"/g"   $AMPACHEDIR/release-test/7/php82_squashed/config/ampache.cfg.php
@@ -440,9 +453,9 @@ sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php83c.log\"/g
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php84.log\"/g"   $AMPACHEDIR/release-test/7/php84/config/ampache.cfg.php
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php84s.log\"/g"   $AMPACHEDIR/release-test/7/php84_squashed/config/ampache.cfg.php
 sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php84c.log\"/g"   $AMPACHEDIR/release-test/7/php84_client/config/ampache.cfg.php
-#sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php85.log\"/g"   $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
-#sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php85s.log\"/g"   $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
-#sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php85c.log\"/g"   $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php85.log\"/g"   $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php85s.log\"/g"   $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
+sed -i "s/log_filename = \"%name\.%Y%m%d\.log\"/log_filename = \"7php85c.log\"/g"   $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
 
 sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/7/php82/config/ampache.cfg.php
 sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/7/php82_squashed/config/ampache.cfg.php
@@ -453,9 +466,9 @@ sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACH
 sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/7/php84/config/ampache.cfg.php
 sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_squashed/config/ampache.cfg.php
 sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/7/php84_client/config/ampache.cfg.php
-#sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
-#sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
-#sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
+sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/7/php85/config/ampache.cfg.php
+sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_squashed/config/ampache.cfg.php
+sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACHEDIR/release-test/7/php85_client/config/ampache.cfg.php
 
 echo
 #release-test7-test7ampache82
@@ -521,25 +534,25 @@ echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $AMPACHEP
 python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $AMPACHEPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7ampache85
-#cat /dev/null > $AMPACHEDIR/docker/log/7php85.log
-#DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18580 admin $AMPACHEPASSWORD)
-#echo "Testing $RELEASEVERSION ampache85 - $DEMOPASSWORD -"
-#echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $AMPACHEPASSWORD admin 1 $APIVERSION"
-#python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18580 $AMPACHEPASSWORD admin 1 $APIVERSION
-#echo
+cat /dev/null > $AMPACHEDIR/docker/log/7php85.log
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18580 admin $AMPACHEPASSWORD)
+echo "Testing $RELEASEVERSION ampache85 - $DEMOPASSWORD -"
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $AMPACHEPASSWORD admin 1 $APIVERSION"
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18580 $AMPACHEPASSWORD admin 1 $APIVERSION
+echo
 #release-test7-test7ampache85_squashed
-#cat /dev/null > $AMPACHEDIR/docker/log/7php85s.log
-#DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18581 admin $AMPACHEPASSWORD)
-#echo "Testing $RELEASEVERSION ampache85_squashed $DEMOPASSWORD"
-#echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $AMPACHEPASSWORD admin 1 $APIVERSION"
-#python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18581 $AMPACHEPASSWORD admin 1 $APIVERSION
-#echo
+cat /dev/null > $AMPACHEDIR/docker/log/7php85s.log
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18581 admin $AMPACHEPASSWORD)
+echo "Testing $RELEASEVERSION ampache85_squashed $DEMOPASSWORD"
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $AMPACHEPASSWORD admin 1 $APIVERSION"
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18581 $AMPACHEPASSWORD admin 1 $APIVERSION
+echo
 #release-test7-test7php85_client
-#cat /dev/null > $AMPACHEDIR/docker/log/7php85c.log
-#DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18582 admin $AMPACHEPASSWORD)
-#echo "Testing $RELEASEVERSION php85_client $DEMOPASSWORD"
-#echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $AMPACHEPASSWORD admin 1 $APIVERSION"
-#python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $AMPACHEPASSWORD admin 1 $APIVERSION
+cat /dev/null > $AMPACHEDIR/docker/log/7php85c.log
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18582 admin $AMPACHEPASSWORD)
+echo "Testing $RELEASEVERSION php85_client $DEMOPASSWORD"
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $AMPACHEPASSWORD admin 1 $APIVERSION"
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $AMPACHEPASSWORD admin 1 $APIVERSION
 
 
 echo "PRINT ERRORS"
@@ -557,9 +570,9 @@ echo
 echo "test7ampache84"
 docker exec -u root -it release-test7-test7ampache84-1 cat /var/log/apache2/error.log
 echo
-#echo "test7ampache85"
-#docker exec -u root -it release-test7-test7ampache85-1 cat /var/log/apache2/error.log
-#echo
+echo "test7ampache85"
+docker exec -u root -it release-test7-test7ampache85-1 cat /var/log/apache2/error.log
+echo
 echo "test7ampache82_squashed"
 docker exec -u root -it release-test7-test7ampache82_squashed-1 cat /var/log/apache2/error.log
 echo
@@ -569,9 +582,9 @@ echo
 echo "test7ampache84_squashed"
 docker exec -u root -it release-test7-test7ampache84_squashed-1 cat /var/log/apache2/error.log
 echo
-#echo "test7ampache85_squashed"
-#docker exec -u root -it release-test7-test7ampache85_squashed-1 cat /var/log/apache2/error.log
-#echo
+echo "test7ampache85_squashed"
+docker exec -u root -it release-test7-test7ampache85_squashed-1 cat /var/log/apache2/error.log
+echo
 echo "test7ampache82_client"
 docker exec -u root -it release-test7-test7ampache82_client-1 cat /var/log/apache2/error.log
 echo
@@ -581,6 +594,6 @@ echo
 echo "test7ampache84_client"
 docker exec -u root -it release-test7-test7ampache84_client-1 cat /var/log/apache2/error.log
 echo
-#echo "test7ampache85_client"
-#docker exec -u root -it release-test7-test7ampache85_client-1 cat /var/log/apache2/error.log
+echo "test7ampache85_client"
+docker exec -u root -it release-test7-test7ampache85_client-1 cat /var/log/apache2/error.log
 

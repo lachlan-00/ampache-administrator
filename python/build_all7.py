@@ -5227,6 +5227,21 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=ping&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (no auth)", {}), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/preference/json-preference_create.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=preference_create&filter=temp_pref_{api_format}&type=boolean&default=0&category=interface&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        if 'error' in response and response["error"]["errorCode"] == "4705":
+            print("Not Implemented preference_create " + api_version)
+        else:
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/preference/json-preference_edit.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=preference_edit&filter=temp_pref_{api_format}&value=1&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/preference/json-preference_delete.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=preference_delete&filter=temp_pref_{api_format}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/bookmark/json-bookmark_create.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=bookmark_create&filter={self.songid}&type=song&position=0&client=python3-ampache&include=False&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -6237,6 +6252,21 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/0_setup/xml-ping.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=ping&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (no auth)", {}), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/preference/json-preference_create.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=preference_create&filter=temp_pref_{api_format}&type=boolean&default=0&category=interface&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        if 'error' in response and response["error"]["errorCode"] == "4705":
+            print("Not Implemented preference_create " + api_version)
+        else:
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/preference/json-preference_edit.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=preference_edit&filter=temp_pref_{api_format}&value=1&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/preference/json-preference_delete.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=preference_delete&filter=temp_pref_{api_format}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/create/bookmark/xml-bookmark_create.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=bookmark_create&filter={self.songid}&type=song&position=0&client=python3-ampache&include=False&version={api_version}"
