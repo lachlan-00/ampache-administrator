@@ -19,12 +19,12 @@ else:
     SLASH = '/'
 
 try:
-    file_path = os.path.join(ampache_dir, '..', 'ampache-patch6', 'src', 'Config', 'Init',
+    file_path = os.path.join(ampache_dir, '..', 'ampache-patch7', 'src', 'Config', 'Init',
                              'InitializationHandlerConfig.php')
     with open(file_path, 'r') as file:
         file_content = file.read()
 except FileNotFoundError:
-    file_path = os.path.join(ampache_dir, 'ampache-patch6', 'src', 'Config', 'Init', 'InitializationHandlerConfig.php')
+    file_path = os.path.join(ampache_dir, 'ampache-patch7', 'src', 'Config', 'Init', 'InitializationHandlerConfig.php')
     with open(file_path, 'r') as file:
         file_content = file.read()
 
