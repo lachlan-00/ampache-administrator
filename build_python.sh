@@ -33,7 +33,7 @@ docker exec -u root -it ampache-test-ampachetest-1 cat /dev/null > /var/log/ampa
 
 mysql -uroot ampachetest < $AMPACHEDIR/ampache-test/docker/data/sql/ampache-test.sql
 cd $AMPACHEDIR/python/
-if [ ! $BRANCH -eq 0 ]; then
+if [ "$BRANCH" != "0" ]; then
   echo "RESET THE DATABASE"
   mysql -uroot ampachetest < $AMPACHEDIR/ampache-test/docker/data/sql/ampache-test.sql
   docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
@@ -95,6 +95,11 @@ docker exec -u root -it ampache-test-ampachetest-1 cat /var/log/apache2/error.lo
 echo
 echo "DOCKER Ampache log errors"
 docker exec -u root -it ampache-test-ampachetest-1 cat /var/log/ampache/ampache-test.log | grep Error
+
+### Update test sql
+#mysql -uroot ampachetest < $AMPACHEDIR/ampache-test/docker/data/sql/ampache-test.sql
+#docker exec ampache-test-ampachetest-1 sh -c "php /var/www/html/bin/cli admin:updateDatabase -e"
+#mysqldump -uroot ampachetest > $AMPACHEDIR/ampache-test/docker/data/sql/ampache-test.sql
 
 cat $AMPACHEDIR/ampache-test/docker/log/apache2/error.log
 # go home
