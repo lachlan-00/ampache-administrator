@@ -17,6 +17,9 @@ fi
 sh ./setup-python.sh
 cd $AMPACHEDIR/ampache-test/ampache && git reset --hard origin/develop  && git pull && $COMPOSERPATH install
 
+sudo chown $USER:33 $AMPACHEDIR/ampache-test/ampache/config/*
+sudo chown $USER:33 $AMPACHEDIR/ampache-test/docker/log
+
 docker container stop ampache-test-ampachetest-1
 
 cd $AMPACHEDIR/ampache-test && docker-compose up -d --build
