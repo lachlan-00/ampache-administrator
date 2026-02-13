@@ -83,6 +83,8 @@ cp $AMPACHEDIR/www/ampache.org-docs/docs/docs/development/TRANSLATIONS.md $AMPAC
 
 cp $AMPACHEDIR/www/ampache.org-docs/docs/docker.md $AMPACHEDIR/docker/ampache-docker/README.md
 
+cp $AMPACHEDIR/www/ampache.org-docs/static/openapi.json $AMPACHEDIR/ampache-develop/docs/openapi.json
+
 # Fix up the weirdness
 sed -i'' '/^---$/,/^#/c\
 # Contributing to Ampache' "$AMPACHEDIR/ampache-develop/CONTRIBUTING.md"
