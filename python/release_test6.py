@@ -28,9 +28,9 @@ try:
     if 1 < length:
         url = sys.argv[1]
     if 2 < length:
-        user = sys.argv[2]
+        api = sys.argv[2]
     if 3 < length:
-        api = sys.argv[3]
+        user = sys.argv[3]
     if 4 < length:
         APIVERSION = sys.argv[4]
 except IndexError:
@@ -51,12 +51,12 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     ampache_session = ampacheConnection.handshake(ampache_url, encrypted_key, ampache_user, mytime, api_version)
     if not ampache_session:
-        print(encrypted_key)
+        print(ampache_api, ' ', ampache_user, ' ', encrypted_key)
         sys.exit('ERROR: Failed to connect to ' + ampache_url)
 
     my_ping = ampacheConnection.ping(ampache_url, ampache_session, api_version)
     if not my_ping:
-        print()
+        print(ampache_api, ' ', ampache_user, ' ', encrypted_key)
         sys.exit('ERROR: Failed to ping ' + ampache_url)
 
     tempusername = 'demo'

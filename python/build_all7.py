@@ -5,6 +5,7 @@ import json
 import os
 import re
 import sys
+import time
 import xmltodict
 import urllib.parse
 
@@ -17,10 +18,26 @@ else:
     SLASH = '/'
 
 # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/collection.bru
-MYUSERNAME = '' # filled in by setup_ampache
-TOKEN = '31cf2a285fe139abef86e7f49728b0e6c8da5b828bf742445451a631ba8ad7d0'
+MYUSERNAME = 'admin' # filled in by setup_ampache
+PASSWORD = "]@zRGb_Rs2i'XVc"
+TOKEN = False
 URL = 'http://localhost'
 DEMOPASSWORD = 'demodemo'
+try:
+    length = len(sys.argv)
+    if 1 < length:
+        URL = sys.argv[1]
+    if 2 < length:
+        TOKEN = sys.argv[2]
+    if 3 < length:
+        MYUSERNAME = sys.argv[3]
+    if 4 < length:
+        if sys.argv[4] == '1':
+            ENABLEDEBUG = False
+    if 5 < length:
+        release_version = sys.argv[5]
+except IndexError:
+    pass
 
 DEMOUSERTOKEN = 'e131647f22af624963e273c63659da1451d4e7f52442ec5362e660f9628bd2da'
 
@@ -79,10 +96,16 @@ class AmpacheRunner:
     def __init__(self):
         self.ampache_connection = ampache.API()
 
+        self.ampache_connection.set_debug(True)
+
         # Not needed when using a bearer token
         #TOKEN = ampache_connection.encrypt_string('apikey', 'username')
 
         self.ampache_connection.set_url(URL)
+        if not TOKEN:
+            TIME = int(time.time())
+            TOKEN = self.ampache_connection.encrypt_password(PASSWORD, TIME)
+
         self.ampache_connection.set_bearer_token(TOKEN)
 
         self.headers = {'Authorization': f'Bearer {TOKEN}'}

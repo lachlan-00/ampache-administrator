@@ -473,86 +473,86 @@ sed -i "s/;api_debug_handler = \"true\"/api_debug_handler = \"true\"/g"  $AMPACH
 echo
 #release-test7-test7ampache82
 cat /dev/null > $AMPACHEDIR/docker/log/7php82.log
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18280 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18280 $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION ampache82 $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18280 $AMPACHEPASSWORD admin 1 $APIVERSION"
-python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18280 $AMPACHEPASSWORD admin 1 $APIVERSION
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18280 $DEMOPASSWORD
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18280 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7ampache82_squashed
 cat /dev/null > $AMPACHEDIR/docker/log/7php82s.log
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18281 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18281 $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION ampache82_squashed $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18281 $AMPACHEPASSWORD admin 1 $APIVERSION"
-python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18281 $AMPACHEPASSWORD admin 1 $APIVERSION
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18281 $DEMOPASSWORD
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18281 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7php82_client
 cat /dev/null > $AMPACHEDIR/docker/log/7php82c.log
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18282 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18282 $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION php82_client $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18282 $AMPACHEPASSWORD admin 1 $APIVERSION"
-python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18282 $AMPACHEPASSWORD admin 1 $APIVERSION
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18282 $DEMOPASSWORD
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18282 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7ampache83
 cat /dev/null > $AMPACHEDIR/docker/log/7php83.log
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18380 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18380 $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION ampache83 $DEMOPASSWORD"
-python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18380 $AMPACHEPASSWORD admin 1 $APIVERSION
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18380 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7ampache83_squashed
 cat /dev/null > $AMPACHEDIR/docker/log/7php83s.log
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18381 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18381 $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION ampache83_squashed $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18381 $AMPACHEPASSWORD admin 1 $APIVERSION"
-python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18381 $AMPACHEPASSWORD admin 1 $APIVERSION
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18381 $DEMOPASSWORD
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18381 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7php83_client
 cat /dev/null > $AMPACHEDIR/docker/log/7php83c.log
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18382 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18382 $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION php83_client $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18382 $AMPACHEPASSWORD admin 1 $APIVERSION"
-python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18382 $AMPACHEPASSWORD admin 1 $APIVERSION
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18382 $DEMOPASSWORD
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18382 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7ampache84
 cat /dev/null > $AMPACHEDIR/docker/log/7php84.log
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18480 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18480 $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION ampache84 - $DEMOPASSWORD -"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $AMPACHEPASSWORD admin 1 $APIVERSION"
-python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18480 $AMPACHEPASSWORD admin 1 $APIVERSION
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $DEMOPASSWORD
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18480 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7ampache84_squashed
 cat /dev/null > $AMPACHEDIR/docker/log/7php84s.log
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18481 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18481 $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION ampache84_squashed $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $AMPACHEPASSWORD admin 1 $APIVERSION"
-python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18481 $AMPACHEPASSWORD admin 1 $APIVERSION
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $DEMOPASSWORD
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18481 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7php84_client
 cat /dev/null > $AMPACHEDIR/docker/log/7php84c.log
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18482 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18482 $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION php84_client $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $AMPACHEPASSWORD admin 1 $APIVERSION"
-python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $AMPACHEPASSWORD admin 1 $APIVERSION
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $DEMOPASSWORD
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18482 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7ampache85
 cat /dev/null > $AMPACHEDIR/docker/log/7php85.log
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18580 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18580 $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION ampache85 - $DEMOPASSWORD -"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $AMPACHEPASSWORD admin 1 $APIVERSION"
-python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18580 $AMPACHEPASSWORD admin 1 $APIVERSION
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $DEMOPASSWORD
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18580 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7ampache85_squashed
 cat /dev/null > $AMPACHEDIR/docker/log/7php85s.log
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18581 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18581 $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION ampache85_squashed $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $AMPACHEPASSWORD admin 1 $APIVERSION"
-python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18581 $AMPACHEPASSWORD admin 1 $APIVERSION
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $DEMOPASSWORD
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18581 $DEMOPASSWORD admin 1 $APIVERSION
 echo
 #release-test7-test7php85_client
 cat /dev/null > $AMPACHEDIR/docker/log/7php85c.log
-DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18582 admin $AMPACHEPASSWORD)
+DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:18582 $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION php85_client $DEMOPASSWORD"
-echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $AMPACHEPASSWORD admin 1 $APIVERSION"
-python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $AMPACHEPASSWORD admin 1 $APIVERSION
+echo "python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $DEMOPASSWORD
+python3 $AMPACHEDIR/python/build_all7.py http://${LOCALIP}:18582 $DEMOPASSWORD admin 1 $APIVERSION
 
 
 echo "PRINT ERRORS"
