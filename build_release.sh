@@ -109,6 +109,7 @@ cd $AMPACHEDIR/releases/5/php82_squashed && git fetch origin $SQUASHBRANCH && gi
 
 # php 7.4
 cd $AMPACHEDIR/releases/5/php74
+git clean -fx
 rm -rf ./composer.lock vendor/* public/lib/components/* && php7.4 $COMPOSERPATH install
 php7.4 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -119,6 +120,7 @@ cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/5/php74_squashed
+git clean -fx
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php7.4 $COMPOSERPATH install
 php7.4 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -130,6 +132,7 @@ find . -name "*.map.1" -exec rm {} \;
 
 # php 8.0
 cd $AMPACHEDIR/releases/5/php80
+git clean -fx
 rm -rf ./composer.lock vendor/* public/lib/components/* && php8.0 $COMPOSERPATH install
 php8.0 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -140,6 +143,7 @@ cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/5/php80_squashed
+git clean -fx
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php8.0 $COMPOSERPATH install
 php8.0 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -151,6 +155,7 @@ find . -name "*.map.1" -exec rm {} \;
 
 # php 8.1
 cd $AMPACHEDIR/releases/5/php81
+git clean -fx
 rm -rf ./composer.lock vendor/* public/lib/components/* && php8.1 $COMPOSERPATH install
 php8.1 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -161,6 +166,7 @@ cp -rf $AMPACHEDIR/extras/prettyphoto/* ./public/lib/components/prettyphoto
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/5/php81_squashed
+git clean -fx
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php8.1 $COMPOSERPATH install
 php8.1 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -173,6 +179,7 @@ find . -name "*.map.1" -exec rm {} \;
 # php 8.2
 cd $AMPACHEDIR/releases/5/php82
 cp -f $AMPACHEDIR/extras/composer_php8.2.json ./composer.json
+git clean -fx
 rm -rf ./composer.lock vendor/* public/lib/components/* && php8.2 $COMPOSERPATH install
 php8.2 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
@@ -184,6 +191,7 @@ find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/5/php82_squashed
 cp -f $AMPACHEDIR/extras/composer_php8.2_squashed.json ./composer.json
+git clean -fx
 rm -rf ./composer.lock vendor/* ./lib/components/* ./docker/ && php8.2 $COMPOSERPATH install
 php8.2 $COMPOSERPATH install
 find . -xtype l -exec rm {} \;
