@@ -435,7 +435,7 @@ md5sum ./ampache-${RELEASEVERSION}_client.zip
 echo
 echo "## Zip Version information"
 echo
-echo "If you aren't familiar which the project make sure you know [which zip](https://github.com/ampache/ampache/wiki/which-zip) you need to download."
+echo "If you aren't familiar which the project make sure you know [which zip](https://ampache.org/docs/information/which-zip) you need to download."
 echo
 
 # go home
