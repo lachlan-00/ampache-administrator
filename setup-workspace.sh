@@ -54,10 +54,18 @@ if [ -f $AMPACHEDIR/ampache-master/composer.lock ]; then
   rm $AMPACHEDIR/ampache-master/composer.lock
 fi
 cd $AMPACHEDIR/ampache-master && php $COMPOSERPATH install && cd $AMPACHEDIR
-if [ -f $AMPACHEDIR/ampache-squashed/composer.lock ]; then
-  rm $AMPACHEDIR/ampache-squashed/composer.lock
+if [ -f $AMPACHEDIR/ampache-patch7/composer.lock ]; then
+  rm $AMPACHEDIR/ampache-patch7/composer.lock
 fi
-cd $AMPACHEDIR/ampache-squashed && php $COMPOSERPATH install && cd $AMPACHEDIR
+cd $AMPACHEDIR/ampache-patch7 && php $COMPOSERPATH install && cd $AMPACHEDIR
+if [ -f $AMPACHEDIR/ampache-squashed7/composer.lock ]; then
+  rm $AMPACHEDIR/ampache-squashed7/composer.lock
+fi
+cd $AMPACHEDIR/ampache-squashed7 && php $COMPOSERPATH install && cd $AMPACHEDIR
+if [ -f $AMPACHEDIR/ampache-client7/composer.lock ]; then
+  rm $AMPACHEDIR/ampache-client7/composer.lock
+fi
+cd $AMPACHEDIR/ampache-client7 && php $COMPOSERPATH install && cd $AMPACHEDIR
 
 # AMPACHE 5
 if [ ! -d $AMPACHEDIR/ampache-patch5 ]; then
