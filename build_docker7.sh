@@ -32,7 +32,7 @@ if [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "all" ]; then
 fi
 
 # NOSQL
-if [ $BRANCH = "nosql" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "all" ]; then
+if [ $BRANCH = "nosql" ] || [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "all" ]; then
   if [ ! -d $AMPACHEDIR/docker/ampache-docker-nosql/ ]; then
     cd $AMPACHEDIR/docker && git clone -b nosql https://github.com/ampache/ampache-docker.git ampache-docker-nosql
   fi
@@ -56,7 +56,7 @@ if [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "all" ]; then
 fi
 
 # CLIENT NOSQL
-if [ $BRANCH = "nosql" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "all" ]; then
+if [ $BRANCH = "nosql" ] || [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] ||  [ $BRANCH = "all" ]; then
   if [ ! -d $AMPACHEDIR/docker/ampache-docker-client-nosql/ ]; then
     cd $AMPACHEDIR/docker && git clone -b client-nosql https://github.com/ampache/ampache-docker.git ampache-docker-client-nosql
   fi
