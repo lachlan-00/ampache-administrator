@@ -5,6 +5,7 @@ import json
 import os
 import re
 import sys
+import time
 import xmltodict
 import urllib.parse
 
@@ -17,15 +18,28 @@ else:
     SLASH = '/'
 
 # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/collection.bru
-MYUSERNAME = '' # filled in by setup_ampache
-TOKEN = 'dca53349768c8c9f5442b4de9f1611e86ac8e08a6b7b84a7dcfec1f7476601c2'
-URL = 'https://ampache.lachlandewaard.org'
-DEMOPASSWORD = '*Su$]Qr6~w"Vs@f'
-#TOKEN = '31cf2a285fe139abef86e7f49728b0e6c8da5b828bf742445451a631ba8ad7d0'
-#URL = 'http://localhost:8989'
-#DEMOPASSWORD = 'demodemo'
+MYUSERNAME = 'user' # filled in by setup_ampache
+PASSWORD = "demodemo"
+TOKEN = "31cf2a285fe139abef86e7f49728b0e6c8da5b828bf742445451a631ba8ad7d0"
+URL = 'http://localhost:8989'
+DEMOPASSWORD = 'demodemo'
+try:
+    length = len(sys.argv)
+    if 1 < length and sys.argv[1].startswith("http"):
+        URL = sys.argv[1]
+    if 2 < length:
+        TOKEN = sys.argv[2]
+    if 3 < length:
+        MYUSERNAME = sys.argv[3]
+    if 4 < length:
+        if sys.argv[4] == '1':
+            ENABLEDEBUG = False
+    if 5 < length:
+        release_version = sys.argv[5]
+except IndexError:
+    pass
 
-DEMOUSERTOKEN = '3ab68f7d351d09cf7c0c7a3f3e247e1546e0271a6f55b09d064e6179090f343f'
+DEMOUSERTOKEN = 'e131647f22af624963e273c63659da1451d4e7f52442ec5362e660f9628bd2da'
 
 CATALOGACTION = 'add_to_catalog'
 
@@ -53,7 +67,7 @@ RUNOPENSUBSONIC = True
 
 try:
     length = len(sys.argv)
-    if length > 1:
+    if length >= 1:
         RUN6 = False
         RUN5 = False
         RUN4 = False
@@ -82,11 +96,19 @@ class AmpacheRunner:
     def __init__(self):
         self.ampache_connection = ampache.API()
 
+        self.ampache_connection.set_debug(False)
+
         # Not needed when using a bearer token
         #TOKEN = ampache_connection.encrypt_string('apikey', 'username')
 
         self.ampache_connection.set_url(URL)
-        self.ampache_connection.set_bearer_token(TOKEN)
+        if not TOKEN:
+            mytime = int(time.time())
+            self.ampache_connection.set_user("user")
+            encrypted_key = self.ampache_connection.encrypt_password(PASSWORD, mytime)
+            self.ampache_connection.set_bearer_token(encrypted_key)
+        else:
+            self.ampache_connection.set_bearer_token(TOKEN)
 
         self.headers = {'Authorization': f'Bearer {TOKEN}'}
         self.demoheaders = {'Authorization': f'Bearer {DEMOUSERTOKEN}'}
@@ -103,8 +125,8 @@ class AmpacheRunner:
         self.songid2 = '17'
         self.playlistid = '8'
         self.videoid = '1'
-        self.podcastid = '5'
-        self.podcastepisodeid = '27'
+        self.podcastid = '1'
+        self.podcastepisodeid = '1'
         self.livestreamid = '1'
         self.albumartistid = '43'
         self.shareid = '4'
@@ -160,7 +182,7 @@ class AmpacheRunner:
         self.cleanup()
 
     def setup_ampache(self):
-        self.ampache_connection.set_debug(False)
+        self.ampache_connection.set_debug(True)
 
         api_version = '6.7.3'
         api_format = 'json'
@@ -183,7 +205,7 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=catalogs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
         for catalog in response['catalog']:
-            if catalog['gather_types'] == 'music':
+            if catalog['gather_types'] == 'music' and catalog['name'] != 'upload':
                 self.musiccatalogid = catalog['id']
                 continue
             if catalog['gather_types'] == 'podcast':
@@ -270,8 +292,14 @@ class AmpacheRunner:
 
         api_url = f"{URL}/server/{api_format}.server.php?action=user_playlists&version={api_version}&sort=rand"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
-        self.playlistid = response['playlist'][0]['id']
-        self.playlistname = urllib.parse.quote_plus(response['playlist'][1]['name'])
+        try:
+            self.playlistid = response['playlist'][0]['id']
+            self.playlistname = urllib.parse.quote_plus(response['playlist'][0]['name'])
+        except (KeyError, IndexError, TypeError):
+            api_url = f"{URL}/server/{api_format}.server.php?action=playlist_create&name=Example%20Playlist&type=private&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+            self.playlistid = response['id']
+            pass
 
         api_url = f"{URL}/server/{api_format}.server.php?action=shares&version={api_version}&sort=rand"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -279,15 +307,24 @@ class AmpacheRunner:
 
         api_url = f"{URL}/server/{api_format}.server.php?action=videos&version={api_version}&sort=rand"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
-        self.videoid = response['video'][0]['id']
+        try:
+            self.videoid = response['video'][0]['id']
+        except (KeyError, IndexError, TypeError):
+            pass
 
         api_url = f"{URL}/server/{api_format}.server.php?action=podcasts&version={api_version}&sort=rand"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
-        self.podcastid = response['podcast'][0]['id']
+        try:
+            self.podcastid = response['podcast'][0]['id']
+        except (KeyError, IndexError, TypeError):
+            pass
 
         api_url = f"{URL}/server/{api_format}.server.php?action=podcast&filter={self.podcastid}&include=1&version={api_version}&sort=rand"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
-        self.podcastepisodeid = response['podcast_episode'][0]['id']
+        try:
+            self.podcastepisodeid = response['podcast_episode'][0]['id']
+        except (KeyError, IndexError, TypeError):
+            pass
 
         api_url = f"{URL}/server/{api_format}.server.php?action=search&operator=and&type=song&offset=0&limit=4&random=1&rule_1=lyrics&rule_1_operator=5&rule_1_input=&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -657,6 +694,10 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-artist.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-artist.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-artist_albums.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artist_albums&filter={self.artistid}&offset=0&limit=4&version={api_version}"
@@ -1115,6 +1156,8 @@ class AmpacheRunner:
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-podcast_episodes.bru
         if 'error' in response and response["error"]["code"] == "405":
             print("Not Implemented podcast_episodes " + api_version)
+        elif not 'podcast_episode' in response:
+            pass
         else:
             podcastepisodeid = response["podcast_episode"][0]["id"]
 
@@ -1613,6 +1656,10 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-artist.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-artist_albums.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artist_albums&filter={self.artistid}&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -2070,6 +2117,8 @@ class AmpacheRunner:
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-podcast_episodes.bru
         if 'error' in response and response["error"]["code"] == "405":
             print("Not Implemented podcast_episodes " + api_version)
+        elif not 'podcast_episode' in response:
+            pass
         else:
             podcastepisodeid = response[0]["id"]
 
@@ -2562,6 +2611,10 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-artist.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-artist_albums.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artist_albums&filter={self.artistid}&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -3019,6 +3072,8 @@ class AmpacheRunner:
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-podcast_episodes.bru
         if 'error' in response and response["error"]["code"] == "405":
             print("Not Implemented podcast_episodes " + api_version)
+        elif not 'podcast_episode' in response:
+            pass
         else:
             podcastepisodeid = response["podcast_episode"][0]["id"]
 
@@ -3515,6 +3570,10 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-artist.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-artist_albums.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artist_albums&filter={self.artistid}&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -3972,6 +4031,8 @@ class AmpacheRunner:
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-podcast_episodes.bru
         if 'error' in response and response["error"]["errorCode"] == "4705":
             print("Not Implemented podcast_episodes " + api_version)
+        elif not 'podcast_episode' in response:
+            pass
         else:
             podcastepisodeid = response["podcast_episode"][0]["id"]
 
@@ -4464,6 +4525,10 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-artist.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-artist_albums.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artist_albums&filter={self.artistid}&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -4921,6 +4986,8 @@ class AmpacheRunner:
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-podcast_episodes.bru
         if 'error' in response and response["error"]["errorCode"] == "4705":
             print("Not Implemented podcast_episodes " + api_version)
+        elif not 'podcast_episode' in response:
+            pass
         else:
             podcastepisodeid = response["podcast_episode"][0]["id"]
 
@@ -5210,6 +5277,21 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=ping&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (no auth)", {}), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/preference/json-preference_create.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=preference_create&filter=temp_pref_{api_format}&type=boolean&default=0&category=interface&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        if 'error' in response and response["error"]["errorCode"] == "4705":
+            print("Not Implemented preference_create " + api_version)
+        else:
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/preference/json-preference_edit.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=preference_edit&filter=temp_pref_{api_format}&value=1&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/preference/json-preference_delete.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=preference_delete&filter=temp_pref_{api_format}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/bookmark/json-bookmark_create.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=bookmark_create&filter={self.songid}&type=song&position=0&client=python3-ampache&include=False&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -5494,6 +5576,10 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-artist.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-artist.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-artist_albums.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artist_albums&filter={self.artistid}&offset=0&limit=4&version={api_version}"
@@ -5937,6 +6023,10 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=playlists&filter={self.playlistname}&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-smartlists.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=smartlists&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-podcast.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=podcast&filter=1&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -5952,6 +6042,8 @@ class AmpacheRunner:
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-podcast_episodes.bru
         if 'error' in response and response["error"]["errorCode"] == "4705":
             print("Not Implemented podcast_episodes " + api_version)
+        elif not 'podcast_episode' in response:
+            pass
         else:
             podcastepisodeid = response["podcast_episode"][0]["id"]
 
@@ -6216,6 +6308,21 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/0_setup/xml-ping.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=ping&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (no auth)", {}), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/preference/json-preference_create.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=preference_create&filter=temp_pref_{api_format}&type=boolean&default=0&category=interface&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        if 'error' in response and response["error"]["errorCode"] == "4705":
+            print("Not Implemented preference_create " + api_version)
+        else:
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/preference/json-preference_edit.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=preference_edit&filter=temp_pref_{api_format}&value=1&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/preference/json-preference_delete.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=preference_delete&filter=temp_pref_{api_format}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/create/bookmark/xml-bookmark_create.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=bookmark_create&filter={self.songid}&type=song&position=0&client=python3-ampache&include=False&version={api_version}"
@@ -6506,6 +6613,10 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-artist.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=albums&include=songs&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include songs,albums)", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-artist.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=artist&filter={self.artistid}&include=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-artist_albums.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=artist_albums&filter={self.artistid}&offset=0&limit=4&version={api_version}"
@@ -6949,6 +7060,10 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=playlists&filter={self.playlistname}&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-smartlists.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=smartlists&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-podcast.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=podcast&filter=1&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -6964,6 +7079,8 @@ class AmpacheRunner:
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-podcast_episodes.bru
         if 'error' in response and response["error"]["errorCode"] == "4705":
             print("Not Implemented podcast_episodes " + api_version)
+        elif not 'podcast_episode' in response:
+            pass
         else:
             podcastepisodeid = response["podcast_episode"][0]["id"]
 
@@ -7154,32 +7271,38 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/live_stream/json-getInternetRadioStations (GET CREATED).bru
-        for radio in response["subsonic-response"]["internetRadioStations"]["internetRadioStation"]:
-            if radio["name"] == "4ZZZ Community Radio":
-                createdradio = radio["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            for radio in response["subsonic-response"]["internetRadioStations"]["internetRadioStation"]:
+                if radio["name"] == "4ZZZ Community Radio":
+                    createdradio = radio["id"]
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/live_stream/json-updateInternetRadioStation.bru
-                api_url = f"{URL}/rest/updateInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&streamUrl={RADIOSTREAMURL}&name={STREAMNAME}&homepageUrl={RADIOHOMEURL}&id={createdradio}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/live_stream/json-updateInternetRadioStation.bru
+                    api_url = f"{URL}/rest/updateInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&streamUrl={RADIOSTREAMURL}&name={STREAMNAME}&homepageUrl={RADIOHOMEURL}&id={createdradio}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/live_stream/json-deleteInternetRadioStation.bru
-                api_url = f"{URL}/rest/deleteInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/live_stream/json-deleteInternetRadioStation.bru
+                    api_url = f"{URL}/rest/deleteInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/playlist/json-createPlaylist.bru
         api_url = f"{URL}/rest/createPlaylist.view?v=1.16.1&c=Ampache&f={api_format}&name=testcreate&songId={SONGPREFIX}{self.songid}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/playlist/json-createPlaylist.bru
-        createdplaylist = response["subsonic-response"]["playlist"]["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            createdplaylist = response["subsonic-response"]["playlist"]["id"]
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/playlist/json-updatePlaylist.bru
-        api_url = f"{URL}/rest/updatePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&playlistId={createdplaylist}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/playlist/json-updatePlaylist.bru
+            api_url = f"{URL}/rest/updatePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&playlistId={createdplaylist}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/playlist/json-deletePlaylist.bru
-        api_url = f"{URL}/rest/deletePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&id={createdplaylist}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/playlist/json-deletePlaylist.bru
+            api_url = f"{URL}/rest/deletePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&id={createdplaylist}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/podcast/json-createPodcastChannel.bru
         api_url = f"{URL}/rest/createPodcastChannel.view?v=1.16.1&c=Ampache&f={api_format}&url={PODCASTFEEDURL}"
@@ -7190,43 +7313,49 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/podcast/json-getPodcasts (GET CREATED).bru
-        for channel in response["subsonic-response"]["podcasts"]["channel"]:
-            if channel["title"] == "Dolly Parton's America":
-                createdpodcast = channel["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            for channel in response["subsonic-response"]["podcasts"]["channel"]:
+                if channel["title"] == "Dolly Parton's America":
+                    createdpodcast = channel["id"]
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/podcast/json-getPodcasts (GET EPISODE).bru
-                api_url = f"{URL}/rest/getPodcasts.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}&includeEpisodes=1"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/podcast/json-getPodcasts (GET EPISODE).bru
+                    api_url = f"{URL}/rest/getPodcasts.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}&includeEpisodes=1"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/podcast/json-getPodcasts (GET EPISODE).bru
-                createdpodcastepisode = response["subsonic-response"]["podcasts"]["channel"][0]["episode"][0]["id"]
+                    # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/podcast/json-getPodcasts (GET EPISODE).bru
+                    createdpodcastepisode = response["subsonic-response"]["podcasts"]["channel"][0]["episode"][0]["id"]
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/podcast/json-downloadPodcastEpisode.bru
-                api_url = f"{URL}/rest/downloadPodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastepisode}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/podcast/json-downloadPodcastEpisode.bru
+                    api_url = f"{URL}/rest/downloadPodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastepisode}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/podcast/json-deletePodcastEpisode.bru
-                api_url = f"{URL}/rest/deletePodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastepisode}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/podcast/json-deletePodcastEpisode.bru
+                    api_url = f"{URL}/rest/deletePodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastepisode}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/podcast/json-deletePodcastChannel.bru
-                api_url = f"{URL}/rest/deletePodcastChannel.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/podcast/json-deletePodcastChannel.bru
+                    api_url = f"{URL}/rest/deletePodcastChannel.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/share/json-createShare.bru
         api_url = f"{URL}/rest/createShare.view?v=1.16.1&c=Ampache&f={api_format}&id={SONGPREFIX}{self.songid}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/share/json-createShare.bru
-        createdshare = response["subsonic-response"]["shares"]["share"][0]["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            createdshare = response["subsonic-response"]["shares"]["share"][0]["id"]
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/share/json-updateShare.bru
-        api_url = f"{URL}/rest/updateShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/share/json-updateShare.bru
+            api_url = f"{URL}/rest/updateShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/share/json-deleteShare.bru
-        api_url = f"{URL}/rest/deleteShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/create/share/json-deleteShare.bru
+            api_url = f"{URL}/rest/deleteShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/json-addChatMessage.bru
         api_url = f"{URL}/rest/addChatMessage.view?v=1.16.1&c=Ampache&f={api_format}&message=Api%20Script%20Testing"
@@ -7332,6 +7461,10 @@ class AmpacheRunner:
         api_url = f"{URL}/rest/getNewestPodcasts.view?v=1.16.1&c=Ampache&f={api_format}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/json-scrobble.bru
+        api_url = f"{URL}/rest/scrobble.view?v=1.16.1&c=Ampache&f={api_format}&id={SONGPREFIX}{self.songid}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/json-getNowPlaying.bru
         api_url = f"{URL}/rest/getNowPlaying.view?v=1.16.1&c=Ampache&f={api_format}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
@@ -7374,10 +7507,6 @@ class AmpacheRunner:
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/json-getSong.bru
         api_url = f"{URL}/rest/getSong.view?v=1.16.1&c=Ampache&f={api_format}&id={SONGPREFIX}{self.songid}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
-
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/json-scrobble.bru
-        api_url = f"{URL}/rest/scrobble.view?v=1.16.1&c=Ampache&f={api_format}&id={SONGPREFIX}{self.songid}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/json/json-getSongsByGenre.bru
@@ -7488,32 +7617,38 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/live_stream/xml-getInternetRadioStations (GET CREATED).bru
-        for radio in response["subsonic-response"]["internetRadioStations"]["internetRadioStation"]:
-            if radio["name"] == "4ZZZ Community Radio":
-                createdradio = radio["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            for radio in response["subsonic-response"]["internetRadioStations"]["internetRadioStation"]:
+                if radio["name"] == "4ZZZ Community Radio":
+                    createdradio = radio["id"]
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/live_stream/xml-updateInternetRadioStation.bru
-                api_url = f"{URL}/rest/updateInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}&streamUrl={RADIOSTREAMURL}&name={STREAMNAME}&homepageUrl={RADIOHOMEURL}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/live_stream/xml-updateInternetRadioStation.bru
+                    api_url = f"{URL}/rest/updateInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}&streamUrl={RADIOSTREAMURL}&name={STREAMNAME}&homepageUrl={RADIOHOMEURL}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/live_stream/xml-deleteInternetRadioStation.bru
-                api_url = f"{URL}/rest/deleteInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/live_stream/xml-deleteInternetRadioStation.bru
+                    api_url = f"{URL}/rest/deleteInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/playlist/xml-createPlaylist.bru
         api_url = f"{URL}/rest/createPlaylist.view?v=1.16.1&c=Ampache&f={api_format}&name=testcreate&songId={SONGPREFIX}{self.songid}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/playlist/xml-createPlaylist.bru
-        createdplaylist = response["subsonic-response"]["playlist"]["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            createdplaylist = response["subsonic-response"]["playlist"]["id"]
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/playlist/xml-updatePlaylist.bru
-        api_url = f"{URL}/rest/updatePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&playlistId={createdplaylist}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/playlist/xml-updatePlaylist.bru
+            api_url = f"{URL}/rest/updatePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&playlistId={createdplaylist}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/playlist/xml-deletePlaylist.bru
-        api_url = f"{URL}/rest/deletePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&id={createdplaylist}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/playlist/xml-deletePlaylist.bru
+            api_url = f"{URL}/rest/deletePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&id={createdplaylist}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/podcast/xml-createPodcastChannel.bru
         api_url = f"{URL}/rest/createPodcastChannel.view?v=1.16.1&c=Ampache&f={api_format}&url={PODCASTFEEDURL}"
@@ -7524,43 +7659,49 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/podcast/xml-getPodcasts (GET CREATED).bru
-        for channel in response["subsonic-response"]["podcasts"]["channel"]:
-            if channel["title"] == "Dolly Parton's America":
-                createdpodcast = channel["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            for channel in response["subsonic-response"]["podcasts"]["channel"]:
+                if channel["title"] == "Dolly Parton's America":
+                    createdpodcast = channel["id"]
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/podcast/xml-getPodcasts (GET EPISODE).bru
-                api_url = f"{URL}/rest/getPodcasts.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}&includeEpisodes=1"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/podcast/xml-getPodcasts (GET EPISODE).bru
+                    api_url = f"{URL}/rest/getPodcasts.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}&includeEpisodes=1"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/podcast/xml-getPodcasts (GET EPISODE).bru
-                createdpodcastepisode = response["subsonic-response"]["podcasts"]["channel"]["episode"][0]["id"]
+                    # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/podcast/xml-getPodcasts (GET EPISODE).bru
+                    createdpodcastepisode = response["subsonic-response"]["podcasts"]["channel"]["episode"][0]["id"]
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/podcast/xml-downloadPodcastEpisode.bru
-                api_url = f"{URL}/rest/downloadPodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastepisode}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/podcast/xml-downloadPodcastEpisode.bru
+                    api_url = f"{URL}/rest/downloadPodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastepisode}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/podcast/xml-deletePodcastEpisode.bru
-                api_url = f"{URL}/rest/deletePodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastepisode}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/podcast/xml-deletePodcastEpisode.bru
+                    api_url = f"{URL}/rest/deletePodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastepisode}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/podcast/xml-deletePodcastChannel.bru
-                api_url = f"{URL}/rest/deletePodcastChannel.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/podcast/xml-deletePodcastChannel.bru
+                    api_url = f"{URL}/rest/deletePodcastChannel.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/share/xml-createShare.bru
         api_url = f"{URL}/rest/createShare.view?v=1.16.1&c=Ampache&f={api_format}&id={SONGPREFIX2}{self.songid2}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/share/xml-createShare.bru
-        createdshare = response["subsonic-response"]["shares"]["share"]["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            createdshare = response["subsonic-response"]["shares"]["share"]["id"]
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/share/xml-updateShare.bru
-        api_url = f"{URL}/rest/updateShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/share/xml-updateShare.bru
+            api_url = f"{URL}/rest/updateShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/share/xml-deleteShare.bru
-        api_url = f"{URL}/rest/deleteShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/create/share/xml-deleteShare.bru
+            api_url = f"{URL}/rest/deleteShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/xml-addChatMessage.bru
         api_url = f"{URL}/rest/addChatMessage.view?v=1.16.1&c=Ampache&f={api_format}&message=Api%20Script%20Testing"
@@ -7611,7 +7752,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/xml-getArtist.bru
-        api_url = f"{URL}/rest/getArtist.view?v=1.16.1&c=Ampache&f={api_format}&id={SONGPREFIX2}{self.songid2}"
+        api_url = f"{URL}/rest/getArtist.view?v=1.16.1&c=Ampache&f={api_format}&id={ARTISTPREFIX}{self.artistid}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/xml-getArtistInfo.bru
@@ -7662,6 +7803,10 @@ class AmpacheRunner:
         api_url = f"{URL}/rest/getNewestPodcasts.view?v=1.16.1&c=Ampache&f={api_format}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/xml-scrobble.bru
+        api_url = f"{URL}/rest/scrobble.view?v=1.16.1&c=Ampache&f={api_format}&id={SONGPREFIX}{self.songid}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/xml-getNowPlaying.bru
         api_url = f"{URL}/rest/getNowPlaying.view?v=1.16.1&c=Ampache&f={api_format}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
@@ -7704,10 +7849,6 @@ class AmpacheRunner:
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/xml-getSong.bru
         api_url = f"{URL}/rest/getSong.view?v=1.16.1&c=Ampache&f={api_format}&id={SONGPREFIX}{self.songid}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
-
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/xml-scrobble.bru
-        api_url = f"{URL}/rest/scrobble.view?v=1.16.1&c=Ampache&f={api_format}&id={SONGPREFIX}{self.songid}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/opensubsonic/xml/xml-getSongsByGenre.bru
@@ -7848,32 +7989,38 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/live_stream/json-getInternetRadioStations (GET CREATED).bru
-        for radio in response["subsonic-response"]["internetRadioStations"]["internetRadioStation"]:
-            if radio["name"] == "4ZZZ Community Radio":
-                createdradio = radio["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            for radio in response["subsonic-response"]["internetRadioStations"]["internetRadioStation"]:
+                if radio["name"] == "4ZZZ Community Radio":
+                    createdradio = radio["id"]
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/live_stream/json-updateInternetRadioStation.bru
-                api_url = f"{URL}/rest/updateInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}&streamUrl={RADIOSTREAMURL}&name={STREAMNAME}&homepageUrl={RADIOHOMEURL}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/live_stream/json-updateInternetRadioStation.bru
+                    api_url = f"{URL}/rest/updateInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}&streamUrl={RADIOSTREAMURL}&name={STREAMNAME}&homepageUrl={RADIOHOMEURL}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/live_stream/json-deleteInternetRadioStation.bru
-                api_url = f"{URL}/rest/deleteInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/live_stream/json-deleteInternetRadioStation.bru
+                    api_url = f"{URL}/rest/deleteInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/playlist/json-createPlaylist.bru
         api_url = f"{URL}/rest/createPlaylist.view?v=1.16.1&c=Ampache&f={api_format}&name=testcreate&songId={OLD_SONG_ID2}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/playlist/json-createPlaylist.bru
-        createdplaylist = response["subsonic-response"]["playlist"]["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            createdplaylist = response["subsonic-response"]["playlist"]["id"]
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/playlist/json-updatePlaylist.bru
-        api_url = f"{URL}/rest/updatePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&playlistId={createdplaylist}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/playlist/json-updatePlaylist.bru
+            api_url = f"{URL}/rest/updatePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&playlistId={createdplaylist}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/playlist/json-deletePlaylist.bru
-        api_url = f"{URL}/rest/deletePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&id={createdplaylist}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/playlist/json-deletePlaylist.bru
+            api_url = f"{URL}/rest/deletePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&id={createdplaylist}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/podcast/json-createPodcastChannel.bru
         api_url = f"{URL}/rest/createPodcastChannel.view?v=1.16.1&c=Ampache&f={api_format}&url={PODCASTFEEDURL}"
@@ -7884,43 +8031,49 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/podcast/json-getPodcasts (GET CREATED).bru
-        for channel in response["subsonic-response"]["podcasts"]["channel"]:
-            if channel["title"] == "Dolly Parton's America":
-                createdpodcast = channel["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            for channel in response["subsonic-response"]["podcasts"]["channel"]:
+                if channel["title"] == "Dolly Parton's America":
+                    createdpodcast = channel["id"]
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/podcast/json-getPodcasts (GET EPISODE).bru
-                api_url = f"{URL}/rest/getPodcasts.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}&includeEpisodes=1"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/podcast/json-getPodcasts (GET EPISODE).bru
+                    api_url = f"{URL}/rest/getPodcasts.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}&includeEpisodes=1"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/podcast/json-getPodcasts (GET EPISODE).bru
-                createdpodcastEPISODE = response["subsonic-response"]["podcasts"]["channel"][0]["episode"][0]["id"]
+                    # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/podcast/json-getPodcasts (GET EPISODE).bru
+                    createdpodcastEPISODE = response["subsonic-response"]["podcasts"]["channel"][0]["episode"][0]["id"]
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/podcast/json-downloadPodcastEpisode.bru
-                api_url = f"{URL}/rest/downloadPodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastEPISODE}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/podcast/json-downloadPodcastEpisode.bru
+                    api_url = f"{URL}/rest/downloadPodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastEPISODE}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/podcast/json-deletePodcastEpisode.bru
-                api_url = f"{URL}/rest/deletePodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastEPISODE}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/podcast/json-deletePodcastEpisode.bru
+                    api_url = f"{URL}/rest/deletePodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastEPISODE}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/podcast/json-deletePodcastChannel.bru
-                api_url = f"{URL}/rest/deletePodcastChannel.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/podcast/json-deletePodcastChannel.bru
+                    api_url = f"{URL}/rest/deletePodcastChannel.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/share/json-createShare.bru
         api_url = f"{URL}/rest/createShare.view?v=1.16.1&c=Ampache&f={api_format}&id={OLD_SONG_ID2}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/share/json-createShare.bru
-        createdshare = response["subsonic-response"]["shares"]["share"][0]["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            createdshare = response["subsonic-response"]["shares"]["share"][0]["id"]
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/share/json-updateShare.bru
-        api_url = f"{URL}/rest/updateShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/share/json-updateShare.bru
+            api_url = f"{URL}/rest/updateShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/share/json-deleteShare.bru
-        api_url = f"{URL}/rest/deleteShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/create/share/json-deleteShare.bru
+            api_url = f"{URL}/rest/deleteShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/json-addChatMessage.bru
         api_url = f"{URL}/rest/addChatMessage.view?v=1.16.1&c=Ampache&f={api_format}&message=Api%20Script%20Testing"
@@ -8026,6 +8179,10 @@ class AmpacheRunner:
         api_url = f"{URL}/rest/getNewestPodcasts.view?v=1.16.1&c=Ampache&f={api_format}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/json-scrobble.bru
+        api_url = f"{URL}/rest/scrobble.view?v=1.16.1&c=Ampache&f={api_format}&id={OLD_SONG_ID}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/json-getNowPlaying.bru
         api_url = f"{URL}/rest/getNowPlaying.view?v=1.16.1&c=Ampache&f={api_format}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
@@ -8068,10 +8225,6 @@ class AmpacheRunner:
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/json-getSong.bru
         api_url = f"{URL}/rest/getSong.view?v=1.16.1&c=Ampache&f={api_format}&id={OLD_SONG_ID}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
-
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/json-scrobble.bru
-        api_url = f"{URL}/rest/scrobble.view?v=1.16.1&c=Ampache&f={api_format}&id={OLD_SONG_ID}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/json/json-getSongsByGenre.bru
@@ -8183,32 +8336,38 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/live_stream/xml-getInternetRadioStations (GET CREATED).bru
-        for radio in response["subsonic-response"]["internetRadioStations"]["internetRadioStation"]:
-            if radio["name"] == "4ZZZ Community Radio":
-                createdradio = radio["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            for radio in response["subsonic-response"]["internetRadioStations"]["internetRadioStation"]:
+                if radio["name"] == "4ZZZ Community Radio":
+                    createdradio = radio["id"]
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/live_stream/xml-updateInternetRadioStation.bru
-                api_url = f"{URL}/rest/updateInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}&streamUrl={RADIOSTREAMURL}&name={STREAMNAME}&homepageUrl={RADIOHOMEURL}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/live_stream/xml-updateInternetRadioStation.bru
+                    api_url = f"{URL}/rest/updateInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}&streamUrl={RADIOSTREAMURL}&name={STREAMNAME}&homepageUrl={RADIOHOMEURL}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/live_stream/xml-deleteInternetRadioStation.bru
-                api_url = f"{URL}/rest/deleteInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/live_stream/xml-deleteInternetRadioStation.bru
+                    api_url = f"{URL}/rest/deleteInternetRadioStation.view?v=1.16.1&c=Ampache&f={api_format}&id={createdradio}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/playlist/xml-createPlaylist.bru
         api_url = f"{URL}/rest/createPlaylist.view?v=1.16.1&c=Ampache&f={api_format}&name=testcreate&songId={OLD_SONG_ID}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/playlist/xml-createPlaylist.bru
-        createdplaylist = response["subsonic-response"]["playlist"]["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            createdplaylist = response["subsonic-response"]["playlist"]["id"]
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/playlist/xml-updatePlaylist.bru
-        api_url = f"{URL}/rest/updatePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&playlistId={createdplaylist}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/playlist/xml-updatePlaylist.bru
+            api_url = f"{URL}/rest/updatePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&playlistId={createdplaylist}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/playlist/xml-deletePlaylist.bru
-        api_url = f"{URL}/rest/deletePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&id={createdplaylist}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/playlist/xml-deletePlaylist.bru
+            api_url = f"{URL}/rest/deletePlaylist.view?v=1.16.1&c=Ampache&f={api_format}&id={createdplaylist}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/podcast/xml-createPodcastChannel.bru
         api_url = f"{URL}/rest/createPodcastChannel.view?v=1.16.1&c=Ampache&f={api_format}&url={PODCASTFEEDURL}"
@@ -8219,43 +8378,49 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/podcast/xml-getPodcasts (GET CREATED).bru
-        for channel in response["subsonic-response"]["podcasts"]["channel"]:
-            if channel["title"] == "Dolly Parton's America":
-                createdpodcast = channel["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            for channel in response["subsonic-response"]["podcasts"]["channel"]:
+                if channel["title"] == "Dolly Parton's America":
+                    createdpodcast = channel["id"]
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/podcast/xml-getPodcasts (GET EPISODE).bru
-                api_url = f"{URL}/rest/getPodcasts.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}&includeEpisodes=1"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/podcast/xml-getPodcasts (GET EPISODE).bru
+                    api_url = f"{URL}/rest/getPodcasts.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}&includeEpisodes=1"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/podcast/xml-getPodcasts (GET EPISODE).bru
-                createdpodcastEPISODE = response["subsonic-response"]["podcasts"]["channel"]["episode"][0]["id"]
+                    # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/podcast/xml-getPodcasts (GET EPISODE).bru
+                    createdpodcastEPISODE = response["subsonic-response"]["podcasts"]["channel"]["episode"][0]["id"]
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/podcast/xml-downloadPodcastEpisode.bru
-                api_url = f"{URL}/rest/downloadPodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastEPISODE}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/podcast/xml-downloadPodcastEpisode.bru
+                    api_url = f"{URL}/rest/downloadPodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastEPISODE}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/podcast/xml-deletePodcastEpisode.bru
-                api_url = f"{URL}/rest/deletePodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastEPISODE}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/podcast/xml-deletePodcastEpisode.bru
+                    api_url = f"{URL}/rest/deletePodcastEpisode.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcastEPISODE}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-                # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/podcast/xml-deletePodcastChannel.bru
-                api_url = f"{URL}/rest/deletePodcastChannel.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}"
-                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+                    # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/podcast/xml-deletePodcastChannel.bru
+                    api_url = f"{URL}/rest/deletePodcastChannel.view?v=1.16.1&c=Ampache&f={api_format}&id={createdpodcast}"
+                    response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/share/xml-createShare.bru
         api_url = f"{URL}/rest/createShare.view?v=1.16.1&c=Ampache&f={api_format}&id={OLD_SONG_ID2}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/share/xml-createShare.bru
-        createdshare = response["subsonic-response"]["shares"]["share"]["id"]
+        if not 'subsonic-response' in response:
+            pass
+        else:
+            createdshare = response["subsonic-response"]["shares"]["share"]["id"]
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/share/xml-updateShare.bru
-        api_url = f"{URL}/rest/updateShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/share/xml-updateShare.bru
+            api_url = f"{URL}/rest/updateShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/share/xml-deleteShare.bru
-        api_url = f"{URL}/rest/deleteShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/create/share/xml-deleteShare.bru
+            api_url = f"{URL}/rest/deleteShare.view?v=1.16.1&c=Ampache&f={api_format}&id={createdshare}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-addChatMessage.bru
         api_url = f"{URL}/rest/addChatMessage.view?v=1.16.1&c=Ampache&f={api_format}&message=Api%20Script%20Testing"
@@ -8306,7 +8471,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-getArtist.bru
-        api_url = f"{URL}/rest/getArtist.view?v=1.16.1&c=Ampache&f={api_format}&id=100000002"
+        api_url = f"{URL}/rest/getArtist.view?v=1.16.1&c=Ampache&f={api_format}&id={OLD_ARTIST_ID}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-getArtistInfo.bru
@@ -8346,7 +8511,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-getMusicDirectory.bru
-        api_url = f"{URL}/rest/getMusicDirectory.view?v=1.16.1&c=Ampache&f={api_format}&id={self.musiccatalogid}"
+        api_url = f"{URL}/rest/getMusicDirectory.view?v=1.16.1&c=Ampache&f={api_format}&id=mf-{self.musiccatalogid}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-getMusicFolders.bru
@@ -8355,6 +8520,10 @@ class AmpacheRunner:
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-getNewestPodcasts.bru
         api_url = f"{URL}/rest/getNewestPodcasts.view?v=1.16.1&c=Ampache&f={api_format}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-scrobble.bru
+        api_url = f"{URL}/rest/scrobble.view?v=1.16.1&c=Ampache&f={api_format}&id={OLD_SONG_ID}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-getNowPlaying.bru
@@ -8399,10 +8568,6 @@ class AmpacheRunner:
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-getSong.bru
         api_url = f"{URL}/rest/getSong.view?v=1.16.1&c=Ampache&f={api_format}&id={OLD_SONG_ID}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
-
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-scrobble.bru
-        api_url = f"{URL}/rest/scrobble.view?v=1.16.1&c=Ampache&f={api_format}&id={OLD_SONG_ID}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'/rest/([a-zA-Z0-9_]+)\.view', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/subsonic/subsoniclegacy/xml/xml-getSongsByGenre.bru
@@ -8514,7 +8679,7 @@ class AmpacheRunner:
                             '<errorMessage><![CDATA[Invalid Request]]></errorMessage>' in filedata or
                             '"message": "Invalid Request"' in filedata or
                             '"errorMessage": "Invalid Request"' in filedata):
-                        print(f"ERROR invalid request: {files}")
+                        print(f"ERROR invalid request: {docpath} {files}")
                         os.remove(os.path.join(docpath, files))
                         continue
                     if ('<error code="401"><![CDATA[Incorrect object type' in filedata or
