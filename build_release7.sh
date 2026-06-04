@@ -171,50 +171,50 @@ find . -name "*.map.1" -exec rm {} \;
 # php 8.2
 cd $AMPACHEDIR/releases/7/php82
 rm -rf vendor/* public/lib/components/*
-php8.2 $COMPOSERPATH install
-npm install
-npm run build
+php8.2 $COMPOSERPATH install || exit 1
+npm install || exit 1
+npm run build || exit 1
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php82_squashed
 rm -rf vendor/* ./lib/components/* ./docker/
-php8.2 $COMPOSERPATH install
-npm install
-npm run build
+php8.2 $COMPOSERPATH install || exit 1
+npm install || exit 1
+npm run build || exit 1
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php82_client
 rm -rf vendor/* public/client/lib/components/*
-php8.2 $COMPOSERPATH install
-npm install
-npm run build
+php8.2 $COMPOSERPATH install || exit 1
+npm install || exit 1
+npm run build || exit 1
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
 # php 8.3
 cd $AMPACHEDIR/releases/7/php83
 rm -rf vendor/* public/lib/components/*
-php8.3 $COMPOSERPATH install
-npm install
-npm run build
+php8.3 $COMPOSERPATH install || exit 1
+npm install || exit 1
+npm run build || exit 1
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php83_squashed
 rm -rf vendor/* ./lib/components/* ./docker/
-php8.3 $COMPOSERPATH install
-npm install
-npm run build
+php8.3 $COMPOSERPATH install || exit 1
+npm install || exit 1
+npm run build || exit 1
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php83_client
 rm -rf vendor/* public/client/lib/components/*
-php8.3 $COMPOSERPATH install
-npm install
-npm run build
+php8.3 $COMPOSERPATH install || exit 1
+npm install || exit 1
+npm run build || exit 1
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
@@ -223,9 +223,9 @@ sed -i 's/"scn\/phptal": "\^4"/"scn\/phptal": "dev-master"/g' $AMPACHEDIR/releas
 cd $AMPACHEDIR/releases/7/php84
 rm -rf vendor/* public/lib/components/*
 php8.4 $COMPOSERPATH update
-php8.4 $COMPOSERPATH install
-npm install
-npm run build
+php8.4 $COMPOSERPATH install || exit 1
+npm install || exit 1
+npm run build || exit 1
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
@@ -233,9 +233,9 @@ sed -i 's/"scn\/phptal": "\^4"/"scn\/phptal": "dev-master"/g' $AMPACHEDIR/releas
 cd $AMPACHEDIR/releases/7/php84_squashed
 rm -rf vendor/* ./lib/components/* ./docker/
 php8.4 $COMPOSERPATH update
-php8.4 $COMPOSERPATH install
-npm install
-npm run build
+php8.4 $COMPOSERPATH install || exit 1
+npm install || exit 1
+npm run build || exit 1
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
@@ -243,9 +243,9 @@ sed -i 's/"scn\/phptal": "\^4"/"scn\/phptal": "dev-master"/g' $AMPACHEDIR/releas
 cd $AMPACHEDIR/releases/7/php84_client
 rm -rf vendor/* public/client/lib/components/*
 php8.4 $COMPOSERPATH update
-php8.4 $COMPOSERPATH install
-npm install
-npm run build
+php8.4 $COMPOSERPATH install || exit 1
+npm install || exit 1
+npm run build || exit 1
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
@@ -254,9 +254,9 @@ sed -i 's/"scn\/phptal": "\^4"/"scn\/phptal": "dev-master"/g' $AMPACHEDIR/releas
 cd $AMPACHEDIR/releases/7/php85
 rm -rf vendor/* public/lib/components/*
 php8.5 $COMPOSERPATH update
-php8.5 $COMPOSERPATH install
-npm install
-npm run build
+php8.5 $COMPOSERPATH install || exit 1
+npm install || exit 1
+npm run build || exit 1
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
@@ -264,9 +264,9 @@ sed -i 's/"scn\/phptal": "\^4"/"scn\/phptal": "dev-master"/g' $AMPACHEDIR/releas
 cd $AMPACHEDIR/releases/7/php85_squashed
 rm -rf vendor/* ./lib/components/* ./docker/
 php8.5 $COMPOSERPATH update
-php8.5 $COMPOSERPATH install
-npm install
-npm run build
+php8.5 $COMPOSERPATH install || exit 1
+npm install || exit 1
+npm run build || exit 1
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
@@ -274,9 +274,9 @@ sed -i 's/"scn\/phptal": "\^4"/"scn\/phptal": "dev-master"/g' $AMPACHEDIR/releas
 cd $AMPACHEDIR/releases/7/php85_client
 rm -rf vendor/* public/client/lib/components/*
 php8.5 $COMPOSERPATH update
-php8.5 $COMPOSERPATH install
-npm install
-npm run build
+php8.5 $COMPOSERPATH install || exit 1
+npm install || exit 1
+npm run build || exit 1
 find . -xtype l -exec rm {} \;
 find . -name "*.map.1" -exec rm {} \;
 
