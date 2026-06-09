@@ -7,7 +7,7 @@ if [ ! $# -eq 0 ]; then
 fi
 START=$(date)
 
-if [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
+if [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "client" ] || [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
   RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-develop/src/Config/Init/InitializationHandlerConfig.php`
   status=$(curl --head --silent https://github.com/ampache/ampache/releases/download/${RELEASEVERSION}/ampache-${RELEASEVERSION}_all_php8.2.zip | head -n 1)
   if echo "$status" | grep -q 404; then
@@ -52,7 +52,7 @@ if [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] ||  [ $BRANCH = "client" ] |
     rm -rf $AMPACHEDIR/docker/ampache-docker-client
     cd $AMPACHEDIR/docker && git clone -b client https://github.com/ampache/ampache-docker.git ampache-docker-client
   fi
-  cd $AMPACHEDIR/docker/ampache-docker-client/ && git checkout client && git reset --hard origin/client && git pull &&docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:client7 -t ampache/ampache:client${RELEASEVERSION} -t ampache/ampache:client --push . &
+  cd $AMPACHEDIR/docker/ampache-docker-client/ && git checkout client && git reset --hard origin/client && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:client7 -t ampache/ampache:client${RELEASEVERSION} -t ampache/ampache:client --push . &
 fi
 
 # CLIENT NOSQL
