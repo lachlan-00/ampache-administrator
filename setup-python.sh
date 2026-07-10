@@ -2,6 +2,7 @@
 
 AMPACHEDIR=$PWD
 COMPOSERPATH="/usr/local/bin/composer"
+DEVELOPBRANCH="develop8"
 
 if [ ! -f $COMPOSERPATH ]; then
   COMPOSERPATH="$AMPACHEDIR/docker/composer"
@@ -53,3 +54,18 @@ if [ ! -f $AMPACHEDIR/python/python3-ampache6/setup.py ]; then
   rm -rf $AMPACHEDIR/python/python3-ampache6
   cd $AMPACHEDIR/python && git clone -b api6 https://github.com/ampache/python3-ampache.git python3-ampache6
 fi
+if [ ! -f $AMPACHEDIR/python/python3-ampache8/setup.py ]; then
+  rm -rf $AMPACHEDIR/python/python3-ampache8
+  cd $AMPACHEDIR/python && git clone -b api8 https://github.com/ampache/python3-ampache.git python3-ampache8
+fi
+
+if [ ! -d $AMPACHEDIR/ampache-test/ampache ]; then
+  cd $AMPACHEDIR/ampache-test
+  git clone -b $DEVELOPBRANCH https://github.com/ampache/ampache.git ampache
+fi
+
+cd $AMPACHEDIR
+if [ ! -f $AMPACHEDIR/ampache-test/ampache/ampache.cfg.php ]; then
+  cp $AMPACHEDIR/ampache-test/ampache.cfg.php $AMPACHEDIR/ampache-test/ampache/config/ampache.cfg.php
+fi
+

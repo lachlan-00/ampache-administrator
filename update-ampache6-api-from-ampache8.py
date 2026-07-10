@@ -39,6 +39,9 @@ def self_check(folder, find, replace):
 
 shutil.copytree('./ampache-develop8/src/Module/Api', './ampache-develop/src/Module/Api', dirs_exist_ok=True)
 
+os.remove("./ampache-develop/src/Module/Api/Method/Api8/Folder8Method.php")
+os.remove("./ampache-develop/src/Module/Api/Method/Api8/Folders8Method.php")
+
 self_check("./ampache-develop/src/Module/Api", "public const array ", "public const ")
 self_check("./ampache-develop/src/Module/Api", "public const int ", "public const ")
 self_check("./ampache-develop/src/Module/Api", "public const string ", "public const ")

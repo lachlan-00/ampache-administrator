@@ -104,7 +104,7 @@ def ampache6_methods(ampacheConnection, ampache_url, ampache_api, ampache_user, 
 
     # return the api key to run build_all
     user = ampacheConnection.user('admin')
-    if not user['auth']:
+    if not 'auth' in user:
         print()
         sys.exit('ERROR: NO AUTH KEY')
 
