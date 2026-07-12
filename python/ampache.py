@@ -483,22 +483,23 @@ class API(object):
         sha_signature = hashlib.sha256(passphrase.encode()).hexdigest()
         return sha_signature
 
-    def fetch_url(self, full_url: str, api_format: str, method: str, headers: dict = None):
+    def fetch_url(self, full_url: str, api_format: str, method: str, headers: dict = None, http_method: str = 'GET'):
         """ fetch_url
 
             This function is used to fetch the string results using urllib
 
             INPUTS
-            * full_url   = (string) url to fetch
-            * api_format = (string) 'xml'|'json'
-            * method     = (string)
-            * headers    = (dict) optional HTTP headers
+            * full_url    = (string) url to fetch
+            * api_format  = (string) 'xml'|'json'
+            * method      = (string) label used for debug/doc capture, NOT the HTTP verb
+            * headers     = (dict) optional HTTP headers
+            * http_method = (string) HTTP verb to use, e.g. 'GET'|'POST'|'PUT'|'PATCH'|'DELETE' //optional, default 'GET'
         """
         try:
             if not headers:
-                req = urllib.request.Request(full_url)
+                req = urllib.request.Request(full_url, method=http_method)
             else:
-                req = urllib.request.Request(full_url, headers=headers)
+                req = urllib.request.Request(full_url, headers=headers, method=http_method)
             result = urllib.request.urlopen(req)
         except urllib.error.HTTPError:
             return False
