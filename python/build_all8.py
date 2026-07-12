@@ -59,6 +59,7 @@ TEMPUSERNAME = 'temp_user'
 REGISTERUSERNAME = 'register'
 
 RUN8 = True
+RUN8REST = True
 RUN6 = True
 RUN5 = True
 RUN4 = True
@@ -70,6 +71,7 @@ try:
     length = len(sys.argv)
     if length >= 1:
         RUN8 = False
+        RUN8REST = False
         RUN6 = False
         RUN5 = False
         RUN4 = False
@@ -79,6 +81,8 @@ try:
         for argument in sys.argv:
             if argument == '8':
                 RUN8 = True
+            if argument == 'r':
+                RUN8REST = True
             if argument == '6':
                 RUN6 = True
             if argument == '5':
@@ -134,6 +138,11 @@ class AmpacheRunner:
         self.livestreamid = '1'
         self.albumartistid = '43'
         self.shareid = '4'
+        self.smartlistid = 'smart_20'
+        self.musiccatalogpath = urllib.parse.quote_plus('/media/music')
+        self.songtodeletename = 'ZZZ_DELETE_ME_TEST_SONG'
+        self.songtodeleteid = ''
+        self.smartlisttodeletename = urllib.parse.quote_plus('ZZZ_DELETE_ME_TEST_SMARTLIST')
         self.followusername = 'admin'
         self.albumname = urllib.parse.quote_plus('CC 20th Anniversary Open Mix')
         self.playlistname = urllib.parse.quote_plus('Example Playlist')
@@ -169,6 +178,8 @@ class AmpacheRunner:
         # ampache api for all versions
         if RUN8:
             self.ampache8()
+        if RUN8REST:
+            self.ampache8rest()
         if RUN6:
             self.ampache6()
         if RUN5:
@@ -213,6 +224,8 @@ class AmpacheRunner:
         for catalog in response['catalog']:
             if catalog['gather_types'] == 'music' and catalog['name'] != 'upload':
                 self.musiccatalogid = catalog['id']
+                if catalog.get('path'):
+                    self.musiccatalogpath = urllib.parse.quote_plus(catalog['path'])
                 continue
             if catalog['gather_types'] == 'podcast':
                 self.podcastcatalogid = catalog['id']
@@ -266,35 +279,69 @@ class AmpacheRunner:
 
         api_url = f"{URL}/server/{api_format}.server.php?action=live_streams&version={api_version}&sort=rand"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
-        self.livestreamid = response['live_stream'][0]['id']
+        try:
+            self.livestreamid = response['live_stream'][0]['id']
+        except (KeyError, IndexError, TypeError):
+            pass
 
         api_url = f"{URL}/server/{api_format}.server.php?action=artists&version={api_version}&cond=song_artist,1;album_artist,1&sort=rand"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
-        self.artistid = response['artist'][0]['id']
-        self.artistid2 = response['artist'][1]['id']
+        try:
+            self.artistid = response['artist'][0]['id']
+            self.artistid2 = response['artist'][1]['id']
+        except (KeyError, IndexError, TypeError):
+            pass
 
         api_url = f"{URL}/server/{api_format}.server.php?action=artists&version={api_version}&cond=song_artist,1&sort=rand"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
-        self.songartistid = response['artist'][0]['id']
+        try:
+            self.songartistid = response['artist'][0]['id']
+        except (KeyError, IndexError, TypeError):
+            pass
 
         api_url = f"{URL}/server/{api_format}.server.php?action=artists&version={api_version}&cond=album_artist,1&sort=rand"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
-        self.albumartistid = response['artist'][0]['id']
+        try:
+            self.albumartistid = response['artist'][0]['id']
+        except (KeyError, IndexError, TypeError):
+            pass
 
         api_url = f"{URL}/server/{api_format}.server.php?action=songs&version={api_version}&sort=rand"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
-        self.songid = response['song'][0]['id']
-        self.songid2 = response['song'][1]['id']
-        self.songfilepath = urllib.parse.quote_plus(response['song'][0]['filename'])
-        self.songfolderpath = urllib.parse.quote_plus(os.path.dirname(response['song'][0]['filename']))
-        self.scrobblesong = urllib.parse.quote_plus(response['song'][2]['title'])
-        self.scrobblealbum = urllib.parse.quote_plus(response['song'][2]['album']['name'])
-        self.scrobbleartist = urllib.parse.quote_plus(response['song'][2]['artist']['name'])
+        try:
+            self.songid = response['song'][0]['id']
+            self.songid2 = response['song'][1]['id']
+            self.songfilepath = urllib.parse.quote_plus(response['song'][0]['filename'])
+            self.songfolderpath = urllib.parse.quote_plus(os.path.dirname(response['song'][0]['filename']))
+            self.scrobblesong = urllib.parse.quote_plus(response['song'][2]['title'])
+            self.scrobblealbum = urllib.parse.quote_plus(response['song'][2]['album']['name'])
+            self.scrobbleartist = urllib.parse.quote_plus(response['song'][2]['artist']['name'])
+        except (KeyError, IndexError, TypeError):
+            pass
 
         api_url = f"{URL}/server/{api_format}.server.php?action=albums&version={api_version}&sort=rand"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
-        self.albumid = response['album'][0]['id']
-        self.albumname = urllib.parse.quote_plus(response['album'][1]['name'])
+        try:
+            self.albumid = response['album'][0]['id']
+            self.albumname = urllib.parse.quote_plus(response['album'][1]['name'])
+        except (KeyError, IndexError, TypeError):
+            pass
+
+        # [GET]  a public smartlist to use for smartlist / smartlist_songs (read-only, never deleted)
+        api_url = f"{URL}/server/{api_format}.server.php?action=smartlists&offset=0&limit=4&version={api_version}&sort=rand"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+        try:
+            self.smartlistid = response['playlist'][0]['id']
+        except (KeyError, IndexError, TypeError):
+            pass
+
+        # [GET]  disposable song reserved for song_delete (see ampache-test-additions.md); id stays '' if not present
+        api_url = f"{URL}/server/{api_format}.server.php?action=songs&filter={self.songtodeletename}&exact=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+        try:
+            self.songtodeleteid = response['song'][0]['id']
+        except (KeyError, IndexError, TypeError):
+            pass
 
         api_url = f"{URL}/server/{api_format}.server.php?action=user_playlists&version={api_version}&sort=rand"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -7467,6 +7514,10 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=playlist_edit&filter={createdplaylist}&name={EXAMPLEPLAYLISTNAME}_{api_format}&type=public&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/playlist/json-playlist_remove.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_remove&filter={createdplaylist}&id={self.songid2}&type=song&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/playlist/json-playlist_remove_song.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=playlist_remove_song&filter={createdplaylist}&track=1&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -7496,6 +7547,20 @@ class AmpacheRunner:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/podcast/json-update_podcast.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=update_podcast&filter={createdpodcast}&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/podcast/json-podcast_update.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=podcast_update&filter={createdpodcast}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/podcast/json-podcast_episode_delete.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=podcast_episodes&filter={createdpodcast}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (find synced episode)", self.headers), api_format)
+            try:
+                createdpodcastepisode = response['podcast_episode'][0]['id']
+                api_url = f"{URL}/server/{api_format}.server.php?action=podcast_episode_delete&filter={createdpodcastepisode}&version={api_version}"
+                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+            except (KeyError, IndexError, TypeError):
+                print("No synced episode found on disposable podcast, skipping podcast_episode_delete " + api_version)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/podcast/json-podcast_delete.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=podcast_delete&filter=notapodcast&version={api_version}"
@@ -7629,6 +7694,10 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=advanced_search&operator=or&type=song&offset=0&limit=4&random=0&rule_1=artist&rule_1_operator=2&rule_1_input=A&rule_2=artist&rule_2_operator=2&rule_2_input=C&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song)", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-get_lyrics.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=get_lyrics&filter={self.songid}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-album.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -7759,6 +7828,29 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-catalogs.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=catalogs&offset=0&limit=0&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/catalog/json-catalog_add.bru
+        # NOTE: reuses the real music catalog path -- creating a catalog row doesn't scan/import anything by itself
+        api_url = f"{URL}/server/{api_format}.server.php?action=catalog_add&name=ZZZ_DELETE_ME_TEST_CATALOG_{api_format}&path={self.musiccatalogpath}&type=local&media_type=music&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+        try:
+            createdcatalog = response['id']
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/catalog/json-catalog_delete.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=catalog_delete&filter={createdcatalog}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+        except (KeyError, IndexError, TypeError):
+            print("Not Implemented catalog_add " + api_version)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/catalog/json-catalog_create.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=catalog_create&name=ZZZ_DELETE_ME_TEST_CATALOG2_{api_format}&path={self.musiccatalogpath}&type=local&media_type=music&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+        try:
+            createdcatalog2 = response['id']
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/catalog/json-catalog_delete.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=catalog_delete&filter={createdcatalog2}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (create alias)", self.headers), api_format)
+        except (KeyError, IndexError, TypeError):
+            print("Not Implemented catalog_create " + api_version)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-deleted_podcast_episodes.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=deleted_podcast_episodes&offset=0&limit=4&version={api_version}"
@@ -8011,6 +8103,10 @@ class AmpacheRunner:
             api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=status&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (status)", self.headers), api_format)
 
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-localplay_songs.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=localplay_songs&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-democratic.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=democratic&method=playlist&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (playlist)", self.headers), api_format)
@@ -8041,6 +8137,25 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-smartlists.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=smartlists&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-smartlist.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=smartlist&filter={self.smartlistid}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-smartlist_songs.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=smartlist_songs&filter={self.smartlistid}&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/smartlist/json-smartlist_delete.bru
+        # NOTE: needs a disposable smartlist named ZZZ_DELETE_ME_TEST_SMARTLIST_json/_xml -- see ampache-test-additions.md 3.1
+        api_url = f"{URL}/server/{api_format}.server.php?action=smartlists&filter={self.smartlisttodeletename}_{api_format}&exact=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (find disposable smartlist)", self.headers), api_format)
+        try:
+            smartlisttodeleteid = response['playlist'][0]['id']
+            api_url = f"{URL}/server/{api_format}.server.php?action=smartlist_delete&filter={smartlisttodeleteid}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+        except (KeyError, IndexError, TypeError):
+            print("No disposable smartlist found, skipping smartlist_delete " + api_version)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-podcast.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=podcast&filter=1&version={api_version}"
@@ -8126,6 +8241,14 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-songs.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=songs&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/song/json-song_delete.bru
+        # NOTE: needs a disposable song named ZZZ_DELETE_ME_TEST_SONG -- see ampache-test-additions.md 3.2
+        if self.songtodeleteid:
+            api_url = f"{URL}/server/{api_format}.server.php?action=song_delete&filter={self.songtodeleteid}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+        else:
+            print("No disposable song found, skipping song_delete " + api_version)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-stats.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=stats&type=album&filter=newest&offset=0&limit=2&username=user&version={api_version}"
@@ -8431,6 +8554,10 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=playlist_edit&filter={createdplaylist}&name={EXAMPLEPLAYLISTNAME}_{api_format}&type=public&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/playlist/xml-playlist_remove.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_remove&filter={createdplaylist}&id={self.songid2}&type=song&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/playlist/xml-playlist_remove_song.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=playlist_remove_song&filter={createdplaylist}&track=1&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -8460,6 +8587,20 @@ class AmpacheRunner:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/podcast/xml-update_podcast.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=update_podcast&filter={createdpodcast}&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/podcast/xml-podcast_update.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=podcast_update&filter={createdpodcast}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/podcast/xml-podcast_episode_delete.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=podcast_episodes&filter={createdpodcast}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (find synced episode)", self.headers), api_format)
+            try:
+                createdpodcastepisode = response['podcast_episode'][0]['id']
+                api_url = f"{URL}/server/{api_format}.server.php?action=podcast_episode_delete&filter={createdpodcastepisode}&version={api_version}"
+                response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+            except (KeyError, IndexError, TypeError):
+                print("No synced episode found on disposable podcast, skipping podcast_episode_delete " + api_version)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/podcast/xml-podcast_delete.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=podcast_delete&filter=notapodcast&version={api_version}"
@@ -8602,6 +8743,10 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=advanced_search&operator=or&type=song&offset=0&limit=4&random=0&rule_1=artist&rule_1_operator=2&rule_1_input=A&rule_2=artist&rule_2_operator=2&rule_2_input=C&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song)", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-get_lyrics.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=get_lyrics&filter={self.songid}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-album.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=album&filter={self.albumid}&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -8732,6 +8877,29 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-catalogs.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=catalogs&offset=0&limit=0&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/catalog/xml-catalog_add.bru
+        # NOTE: reuses the real music catalog path -- creating a catalog row doesn't scan/import anything by itself
+        api_url = f"{URL}/server/{api_format}.server.php?action=catalog_add&name=ZZZ_DELETE_ME_TEST_CATALOG_{api_format}&path={self.musiccatalogpath}&type=local&media_type=music&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+        try:
+            createdcatalog = response['id']
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/catalog/xml-catalog_delete.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=catalog_delete&filter={createdcatalog}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+        except (KeyError, IndexError, TypeError):
+            print("Not Implemented catalog_add " + api_version)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/catalog/xml-catalog_create.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=catalog_create&name=ZZZ_DELETE_ME_TEST_CATALOG2_{api_format}&path={self.musiccatalogpath}&type=local&media_type=music&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+        try:
+            createdcatalog2 = response['id']
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/catalog/xml-catalog_delete.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=catalog_delete&filter={createdcatalog2}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (create alias)", self.headers), api_format)
+        except (KeyError, IndexError, TypeError):
+            print("Not Implemented catalog_create " + api_version)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-deleted_podcast_episodes.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=deleted_podcast_episodes&offset=0&limit=4&version={api_version}"
@@ -9015,6 +9183,25 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=smartlists&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-smartlist.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=smartlist&filter={self.smartlistid}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-smartlist_songs.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=smartlist_songs&filter={self.smartlistid}&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/smartlist/xml-smartlist_delete.bru
+        # NOTE: needs a disposable smartlist named ZZZ_DELETE_ME_TEST_SMARTLIST_json/_xml -- see ampache-test-additions.md 3.1
+        api_url = f"{URL}/server/{api_format}.server.php?action=smartlists&filter={self.smartlisttodeletename}_{api_format}&exact=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (find disposable smartlist)", self.headers), api_format)
+        try:
+            smartlisttodeleteid = response['playlist'][0]['id']
+            api_url = f"{URL}/server/{api_format}.server.php?action=smartlist_delete&filter={smartlisttodeleteid}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+        except (KeyError, IndexError, TypeError):
+            print("No disposable smartlist found, skipping smartlist_delete " + api_version)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-podcast.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=podcast&filter=1&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -9099,6 +9286,14 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-songs.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=songs&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/song/xml-song_delete.bru
+        # NOTE: the json pass above already deleted this song -- this call documents the "already gone" error response
+        if self.songtodeleteid:
+            api_url = f"{URL}/server/{api_format}.server.php?action=song_delete&filter={self.songtodeleteid}&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (error)", self.headers), api_format)
+        else:
+            print("No disposable song found, skipping song_delete " + api_version)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-stats.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=stats&type=album&filter=newest&offset=0&limit=2&username=user&version={api_version}"
@@ -9202,6 +9397,355 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         self.self_check(docpath, URL)
+
+    def ampache8rest(self):
+        # NOTE: exercises the Ampache-native REST surface (`/rest/{version}/{format}/{resource}...`),
+        # which is a thin routing/naming layer in front of the same RPC engine ampache8() already
+        # tests (see docs/REST-to-RPC.md in ampache-develop8 for the full path->action map). This
+        # deliberately loops over both formats instead of duplicating the whole body, since there's
+        # no pre-existing Bruno collection to mirror line-for-line here.
+        #
+        # KNOWN ISSUE found while writing this: `POST {resource}/{id}/share` (for albums, artists,
+        # songs, playlists, podcasts, podcast-episodes, videos, smartlists) routes to the plain
+        # `share` RPC action (Share8Method::share(), "get a share by its id") rather than
+        # `share_create` -- ApiHandler::normalizeAction() has no rewrite rule for action=share +
+        # a type= param, unlike the analogous rewrite it has for action=create. Tested below anyway
+        # (to document the actual response) but the request is not expected to create a real share.
+        api_version = '8.7.3'
+
+        def rest_call(http_method, path, label=None, expect_error=False):
+            rest_url = f"{URL}/rest/8/{api_format}/{path}"
+            doc_label = label or f"{http_method.lower()}-{path.replace('/', '_')}"
+            if expect_error:
+                doc_label += " (error)"
+            return self.parse_response(
+                self.ampache_connection.fetch_url(rest_url, api_format, doc_label, self.headers, http_method),
+                api_format
+            )
+
+        for api_format in ['json', 'xml']:
+            self.ampache_connection.set_debug(True)
+
+            docpath = os.path.join(BUILD_DIR, "python3-ampache8", "docs", ("rest-" + api_format + "-responses")) + SLASH
+            if not os.path.exists(docpath):
+                os.makedirs(docpath)
+            else:
+                for root, dirs, files in os.walk(docpath):
+                    for file in files:
+                        if file.endswith(f".{api_format}"):
+                            os.remove(os.path.join(root, file))
+
+            self.ampache_connection.set_debug_path(docpath)
+
+            # a genre/label/license id, discovered the same way ampache8() does locally
+            response = rest_call('GET', 'genres?sort=rand', 'genres (setup)')
+            try:
+                genreid = response['genre'][0]['id']
+            except (KeyError, IndexError, TypeError):
+                genreid = 1
+            labelid = 2
+            licenseid = 1
+
+            # ------------------------------------------------------------------ albums
+            rest_call('GET', f'albums/{self.albumid}/fetch-metadata')
+            rest_call('POST', f'albums/{self.albumid}/flag?flag=1')
+            rest_call('POST', f'albums/{self.albumid}/rate?rating=5')
+            rest_call('POST', f'albums/{self.albumid}/share')
+            rest_call('GET', f'albums/{self.albumid}/songs?offset=0&limit=4')
+            rest_call('POST', f'albums/{self.albumid}/update-art')
+            rest_call('POST', f'albums/{self.albumid}/update-tags')
+            rest_call('GET', f'albums/{self.albumid}')
+            rest_call('GET', f'albums/search?rule_1=artist&rule_1_operator=2&rule_1_input=A')
+            rest_call('GET', 'albums/stats?filter=newest&offset=0&limit=2')
+            rest_call('GET', 'albums?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ artists
+            rest_call('GET', f'artists/{self.artistid}/albums?offset=0&limit=4')
+            rest_call('POST', f'artists/{self.artistid}/fetch-info')
+            rest_call('GET', f'artists/{self.artistid}/fetch-metadata')
+            rest_call('POST', f'artists/{self.artistid}/flag?flag=1')
+            rest_call('POST', f'artists/{self.artistid}/rate?rating=5')
+            rest_call('POST', f'artists/{self.artistid}/share')
+            rest_call('GET', f'artists/{self.artistid}/similar')
+            rest_call('GET', f'artists/{self.artistid}/songs?offset=0&limit=4')
+            rest_call('POST', f'artists/{self.artistid}/update-art')
+            rest_call('POST', f'artists/{self.artistid}/update-tags')
+            rest_call('GET', f'artists/{self.artistid}')
+            rest_call('GET', 'artists/search?rule_1=artist&rule_1_operator=2&rule_1_input=A')
+            rest_call('GET', 'artists/stats?filter=newest&offset=0&limit=2')
+            rest_call('GET', 'artists?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ bookmarks (own disposable)
+            response = rest_call('PUT', f'bookmarks?filter={self.songid}&type=song&position=0&client=python3-ampache-rest')
+            try:
+                createdbookmarkrest = response['id']
+                rest_call('PATCH', f'bookmarks/{createdbookmarkrest}?position=10&client=python3-ampache-rest')
+                rest_call('GET', f'bookmarks/{createdbookmarkrest}')
+                rest_call('DELETE', f'bookmarks/{createdbookmarkrest}')
+            except (KeyError, IndexError, TypeError):
+                print("Not Implemented bookmarks (REST) " + api_version)
+            rest_call('GET', 'bookmarks?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ browse
+            rest_call('GET', 'browse?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ catalogs (own disposable)
+            response = rest_call('PUT', f'catalogs?name=ZZZ_DELETE_ME_TEST_CATALOG_rest_{api_format}&path={self.musiccatalogpath}&type=local&media_type=music')
+            try:
+                createdcatalogrest = response['id']
+                rest_call('DELETE', f'catalogs/{createdcatalogrest}')
+            except (KeyError, IndexError, TypeError):
+                print("Not Implemented catalogs PUT (REST) " + api_version)
+            rest_call('POST', f'catalogs/{self.videocatalogid}/clean')
+            rest_call('POST', f'catalogs/{self.videocatalogid}/verify')
+            rest_call('POST', f'catalogs/{self.videocatalogid}/action?task=clean_catalog')
+            rest_call('GET', f'catalogs/{self.videocatalogid}/browse')
+            rest_call('GET', f'catalogs/{self.videocatalogid}/browse/albums/{self.albumid}')
+            rest_call('GET', f'catalogs/{self.videocatalogid}/browse/artists/{self.artistid}')
+            rest_call('POST', f'catalogs/{self.videocatalogid}/file?file={self.songfilepath}&task=clean')
+            rest_call('POST', f'catalogs/{self.videocatalogid}/folder?folder={self.songfolderpath}&task=clean')
+            rest_call('GET', f'catalogs/{self.videocatalogid}')
+            rest_call('GET', 'catalogs?offset=0&limit=0')
+
+            # ------------------------------------------------------------------ democratic
+            rest_call('POST', f'democratic/{self.songid}/localplay')
+            rest_call('POST', f'democratic/{self.songid}?method=vote')
+
+            # ------------------------------------------------------------------ folders
+            rest_call('GET', 'folder')
+            rest_call('GET', 'folders?offset=0&limit=0')
+
+            # ------------------------------------------------------------------ genres
+            rest_call('GET', f'genres/{genreid}/albums?offset=0&limit=4')
+            rest_call('GET', f'genres/{genreid}/artists?offset=0&limit=4')
+            rest_call('GET', f'genres/{genreid}/songs?offset=0&limit=4')
+            rest_call('GET', f'genres/{genreid}')
+            rest_call('GET', 'genres/search?rule_1=title&rule_1_operator=0&rule_1_input=a')
+            rest_call('GET', 'genres?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ goodbye / handshake / index / ping
+            rest_call('POST', 'goodbye')
+            rest_call('POST', 'handshake')
+            rest_call('GET', 'index?offset=0&limit=4')
+            rest_call('GET', 'ping')
+
+            # ------------------------------------------------------------------ labels
+            rest_call('GET', f'labels/{labelid}/artists?offset=0&limit=4')
+            rest_call('GET', f'labels/{labelid}/fetch-metadata')
+            rest_call('GET', f'labels/{labelid}')
+            rest_call('GET', 'labels/search?rule_1=title&rule_1_operator=0&rule_1_input=a')
+            rest_call('GET', 'labels?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ licenses
+            rest_call('GET', f'licenses/{licenseid}/songs?offset=0&limit=4')
+            rest_call('GET', f'licenses/{licenseid}')
+            rest_call('GET', 'licenses?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ list
+            rest_call('GET', 'list?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ live-streams (own disposable)
+            response = rest_call('PUT', f'live-streams?name={RADIONAME}&url={STREAMURL}&codec=ogg&catalog={self.musiccatalogid}&api_url={STREAMHOMEURL}')
+            try:
+                createdlivestreamrest = response['id']
+                rest_call('PATCH', f'live-streams/{createdlivestreamrest}?api_url=http%3A%2F%2Fampache.org')
+                rest_call('POST', f'live-streams/{createdlivestreamrest}/localplay')
+                rest_call('DELETE', f'live-streams/{createdlivestreamrest}')
+            except (KeyError, IndexError, TypeError):
+                print("Not Implemented live-streams PUT (REST) " + api_version)
+            rest_call('GET', f'live-streams/{self.livestreamid}')
+            rest_call('GET', 'live-streams?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ localplay
+            if self.localplayenabled:
+                rest_call('GET', 'localplay/status')
+                rest_call('POST', f'localplay/add?filter={self.songid}&type=song')
+                rest_call('POST', 'localplay/play')
+                rest_call('POST', 'localplay/next')
+                rest_call('POST', 'localplay/prev')
+                rest_call('POST', 'localplay/skip?offset=0')
+                rest_call('POST', 'localplay/pause')
+                rest_call('POST', 'localplay/volume-up')
+                rest_call('POST', 'localplay/volume-down')
+                rest_call('POST', 'localplay/volume-mute')
+                rest_call('POST', 'localplay/stop')
+                rest_call('POST', 'localplay/delete-all')
+
+            # ------------------------------------------------------------------ me
+            rest_call('GET', 'me/friends-timeline?offset=0&limit=4')
+            rest_call('GET', 'me/last-shouts?offset=0&limit=4')
+            rest_call('GET', 'me/lost-password')
+            rest_call('GET', 'me/now-playing')
+            rest_call('GET', 'me/playlists?offset=0&limit=4')
+            rest_call('GET', 'me/smartlists?offset=0&limit=4')
+            rest_call('GET', 'me')
+
+            # ------------------------------------------------------------------ playlists (own disposable)
+            response = rest_call('PUT', f'playlists?name=ZZZ_DELETE_ME_TEST_PLAYLIST_rest_{api_format}&type=private')
+            createdplaylistrest = response['id']
+            rest_call('GET', f'playlists/{createdplaylistrest}/hash')
+            rest_call('POST', f'playlists/{createdplaylistrest}/add?id={self.playlistid}&type=playlist')
+            rest_call('POST', f'playlists/{createdplaylistrest}/add-song?song={self.songid}&check=0')
+            rest_call('POST', f'playlists/{createdplaylistrest}/add-song?song={self.songid2}&check=0')
+            rest_call('POST', f'playlists/{createdplaylistrest}/flag?flag=1')
+            rest_call('POST', f'playlists/{createdplaylistrest}/rate?rating=5')
+            rest_call('POST', f'playlists/{createdplaylistrest}/share')
+            rest_call('GET', f'playlists/{createdplaylistrest}/songs?offset=0&limit=4')
+            rest_call('POST', f'playlists/{createdplaylistrest}/remove?id={self.songid2}&type=song')
+            rest_call('POST', f'playlists/{createdplaylistrest}/remove-song?song={self.songid}')
+            rest_call('PATCH', f'playlists/{createdplaylistrest}?name={EXAMPLEPLAYLISTNAME}_rest_{api_format}&type=public')
+            rest_call('GET', f'playlists/{createdplaylistrest}')
+            rest_call('DELETE', f'playlists/{createdplaylistrest}')
+            rest_call('GET', 'playlists/search?rule_1=title&rule_1_operator=0&rule_1_input=a')
+            rest_call('GET', 'playlists/stats?filter=newest&offset=0&limit=2')
+            rest_call('GET', 'playlists?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ podcasts (own disposable) + podcast-episodes
+            response = rest_call('PUT', f'podcasts?url={PODCASTFEEDURL}&catalog={self.podcastcatalogid}')
+            try:
+                createdpodcastrest = response['id']
+                rest_call('PATCH', f'podcasts/{createdpodcastrest}?copyright=False')
+                rest_call('POST', f'podcasts/{createdpodcastrest}/sync')
+
+                response = rest_call('GET', f'podcasts/{createdpodcastrest}/podcast-episodes')
+                try:
+                    createdpodcastepisoderest = response['podcast_episode'][0]['id']
+                    rest_call('PUT', f'podcast-episodes/{createdpodcastepisoderest}/bookmark?position=0&client=python3-ampache-rest')
+                    rest_call('GET', f'podcast-episodes/{createdpodcastepisoderest}/bookmark')
+                    rest_call('PATCH', f'podcast-episodes/{createdpodcastepisoderest}/bookmark?position=10&client=python3-ampache-rest')
+                    rest_call('DELETE', f'podcast-episodes/{createdpodcastepisoderest}/bookmark')
+                    rest_call('POST', f'podcast-episodes/{createdpodcastepisoderest}/flag?flag=1')
+                    rest_call('POST', f'podcast-episodes/{createdpodcastepisoderest}/localplay')
+                    rest_call('POST', f'podcast-episodes/{createdpodcastepisoderest}/rate?rating=5')
+                    rest_call('POST', f'podcast-episodes/{createdpodcastepisoderest}/share')
+                    rest_call('GET', f'podcast-episodes/{createdpodcastepisoderest}')
+                    rest_call('DELETE', f'podcast-episodes/{createdpodcastepisoderest}')
+                except (KeyError, IndexError, TypeError):
+                    print("No synced episode found on REST disposable podcast, skipping podcast-episodes item tests " + api_version)
+
+                rest_call('DELETE', f'podcasts/{createdpodcastrest}')
+            except (KeyError, IndexError, TypeError):
+                print("Not Implemented podcasts PUT (REST) " + api_version)
+
+            rest_call('GET', f'podcasts/{self.podcastid}/podcast-episodes?offset=0&limit=4')
+            rest_call('POST', f'podcasts/{self.podcastid}/flag?flag=1')
+            rest_call('POST', f'podcasts/{self.podcastid}/rate?rating=5')
+            rest_call('POST', f'podcasts/{self.podcastid}/share')
+            rest_call('GET', f'podcasts/{self.podcastid}')
+            rest_call('GET', 'podcasts/search?rule_1=title&rule_1_operator=0&rule_1_input=a')
+            rest_call('GET', 'podcasts/stats?filter=newest&offset=0&limit=2')
+            rest_call('GET', 'podcasts?offset=0&limit=4')
+
+            rest_call('POST', f'podcast-episodes/{self.podcastepisodeid}/flag?flag=1')
+            rest_call('POST', f'podcast-episodes/{self.podcastepisodeid}/rate?rating=5')
+            rest_call('POST', f'podcast-episodes/{self.podcastepisodeid}/share')
+            rest_call('GET', f'podcast-episodes/{self.podcastepisodeid}')
+            rest_call('GET', 'podcast-episodes/deleted?offset=0&limit=4')
+            rest_call('GET', 'podcast-episodes/search?rule_1=title&rule_1_operator=0&rule_1_input=a')
+            rest_call('GET', 'podcast-episodes/stats?filter=newest&offset=0&limit=2')
+            rest_call('GET', 'podcast-episodes?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ preferences (own disposable) + system-preferences
+            response = rest_call('PUT', f'preferences?filter=temp_pref_rest_{api_format}&type=boolean&default=0&category=interface')
+            if 'error' in response and response["error"]["errorCode"] == "4705":
+                print("Not Implemented preferences PUT (REST) " + api_version)
+            else:
+                rest_call('PATCH', f'preferences/temp_pref_rest_{api_format}?value=1')
+                rest_call('DELETE', f'preferences/temp_pref_rest_{api_format}')
+            rest_call('GET', 'preferences/ajax_load')
+            rest_call('GET', 'preferences?offset=0&limit=4')
+            rest_call('GET', 'system-preferences/ajax_load')
+            rest_call('GET', 'system-preferences?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ register / scrobble
+            response = rest_call('POST', f'register?username={REGISTERUSERNAME}_rest_{api_format}&fullname=fullname&password=password98hf29hf2390h&email={REGISTERUSERNAME}_rest_{api_format}@email.com')
+            if 'error' in response and response["error"]["errorCode"] == "4705":
+                print("Not Implemented register (REST) " + api_version)
+            else:
+                rest_call('DELETE', f'users/{REGISTERUSERNAME}_rest_{api_format}', 'users-delete-registered')
+            rest_call('POST', f'scrobble?song={self.scrobblesong}&album={self.scrobblealbum}&artist={self.scrobbleartist}')
+
+            # ------------------------------------------------------------------ search
+            rest_call('GET', 'search/song/rules')
+            rest_call('GET', 'search/song/groups')
+
+            # ------------------------------------------------------------------ shares (own disposable)
+            response = rest_call('PUT', f'shares?filter={self.songid}&type=song&expires=7')
+            try:
+                createdsharerest = response['id']
+                rest_call('PATCH', f'shares/{createdsharerest}')
+                rest_call('GET', f'shares/{createdsharerest}')
+                rest_call('DELETE', f'shares/{createdsharerest}')
+            except (KeyError, IndexError, TypeError):
+                print("Not Implemented shares PUT (REST) " + api_version)
+            rest_call('GET', 'shares?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ smartlists
+            rest_call('POST', f'smartlists/{self.smartlistid}/flag?flag=1')
+            rest_call('POST', f'smartlists/{self.smartlistid}/rate?rating=5')
+            rest_call('POST', f'smartlists/{self.smartlistid}/share')
+            rest_call('GET', f'smartlists/{self.smartlistid}/songs?offset=0&limit=4')
+            rest_call('GET', f'smartlists/{self.smartlistid}')
+            # no smartlist_create exists, so routing is checked against a not-found id rather than a real disposable row
+            rest_call('DELETE', 'smartlists/smart_999999', expect_error=True)
+            rest_call('GET', 'smartlists/search?rule_1=title&rule_1_operator=0&rule_1_input=a')
+            rest_call('GET', 'smartlists?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ songs
+            rest_call('GET', f'songs/{self.songid}/bookmark')
+            rest_call('GET', f'songs/{self.songid}/fetch-metadata')
+            rest_call('POST', f'songs/{self.songid}/flag?flag=1')
+            rest_call('POST', f'songs/{self.songid}/localplay')
+            rest_call('GET', f'songs/{self.songid}/lyrics')
+            rest_call('POST', f'songs/{self.songid}/rate?rating=5')
+            rest_call('POST', f'songs/{self.songid}/record-play')
+            rest_call('POST', f'songs/{self.songid}/share')
+            rest_call('GET', f'songs/{self.songid}/similar')
+            rest_call('GET', f'songs/{self.songid}/tags')
+            rest_call('POST', f'songs/{self.songid}/update-tags')
+            rest_call('GET', f'songs/{self.songid}')
+            if self.songtodeleteid:
+                rest_call('DELETE', f'songs/{self.songtodeleteid}')
+            else:
+                print("No disposable song found, skipping songs DELETE (REST) " + api_version)
+            rest_call('GET', 'songs/deleted?offset=0&limit=4')
+            rest_call('GET', 'songs/lookup/url-to-song?url=' + STREAMURL)
+            rest_call('GET', 'songs/playlist-generate?mode=random&format=song&offset=0&limit=4')
+            rest_call('GET', 'songs/search?rule_1=title&rule_1_operator=0&rule_1_input=a')
+            rest_call('GET', 'songs/stats?filter=newest&offset=0&limit=2')
+            rest_call('GET', 'songs?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ update
+            rest_call('GET', 'update')
+
+            # ------------------------------------------------------------------ users (own disposable)
+            response = rest_call('PUT', f'users?username={TEMPUSERNAME}_rest_{api_format}&password=b4aa92f0f88c335389e52058b5d432a5e1b40440883bd97e88d9a798899acaf9&email={TEMPUSERNAME}_rest_{api_format}@gmail.com&disable=0')
+            if 'error' in response and response["error"]["errorCode"] == "4705":
+                print("Not Implemented users PUT (REST) " + api_version)
+            else:
+                rest_call('GET', f'users/{TEMPUSERNAME}_rest_{api_format}')
+                rest_call('PATCH', f'users/{TEMPUSERNAME}_rest_{api_format}?disable=1')
+                rest_call('DELETE', f'users/{TEMPUSERNAME}_rest_{api_format}')
+            rest_call('POST', f'users/{self.followusername}/follow')
+            rest_call('GET', f'users/{self.followusername}/followers?offset=0&limit=4')
+            rest_call('GET', f'users/{self.followusername}/following?offset=0&limit=4')
+            rest_call('GET', f'users/{self.followusername}/timeline?offset=0&limit=4')
+            rest_call('GET', f'users/{self.followusername}')
+            rest_call('GET', 'users/search?rule_1=username&rule_1_operator=0&rule_1_input=a')
+            rest_call('GET', 'users?offset=0&limit=4')
+
+            # ------------------------------------------------------------------ videos
+            rest_call('GET', f'videos/{self.videoid}/bookmark')
+            rest_call('POST', f'videos/{self.videoid}/flag?flag=1')
+            rest_call('POST', f'videos/{self.videoid}/localplay')
+            rest_call('POST', f'videos/{self.videoid}/rate?rating=5')
+            rest_call('POST', f'videos/{self.videoid}/share')
+            rest_call('GET', f'videos/{self.videoid}')
+            rest_call('GET', 'videos/deleted?offset=0&limit=4')
+            rest_call('GET', 'videos/search?rule_1=title&rule_1_operator=0&rule_1_input=a')
+            rest_call('GET', 'videos/stats?filter=newest&offset=0&limit=2')
+
+            self.self_check(docpath, URL)
 
     def opensubsonic(self):
         self.ampache_connection.set_debug(False)
