@@ -80,6 +80,7 @@ cp $AMPACHEDIR/www/ampache.org-docs/docs/api/subsonic.md $AMPACHEDIR/ampache-dev
 
 cp $AMPACHEDIR/www/ampache.org-docs/docs/docs/development/CONTRIBUTING.md $AMPACHEDIR/ampache-develop/CONTRIBUTING.md
 cp $AMPACHEDIR/www/ampache.org-docs/docs/docs/development/TRANSLATIONS.md $AMPACHEDIR/ampache-develop/locale/base/TRANSLATIONS.md
+cp $AMPACHEDIR/www/ampache.org-docs/docs/docs/configuration/oidc.md $AMPACHEDIR/ampache-develop/docs/OIDC.md
 
 cp $AMPACHEDIR/www/ampache.org-docs/docs/docker.md $AMPACHEDIR/docker/ampache-docker/README.md
 
@@ -96,6 +97,8 @@ sed -i'' '/^---$/,/^#/c\
 # API XML Methods' "$AMPACHEDIR/ampache-develop/docs/API-XML-methods.md"
 sed -i'' '/^---$/,/^#/c\
 # Ampache Translation Guide' "$AMPACHEDIR/ampache-develop/locale/base/TRANSLATIONS.md"
+sed -i'' '/^---$/,/^#/c\
+# OpenID Connect' "$AMPACHEDIR/ampache-develop/docs/OIDC.md"
 sed -i'' '/^---$/,/^#/c\
 # Ampache API' "$AMPACHEDIR/ampache-develop/docs/API.md"
 sed -i'' '/^---$/,/^#/c\
