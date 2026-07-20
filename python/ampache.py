@@ -501,8 +501,8 @@ class API(object):
             else:
                 req = urllib.request.Request(full_url, headers=headers, method=http_method)
             result = urllib.request.urlopen(req)
-        except urllib.error.HTTPError:
-            return False
+        except urllib.error.HTTPError as error:
+            result = error
         except urllib.error.URLError:
             return False
         except ValueError:
