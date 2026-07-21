@@ -77,7 +77,7 @@ if [ $BRANCH = "develop" ] || [ $BRANCH = "all" ]; then
     rm -rf $AMPACHEDIR/docker/ampache-docker-develop
     cd $AMPACHEDIR/docker && git clone -b develop https://github.com/ampache/ampache-docker.git ampache-docker-develop
   fi
-  cd $AMPACHEDIR/docker/ampache-docker-develop/ && git checkout develop && git reset --hard origin/develop && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 -t ampache/ampache:develop -t ampache/ampache:preview --push . &
+  cd $AMPACHEDIR/docker/ampache-docker-develop/ && git checkout develop && git reset --hard origin/develop && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 -t ampache/ampache:develop --push . &
 fi
 
 if [ $BRANCH = "develop" ] || [ $BRANCH = "nosql-develop" ] || [ $BRANCH = "all" ]; then
@@ -89,11 +89,11 @@ if [ $BRANCH = "develop" ] || [ $BRANCH = "nosql-develop" ] || [ $BRANCH = "all"
     rm -rf $AMPACHEDIR/docker/ampache-docker-nosql-develop
     cd $AMPACHEDIR/docker && git clone -b nosql-develop https://github.com/ampache/ampache-docker.git ampache-docker-nosql-develop
   fi
-  cd $AMPACHEDIR/docker/ampache-docker-nosql-develop/ && git checkout nosql-develop && git reset --hard origin/nosql-develop && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 -t ampache/ampache:nosql-develop -t ampache/ampache:nosql-preview --push . &
+  cd $AMPACHEDIR/docker/ampache-docker-nosql-develop/ && git checkout nosql-develop && git reset --hard origin/nosql-develop && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 -t ampache/ampache:nosql-develop --push . &
 fi
 
 # PREVIEW
-if [ $BRANCH = "preview" ]; then
+if [ $BRANCH = "preview" ] || [ $BRANCH = "all" ]; then
   # DEFAULT
   if [ ! -d $AMPACHEDIR/docker/ampache-docker-preview/ ]; then
     cd $AMPACHEDIR/docker && git clone -b preview https://github.com/ampache/ampache-docker.git ampache-docker-preview

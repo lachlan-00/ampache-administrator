@@ -39,7 +39,9 @@ cp -rfv $AMPACHEDIR/ampache-patch8/resources/* $AMPACHEDIR/ampache-squashed8/res
 cp -rfv $AMPACHEDIR/ampache-patch8/src/* $AMPACHEDIR/ampache-squashed8/src/
 cp -rfv $AMPACHEDIR/ampache-patch8/tests/* $AMPACHEDIR/ampache-squashed8/tests/
 #copy public back over the top
-cp -rfv $AMPACHEDIR/ampache-patch8/public/* $AMPACHEDIR/ampache-squashed8/
+# "public/." rather than "public/*" so the .htaccess files come across too -
+# the glob skips dotfiles, which is why they used to drift from the patch branch
+cp -rfv $AMPACHEDIR/ampache-patch8/public/. $AMPACHEDIR/ampache-squashed8/
 
 rm -rf $AMPACHEDIR/ampache-squashed8/channel
 rm -f $AMPACHEDIR/ampache-squashed8/channel.php

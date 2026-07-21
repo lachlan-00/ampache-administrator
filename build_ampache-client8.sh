@@ -24,8 +24,14 @@ if [ ! -f $AMPACHEDIR/ampache-client8/index.php ]; then
   rm -rf $AMPACHEDIR/ampache-client
   git clone -b client8 https://github.com/ampache/ampache.git ampache-client
 fi
-if [ ! -d $AMPACHEDIR/ampache-client8/public/client/captcha ]; then
-  mkdir $AMPACHEDIR/ampache-client8/public/client/captcha
+if [ ! -d $AMPACHEDIR/ampache-client8/public/client/dist ]; then
+  mkdir $AMPACHEDIR/ampache-client8/public/client/dist
+fi
+if [ ! -d $AMPACHEDIR/ampache-client8/public/client/m ]; then
+  mkdir $AMPACHEDIR/ampache-client8/public/client/m
+fi
+if [ ! -d $AMPACHEDIR/ampache-client8/public/client/play ]; then
+  mkdir $AMPACHEDIR/ampache-client8/public/client/play
 fi
 if [ ! -d $AMPACHEDIR/ampache-client8/public/client/images ]; then
   mkdir $AMPACHEDIR/ampache-client8/public/client/images
@@ -52,21 +58,25 @@ cp -rfv $AMPACHEDIR/ampache-patch8/resources/* $AMPACHEDIR/ampache-client8/resou
 cp -rfv $AMPACHEDIR/ampache-patch8/src/* $AMPACHEDIR/ampache-client8/src/
 cp -rfv $AMPACHEDIR/ampache-patch8/tests/* $AMPACHEDIR/ampache-client8/tests/
 # copy public back over the top
+# "dir/." rather than "dir/*" so the .htaccess files come across too - the
+# glob skips dotfiles, which is why they used to drift from the patch branch
 cp -fv $AMPACHEDIR/ampache-patch8/public/*.php $AMPACHEDIR/ampache-client8/public/client/
-cp -rfv $AMPACHEDIR/ampache-patch8/public/admin/* $AMPACHEDIR/ampache-client8/public/admin/
-cp -rfv $AMPACHEDIR/ampache-patch8/public/daap/* $AMPACHEDIR/ampache-client8/public/daap/
-cp -rfv $AMPACHEDIR/ampache-patch8/public/play/* $AMPACHEDIR/ampache-client8/public/play/
-cp -rfv $AMPACHEDIR/ampache-patch8/public/rest/* $AMPACHEDIR/ampache-client8/public/rest/
-cp -rfv $AMPACHEDIR/ampache-patch8/public/server/* $AMPACHEDIR/ampache-client8/public/server/
-cp -rfv $AMPACHEDIR/ampache-patch8/public/upnp/* $AMPACHEDIR/ampache-client8/public/upnp/
-cp -rfv $AMPACHEDIR/ampache-patch8/public/webdav/* $AMPACHEDIR/ampache-client8/public/webdav/
+cp -fv $AMPACHEDIR/ampache-patch8/public/.htaccess.dist $AMPACHEDIR/ampache-client8/public/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/admin/. $AMPACHEDIR/ampache-client8/public/admin/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/daap/. $AMPACHEDIR/ampache-client8/public/daap/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/oidc/. $AMPACHEDIR/ampache-client8/public/oidc/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/rest/. $AMPACHEDIR/ampache-client8/public/rest/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/server/. $AMPACHEDIR/ampache-client8/public/server/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/upnp/. $AMPACHEDIR/ampache-client8/public/upnp/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/webdav/. $AMPACHEDIR/ampache-client8/public/webdav/
 # client subfolder
-cp -rfv $AMPACHEDIR/ampache-patch8/public/captcha/* $AMPACHEDIR/ampache-client8/public/client/captcha/
-cp -rfv $AMPACHEDIR/ampache-patch8/public/dist/* $AMPACHEDIR/ampache-client8/public/client/dist/
-cp -rfv $AMPACHEDIR/ampache-patch8/public/images/* $AMPACHEDIR/ampache-client8/public/client/images/
-cp -rfv $AMPACHEDIR/ampache-patch8/public/lib/* $AMPACHEDIR/ampache-client8/public/client/lib/
-cp -rfv $AMPACHEDIR/ampache-patch8/public/templates/* $AMPACHEDIR/ampache-client8/public/client/templates/
-cp -rfv $AMPACHEDIR/ampache-patch8/public/themes/* $AMPACHEDIR/ampache-client8/public/client/themes/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/dist/. $AMPACHEDIR/ampache-client8/public/client/dist/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/images/. $AMPACHEDIR/ampache-client8/public/client/images/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/lib/. $AMPACHEDIR/ampache-client8/public/client/lib/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/m/. $AMPACHEDIR/ampache-client8/public/client/m/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/play/. $AMPACHEDIR/ampache-client8/public/client/play/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/templates/. $AMPACHEDIR/ampache-client8/public/client/templates/
+cp -rfv $AMPACHEDIR/ampache-patch8/public/themes/. $AMPACHEDIR/ampache-client8/public/client/themes/
 
 cd $AMPACHEDIR
 
