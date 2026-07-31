@@ -6,7 +6,7 @@ if [ ! $# -eq 0 ]; then
   BRANCH=$1
 fi
 COMPOSERPATH="/usr/local/bin/composer"
-DEVELOPBRANCH="develop8"
+DEVELOPBRANCH="develop"
 
 echo $BRANCH
 
@@ -20,7 +20,7 @@ sh $AMPACHEDIR/setup-python.sh
 sudo chown $USER:33 -R $AMPACHEDIR/ampache-test/ampache/
 
 cd $AMPACHEDIR/ampache-test/ampache
-git reset --hard origin/$DEVELOPBRANCH  && git pull && $COMPOSERPATH install
+git fetch origin $DEVELOPBRANCH && git checkout -f $DEVELOPBRANCH && git reset --hard origin/$DEVELOPBRANCH && git pull && $COMPOSERPATH install
 npm install
 npm run build
 
