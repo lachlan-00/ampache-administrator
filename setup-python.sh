@@ -2,7 +2,7 @@
 
 AMPACHEDIR=$PWD
 COMPOSERPATH="/usr/local/bin/composer"
-DEVELOPBRANCH="develop8"
+DEVELOPBRANCH="develop"
 
 if [ ! -f $COMPOSERPATH ]; then
   COMPOSERPATH="$AMPACHEDIR/docker/composer"
