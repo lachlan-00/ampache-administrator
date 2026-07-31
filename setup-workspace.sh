@@ -24,6 +24,27 @@ if [ ! -f $AMPACHEDIR/ampache-master/index.php ]; then
   rm -rf $AMPACHEDIR/ampache-master
   cd $AMPACHEDIR && git clone -b master https://github.com/ampache/ampache.git ampache-master
 fi
+if [ ! -d $AMPACHEDIR/ampache-patch8 ]; then
+  cd $AMPACHEDIR && git clone -b patch8 https://github.com/ampache/ampache.git ampache-patch8
+fi
+if [ ! -f $AMPACHEDIR/ampache-patch8/index.php ]; then
+  rm -rf $AMPACHEDIR/ampache-patch8
+  cd $AMPACHEDIR && git clone -b patch8 https://github.com/ampache/ampache.git ampache-patch8
+fi
+if [ ! -d $AMPACHEDIR/ampache-squashed8 ]; then
+  cd $AMPACHEDIR && git clone -b squashed8 https://github.com/ampache/ampache.git ampache-squashed8
+fi
+if [ ! -f $AMPACHEDIR/ampache-squashed8/index.php ]; then
+  rm -rf $AMPACHEDIR/ampache-squashed8
+  cd $AMPACHEDIR && git clone -b squashed8 https://github.com/ampache/ampache.git ampache-squashed8
+fi
+if [ ! -d $AMPACHEDIR/ampache-client8 ]; then
+  cd $AMPACHEDIR && git clone -b client8 https://github.com/ampache/ampache.git ampache-client8
+fi
+if [ ! -f $AMPACHEDIR/ampache-client8/index.php ]; then
+  rm -rf $AMPACHEDIR/ampache-client8
+  cd $AMPACHEDIR && git clone -b client8 https://github.com/ampache/ampache.git ampache-client8
+fi
 if [ ! -d $AMPACHEDIR/ampache-patch7 ]; then
   cd $AMPACHEDIR && git clone -b patch7 https://github.com/ampache/ampache.git ampache-patch7
 fi
@@ -54,14 +75,21 @@ if [ -f $AMPACHEDIR/ampache-master/composer.lock ]; then
   rm $AMPACHEDIR/ampache-master/composer.lock
 fi
 cd $AMPACHEDIR/ampache-master && php $COMPOSERPATH install && cd $AMPACHEDIR
+
+cd $AMPACHEDIR/ampache-squashed8 && php $COMPOSERPATH install && cd $AMPACHEDIR
+cd $AMPACHEDIR/ampache-client8 && php $COMPOSERPATH install && cd $AMPACHEDIR
+cd $AMPACHEDIR/ampache-patch8 && php $COMPOSERPATH install && cd $AMPACHEDIR
+
 if [ -f $AMPACHEDIR/ampache-patch7/composer.lock ]; then
   rm $AMPACHEDIR/ampache-patch7/composer.lock
 fi
 cd $AMPACHEDIR/ampache-patch7 && php $COMPOSERPATH install && cd $AMPACHEDIR
+
 if [ -f $AMPACHEDIR/ampache-squashed7/composer.lock ]; then
   rm $AMPACHEDIR/ampache-squashed7/composer.lock
 fi
 cd $AMPACHEDIR/ampache-squashed7 && php $COMPOSERPATH install && cd $AMPACHEDIR
+
 if [ -f $AMPACHEDIR/ampache-client7/composer.lock ]; then
   rm $AMPACHEDIR/ampache-client7/composer.lock
 fi
