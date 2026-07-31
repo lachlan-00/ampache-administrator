@@ -14,7 +14,12 @@ ZIPEXCLUDE="--exclude=./config/ampache.cfg.php --exclude=./docker/* --exclude=./
 # the code-only zips still have to run `composer install` and `npm install` against them.
 ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./tests/* --exclude=./phpunit.xml --exclude=./phpstan.neon --exclude=./phpstan-baseline.neon --exclude=./rector.php --exclude=./docker-compose.yml"
 # The openapi spec is a development reference and is published on ampache.org (4MB of the two files)
-ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./docs/openapi*.json"
+ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./docs/openapi*.json --exclude=./docs/subsonic-rest-api-*.xsd.xml --exclude=./docs/templates/*"
+ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./resources/scripts/api-docs/* --exclude=./resources/scripts/tests/*"
+ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./resources/scripts/hooks/* --exclude=./resources/scripts/composer/*"
+ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./resources/scripts/crawl/* --exclude=./resources/licenseheader.txt"
+ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./locale/base/*"
+ZIPEXCLUDE="$ZIPEXCLUDE --exclude=AGENTS.md --exclude=CONTRIBUTING.md"
 # prettyPhoto ships its demo gallery images (1.2MB) which nothing in Ampache links to.
 # Leading * (not */) so one pattern matches all three structures: public/lib, lib and public/client/lib.
 ZIPEXCLUDE="$ZIPEXCLUDE --exclude=*lib/modules/prettyphoto/images/fullscreen/*"
