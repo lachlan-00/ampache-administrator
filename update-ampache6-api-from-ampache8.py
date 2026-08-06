@@ -37,15 +37,25 @@ def self_check(folder, find, replace):
                     f.write(newdata)
                     f.close()
 
-shutil.copytree('./ampache-develop8/src/Module/Api', './ampache-develop/src/Module/Api', dirs_exist_ok=True)
+# The directory name is not the branch name, so both ends are named once here rather than inline.
+# Before the develop8 -> develop rename these read ampache-develop8 (source) and ampache-develop
+# (target); ampache-develop is now the Ampache8 tree itself, so the old target would downgrade
+# Ampache8's own API to API6.
+SRC = './ampache-develop'    # Ampache8, branch develop
+DEST = './ampache-patch7'    # Ampache7 staging, branch patch7
 
-os.remove("./ampache-develop/src/Module/Api/Method/Api8/Folder8Method.php")
-os.remove("./ampache-develop/src/Module/Api/Method/Api8/Folders8Method.php")
+if not os.path.isdir(SRC) or not os.path.isdir(DEST):
+    raise SystemExit('expected %s (Ampache8) and %s (Ampache7); check the branch each is on' % (SRC, DEST))
 
-self_check("./ampache-develop/src/Module/Api", "public const array ", "public const ")
-self_check("./ampache-develop/src/Module/Api", "public const int ", "public const ")
-self_check("./ampache-develop/src/Module/Api", "public const string ", "public const ")
-self_check("./ampache-develop/src/Module/Api", "public const false ", "public const ")
-self_check("./ampache-develop/src/Module/Api", "public const DEFAULT_VERSION = 8", "public const DEFAULT_VERSION = 6")
-self_check("./ampache-develop/src/Module/Api", "\(\$api_version == 8 && !Preference::get_by_user\(\$userId, 'api_enable_8'\)\)", "$api_version == 8 //|| ($api_version == 8 && !Preference::get_by_user($userId, 'api_enable_8'))")
+shutil.copytree(SRC + '/src/Module/Api', DEST + '/src/Module/Api', dirs_exist_ok=True)
+
+os.remove(DEST + "/src/Module/Api/Method/Api8/Folder8Method.php")
+os.remove(DEST + "/src/Module/Api/Method/Api8/Folders8Method.php")
+
+self_check(DEST + "/src/Module/Api","public const array ", "public const ")
+self_check(DEST + "/src/Module/Api","public const int ", "public const ")
+self_check(DEST + "/src/Module/Api","public const string ", "public const ")
+self_check(DEST + "/src/Module/Api","public const false ", "public const ")
+self_check(DEST + "/src/Module/Api","public const DEFAULT_VERSION = 8", "public const DEFAULT_VERSION = 6")
+self_check(DEST + "/src/Module/Api","\(\$api_version == 8 && !Preference::get_by_user\(\$userId, 'api_enable_8'\)\)", "$api_version == 8 //|| ($api_version == 8 && !Preference::get_by_user($userId, 'api_enable_8'))")
 

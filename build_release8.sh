@@ -288,6 +288,15 @@ fi
 if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.5_client.zip ]; then
   rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.5_client.zip
 fi
+# Ampache9 naming (see "Which zip" docs): the default public structure drops the
+# _public and _all markers. Shipped as copies alongside the current names so the
+# 8.x downloads keep working while people move over.
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}.zip
+fi
+if [ -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_php8.5.zip ]; then
+  rm $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_php8.5.zip
+fi
 
 # Build Releases
 
@@ -300,6 +309,11 @@ cd $AMPACHEDIR/releases/8/generic_client && zip -r -q -u -9 $ZIPEXCLUDE $ZIPEXCL
 cd $AMPACHEDIR/releases/8/php85 && zip -r -q -u -9 $ZIPEXCLUDE $ZIPEXCLUDEPUBLIC ./../../ampache-${RELEASEVERSION}_all_php8.5.zip ./
 cd $AMPACHEDIR/releases/8/php85_squashed && zip -r -q -u -9 $ZIPEXCLUDE $ZIPEXCLUDESQUASHED ./../../ampache-${RELEASEVERSION}_all_php8.5_squashed.zip ./
 cd $AMPACHEDIR/releases/8/php85_client && zip -r -q -u -9 $ZIPEXCLUDE $ZIPEXCLUDEPUBLIC ./../../ampache-${RELEASEVERSION}_all_php8.5_client.zip ./
+
+## Ampache9 naming for the default public structure. Copies of the zips above, not rebuilds,
+## so the pairs are byte identical and the checksums below match either filename.
+cp $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_public.zip $AMPACHEDIR/releases/ampache-${RELEASEVERSION}.zip
+cp $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.5.zip $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_php8.5.zip
 
 # go back
 cd $AMPACHEDIR
@@ -322,6 +336,12 @@ fi
 if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.5_client.zip ]; then
   echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_all_php8.5_client.zip
 fi
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}.zip
+fi
+if [ ! -f $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_php8.5.zip ]; then
+  echo "ERROR " $AMPACHEDIR/releases/ampache-${RELEASEVERSION}_php8.5.zip
+fi
 
 cd $AMPACHEDIR/releases
 # echo the version checksum
@@ -329,11 +349,13 @@ echo
 echo "# ${RELEASEVERSION}"
 echo
 echo "php8.5"
+md5sum ./ampache-${RELEASEVERSION}_php8.5.zip
 md5sum ./ampache-${RELEASEVERSION}_all_php8.5.zip
 md5sum ./ampache-${RELEASEVERSION}_all_php8.5_squashed.zip
 md5sum ./ampache-${RELEASEVERSION}_all_php8.5_client.zip
 echo
 echo "**UNSUPPORTED** Code only release. (Requires composer and npm install)"
+md5sum ./ampache-${RELEASEVERSION}.zip
 md5sum ./ampache-${RELEASEVERSION}_public.zip
 md5sum ./ampache-${RELEASEVERSION}_squashed.zip
 md5sum ./ampache-${RELEASEVERSION}_client.zip
@@ -341,6 +363,10 @@ echo
 echo "## Zip Version information"
 echo
 echo "If you aren't familiar which the project make sure you know [which zip](https://ampache.org/docs/information/which-zip) you need to download."
+echo
+echo "\`ampache-${RELEASEVERSION}.zip\` and \`ampache-${RELEASEVERSION}_php8.5.zip\` are identical copies of \`ampache-${RELEASEVERSION}_public.zip\` and \`ampache-${RELEASEVERSION}_all_php8.5.zip\`."
+echo
+echo "The shorter names become the default for the public structure in Ampache9; the \`_public\` and \`_all\` names are kept for the rest of the 8.x series."
 echo
 
 # go home

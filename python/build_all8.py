@@ -171,6 +171,13 @@ class AmpacheRunner:
         else:
             raise ValueError("Unsupported api_format. Use 'json' or 'xml'.")
 
+    @staticmethod
+    def first_item(collection):
+        # xmltodict collapses a single repeated element into a dict, where json keeps a list of one
+        if isinstance(collection, dict):
+            return collection
+        return collection[0]
+
     def run_all(self):
         # delete of check things to make sure we only get correct values
         self.setup_ampache()
@@ -8327,10 +8334,6 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=player&offset=0&limit=0&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-folder.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=folder&offset=0&limit=0&version={api_version}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
-
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-folders.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=folders&offset=0&limit=0&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -8584,7 +8587,7 @@ class AmpacheRunner:
             api_url = f"{URL}/server/{api_format}.server.php?action=podcast_episodes&filter={createdpodcast}&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (find synced episode)", self.headers), api_format)
             try:
-                createdpodcastepisode = response['podcast_episode'][0]['id']
+                createdpodcastepisode = self.first_item(response['podcast_episode'])['id']
                 api_url = f"{URL}/server/{api_format}.server.php?action=podcast_episode_delete&filter={createdpodcastepisode}&version={api_version}"
                 response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
             except (KeyError, IndexError, TypeError):
@@ -8924,7 +8927,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-genres.bru
-        genreid = response["genre"][0]["id"]
+        genreid = self.first_item(response["genre"])["id"]
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-genre.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=genre&filter={genreid}&version={api_version}"
@@ -9102,7 +9105,7 @@ class AmpacheRunner:
         if 'error' in response and response["error"]["errorCode"] == "4705":
             print("Not Implemented live_streams " + api_version)
         else:
-            livestreamid = response["live_stream"][0]["id"]
+            livestreamid = self.first_item(response["live_stream"])["id"]
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-live_stream.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=live_stream&filter={livestreamid}&version={api_version}"
@@ -9160,7 +9163,7 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=smartlists&filter={self.smartlisttodeletename}_{api_format}&exact=1&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (find disposable smartlist)", self.headers), api_format)
         try:
-            smartlisttodeleteid = response['playlist'][0]['id']
+            smartlisttodeleteid = self.first_item(response['playlist'])['id']
             api_url = f"{URL}/server/{api_format}.server.php?action=smartlist_delete&filter={smartlisttodeleteid}&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
         except (KeyError, IndexError, TypeError):
@@ -9184,7 +9187,7 @@ class AmpacheRunner:
         elif not 'podcast_episode' in response:
             pass
         else:
-            podcastepisodeid = response["podcast_episode"][0]["id"]
+            podcastepisodeid = self.first_item(response["podcast_episode"])["id"]
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-podcast_episode.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=podcast_episode&filter={podcastepisodeid}&version={api_version}"
@@ -9348,10 +9351,6 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=player&offset=0&limit=0&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-folder.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=folder&offset=0&limit=0&version={api_version}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
-
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-folders.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=folders&offset=0&limit=0&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -9365,7 +9364,7 @@ class AmpacheRunner:
     def ampache8rest(self):
         # NOTE: exercises the Ampache-native REST surface (`/rest/{version}/{format}/{resource}...`),
         # which is a thin routing/naming layer in front of the same RPC engine ampache8() already
-        # tests (see docs/REST-to-RPC.md in ampache-develop8 for the full path->action map). This
+        # tests (see docs/REST-to-RPC.md in ampache-develop for the full path->action map). This
         # deliberately loops over both formats instead of duplicating the whole body, since there's
         # no pre-existing Bruno collection to mirror line-for-line here.
         #
@@ -9476,7 +9475,6 @@ class AmpacheRunner:
             rest_call('POST', f'democratic/{self.songid}?method=vote')
 
             # ------------------------------------------------------------------ folders
-            rest_call('GET', 'folder')
             rest_call('GET', 'folders?offset=0&limit=0')
 
             # ------------------------------------------------------------------ genres
@@ -11158,7 +11156,7 @@ class AmpacheRunner:
                             '<errorMessage><![CDATA[Invalid Request]]></errorMessage>' in filedata or
                             '"message": "Invalid Request"' in filedata or
                             '"errorMessage": "Invalid Request"' in filedata):
-                        print(f"ERROR invalid request: {docpath} {files}")
+                        print(f"ERROR invalid request: {docpath}{files}")
                         #os.remove(os.path.join(docpath, files))
                         continue
                     if ('<error code="401"><![CDATA[Incorrect object type' in filedata or

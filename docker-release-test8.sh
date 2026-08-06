@@ -75,6 +75,9 @@ done
 sudo chown -R $UID:33 $AMPACHEDIR/docker/media
 sudo chmod -R 775 $AMPACHEDIR/docker/media
 
+sudo chown -R $UID:33 $AMPACHEDIR/docker/log
+sudo chmod -R 775 $AMPACHEDIR/docker/log
+
 for DEST in php85 php85_squashed php85_client; do
   sudo chown -R $UID:33 $AMPACHEDIR/release-test/8/$DEST
   sudo chmod -R 775 $AMPACHEDIR/release-test/8/$DEST
@@ -155,7 +158,7 @@ cat /dev/null > $AMPACHEDIR/docker/log/8php85.log
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:${PORTPUBLIC} $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION ampache85 - $DEMOPASSWORD -"
 echo "python3 $AMPACHEDIR/python/build_all8.py http://${LOCALIP}:${PORTPUBLIC} $DEMOPASSWORD"
-python3 $AMPACHEDIR/python/build_all8.py http://${LOCALIP}:${PORTPUBLIC} $DEMOPASSWORD admin 1 $APIVERSION
+python3 $AMPACHEDIR/python/build_all8.py http://${LOCALIP}:${PORTPUBLIC} $DEMOPASSWORD admin 1 $APIVERSION 8
 
 echo
 #release-test8-test8ampache85_squashed
@@ -163,7 +166,7 @@ cat /dev/null > $AMPACHEDIR/docker/log/8php85s.log
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:${PORTSQUASHED} $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION ampache85_squashed $DEMOPASSWORD"
 echo "python3 $AMPACHEDIR/python/build_all8.py http://${LOCALIP}:${PORTSQUASHED} $DEMOPASSWORD"
-python3 $AMPACHEDIR/python/build_all8.py http://${LOCALIP}:${PORTSQUASHED} $DEMOPASSWORD admin 1 $APIVERSION
+python3 $AMPACHEDIR/python/build_all8.py http://${LOCALIP}:${PORTSQUASHED} $DEMOPASSWORD admin 1 $APIVERSION 8
 
 echo
 #release-test8-test8ampache85_client
@@ -171,7 +174,7 @@ cat /dev/null > $AMPACHEDIR/docker/log/8php85c.log
 DEMOPASSWORD=$(python3 $AMPACHEDIR/python/release_test6.py http://${LOCALIP}:${PORTCLIENT} $AMPACHEPASSWORD admin)
 echo "Testing $RELEASEVERSION php85_client $DEMOPASSWORD"
 echo "python3 $AMPACHEDIR/python/build_all8.py http://${LOCALIP}:${PORTCLIENT} $DEMOPASSWORD"
-python3 $AMPACHEDIR/python/build_all8.py http://${LOCALIP}:${PORTCLIENT} $DEMOPASSWORD admin 1 $APIVERSION
+python3 $AMPACHEDIR/python/build_all8.py http://${LOCALIP}:${PORTCLIENT} $DEMOPASSWORD admin 1 $APIVERSION 8
 
 echo "PRINT ERRORS"
 cat $AMPACHEDIR/docker/log/8*.log | grep Error
