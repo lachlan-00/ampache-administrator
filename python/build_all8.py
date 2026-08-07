@@ -7545,6 +7545,108 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=playlist_delete&filter={createdplaylist}&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
+        # NOTE: the API8 album_disk, collection and playlist folder methods have no Bruno collection to mirror yet
+
+        # [GET]  album_disks
+        api_url = f"{URL}/server/{api_format}.server.php?action=album_disks&filter={self.albumid}&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [VARS] album_disks
+        createdalbumdisk = self.first_item(response['album_disk'])['id']
+
+        # [GET]  album_disk
+        api_url = f"{URL}/server/{api_format}.server.php?action=album_disk&filter={createdalbumdisk}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  album_disk_songs
+        api_url = f"{URL}/server/{api_format}.server.php?action=album_disk_songs&filter={createdalbumdisk}&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collection_create
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection_create&name=collection_{api_format}&type=private&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [VARS] collection_create
+        createdcollection = self.first_item(response['collection'])['id']
+
+        # [GET]  collection
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection&filter={createdcollection}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collections
+        api_url = f"{URL}/server/{api_format}.server.php?action=collections&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collection_add
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection_add&filter={createdcollection}&id={self.songid}&object_type=song&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collection_items
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection_items&filter={createdcollection}&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collection_edit
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection_edit&filter={createdcollection}&name=collection_{api_format}_edit&type=public&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collection_remove
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection_remove&filter={createdcollection}&id={self.songid}&object_type=song&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collection_delete
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection_delete&filter={createdcollection}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folder_create
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_create&name=folder_{api_format}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [VARS] playlist_folder_create
+        createdfolder = self.first_item(response['playlist_folder'])['id']
+
+        # [GET]  playlist_folder_create (a child names its parent by id or by name path)
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_create&name=child_{api_format}&parent={createdfolder}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (child)", self.headers), api_format)
+
+        # [VARS] playlist_folder_create (child)
+        createdchildfolder = self.first_item(response['playlist_folder'])['id']
+
+        # [GET]  playlist_folder
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder&filter={createdfolder}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folders
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folders&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folder_edit
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_edit&filter={createdchildfolder}&name=child_{api_format}_edit&sort_order=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folder_add
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_add&filter={createdfolder}&id={self.playlistid}&type=playlist&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folder_items
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_items&filter={createdfolder}&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folder_items (the root holds every list that hasn't been filed)
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_items&filter=0&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (root)", self.headers), api_format)
+
+        # [GET]  playlist_folder_remove
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_remove&id={self.playlistid}&type=playlist&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folder_delete (the child goes first; a folder must hold nothing to be deleted)
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_delete&filter={createdchildfolder}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (child)", self.headers), api_format)
+
+        # [GET]  playlist_folder_delete
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_delete&filter={createdfolder}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/podcast/json-podcast_create.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=podcast_create&url={PODCASTFEEDURL}&catalog={self.podcastcatalogid}&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -8559,6 +8661,108 @@ class AmpacheRunner:
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/playlist/xml-playlist_delete.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=playlist_delete&filter={createdplaylist}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # NOTE: the API8 album_disk, collection and playlist folder methods have no Bruno collection to mirror yet
+
+        # [GET]  album_disks
+        api_url = f"{URL}/server/{api_format}.server.php?action=album_disks&filter={self.albumid}&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [VARS] album_disks
+        createdalbumdisk = self.first_item(response['album_disk'])['id']
+
+        # [GET]  album_disk
+        api_url = f"{URL}/server/{api_format}.server.php?action=album_disk&filter={createdalbumdisk}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  album_disk_songs
+        api_url = f"{URL}/server/{api_format}.server.php?action=album_disk_songs&filter={createdalbumdisk}&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collection_create
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection_create&name=collection_{api_format}&type=private&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [VARS] collection_create
+        createdcollection = self.first_item(response['collection'])['id']
+
+        # [GET]  collection
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection&filter={createdcollection}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collections
+        api_url = f"{URL}/server/{api_format}.server.php?action=collections&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collection_add
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection_add&filter={createdcollection}&id={self.songid}&object_type=song&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collection_items
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection_items&filter={createdcollection}&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collection_edit
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection_edit&filter={createdcollection}&name=collection_{api_format}_edit&type=public&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collection_remove
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection_remove&filter={createdcollection}&id={self.songid}&object_type=song&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  collection_delete
+        api_url = f"{URL}/server/{api_format}.server.php?action=collection_delete&filter={createdcollection}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folder_create
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_create&name=folder_{api_format}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [VARS] playlist_folder_create
+        createdfolder = self.first_item(response['playlist_folder'])['id']
+
+        # [GET]  playlist_folder_create (a child names its parent by id or by name path)
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_create&name=child_{api_format}&parent={createdfolder}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (child)", self.headers), api_format)
+
+        # [VARS] playlist_folder_create (child)
+        createdchildfolder = self.first_item(response['playlist_folder'])['id']
+
+        # [GET]  playlist_folder
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder&filter={createdfolder}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folders
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folders&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folder_edit
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_edit&filter={createdchildfolder}&name=child_{api_format}_edit&sort_order=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folder_add
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_add&filter={createdfolder}&id={self.playlistid}&type=playlist&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folder_items
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_items&filter={createdfolder}&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folder_items (the root holds every list that hasn't been filed)
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_items&filter=0&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (root)", self.headers), api_format)
+
+        # [GET]  playlist_folder_remove
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_remove&id={self.playlistid}&type=playlist&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+
+        # [GET]  playlist_folder_delete (the child goes first; a folder must hold nothing to be deleted)
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_delete&filter={createdchildfolder}&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (child)", self.headers), api_format)
+
+        # [GET]  playlist_folder_delete
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_folder_delete&filter={createdfolder}&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/podcast/xml-podcast_create.bru
