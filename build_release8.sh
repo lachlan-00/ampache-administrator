@@ -18,6 +18,7 @@ ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./docs/openapi*.json --exclude=./docs/subsonic
 ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./resources/scripts/api-docs/* --exclude=./resources/scripts/tests/*"
 ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./resources/scripts/hooks/* --exclude=./resources/scripts/composer/*"
 ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./resources/scripts/crawl/* --exclude=./resources/licenseheader.txt"
+ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./resources/scripts/xss-probe/*"
 ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./locale/base/*"
 ZIPEXCLUDE="$ZIPEXCLUDE --exclude=AGENTS.md --exclude=CONTRIBUTING.md"
 # prettyPhoto ships its demo gallery images (1.2MB) which nothing in Ampache links to.
@@ -70,7 +71,7 @@ prune_release_tree() {
   if [ -d "$ICONDIR" ]; then
     KEEP=`mktemp`; ALL=`mktemp`; DROP=`mktemp`
     find . \( -path ./node_modules -o -path ./.git -o -path ./vendor -o -path "$ICONDIR" \) -prune -o \
-      -type f \( -name '*.php' -o -name '*.js' -o -name '*.inc' -o -name '*.html' -o -name '*.css' \) \
+      -type f \( -name '*.php' -o -name '*.phtml' -o -name '*.js' -o -name '*.inc' -o -name '*.html' -o -name '*.css' \) \
       -exec grep -hoE "['\"][a-z0-9][a-z0-9_-]{1,40}['\"]" {} + | tr -d "\"'" | sort -u > "$KEEP"
     find "$ICONDIR" -name '*.svg' -exec basename {} .svg \; | sort -u > "$ALL"
     comm -12 "$ALL" "$KEEP" > "$DROP".keep

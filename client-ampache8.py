@@ -92,7 +92,7 @@ def self_check(folder, find, replace):
                 self_check(filename, find, replace)
             elif os.path.isfile(filename):
                 extension = os.path.splitext(filename)[-1]
-                if extension == ".php" or extension == ".json" or extension == ".sh":
+                if extension == ".php" or extension == ".phtml" or extension == ".json" or extension == ".sh":
                     print("Reading " + extension + ": " + filename)
                     f = codecs.open(filename, 'r', encoding="utf-8")
                     filedata = f.read()
