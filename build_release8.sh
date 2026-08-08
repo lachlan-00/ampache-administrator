@@ -39,7 +39,7 @@ prune_release_tree() {
   find . \( -path ./node_modules -o -path ./.git \) -prune -o -name '*.map' -type f -exec rm -f {} +
 
   # 2. bootstrap ships every build variant. Ampache only ever loads bootstrap.min.css and bootstrap.min.js
-  # (see public/templates/install_header.inc.php and friends), so drop rtl, esm and the unminified builds.
+  # (see resources/templates/install/header.phtml and friends), so drop rtl, esm and the unminified builds.
   find . -path '*/components/bootstrap/*' -type f \( -name '*rtl*' -o -name '*esm*' \) -delete
   find . -path '*/components/bootstrap/*' -type f \( -name '*.css' -o -name '*.js' \) ! -name '*.min.*' -delete
 
