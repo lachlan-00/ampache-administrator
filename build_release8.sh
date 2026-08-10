@@ -365,9 +365,9 @@ echo "## Zip Version information"
 echo
 echo "If you aren't familiar which the project make sure you know [which zip](https://ampache.org/docs/information/which-zip) you need to download."
 echo
-echo "\`ampache-${RELEASEVERSION}.zip\` and \`ampache-${RELEASEVERSION}_php8.5.zip\` are identical copies of \`ampache-${RELEASEVERSION}_public.zip\` and \`ampache-${RELEASEVERSION}_all_php8.5.zip\`."
+echo "\`ampache-${RELEASEVERSION}.zip\` is a copy of \`ampache-${RELEASEVERSION}_public.zip\` and \`ampache-${RELEASEVERSION}_php8.5.zip\` is a copy of \`ampache-${RELEASEVERSION}_all_php8.5.zip\`."
 echo
-echo "The shorter names become the default for the public structure in Ampache9; the \`_public\` and \`_all\` names are kept for the rest of the 8.x series."
+echo "The shorter names become the default for the public structure in Ampache9; the \`_public\` and \`_all\` names will be kept for the rest of the 8.x series."
 echo
 
 # go home

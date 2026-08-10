@@ -64,6 +64,14 @@ ROOT_URLS = ROOT_ENTRIES + ("matomo", "piwik")
 ROOT_URL_RESTORE = (r"(get_web_path|getWebPath)\('/client'\) \. ([\"'])/("
                     + "|".join(ROOT_URLS) + r")/")
 
+# the view classes in src/Gui declare their own zero-argument getWebPath(), so
+# the suffix must only be added to calls - suffixing the declaration is a parse
+# error that takes the whole install down.
+DECLARATION_SKIP = r"(?<!function )"
+
+# the STRUCTURE constant, matched on its final value so a re-run is a no-op
+STRUCTURE_FIND = r"(const (?:string )?STRUCTURE\s*=\s*)'(?:public|client|squashed)'"
+
 # __DIR__ paths that reach out of the web root into the repository root.
 # public/client/templates is three levels below the root. Sibling references
 # such as '/../dist/' and '/../lib/' are deliberately not matched: they still
@@ -170,10 +178,17 @@ def report_stale(repo, source):
 # ../ for each level it is nested, whichever side of the split it landed on.
 fix_init_depth(TARGET, "public")
 
+# AmpConfig::get('structure') is read at runtime to pick the release zip and the
+# web root, and the copy from ampache-patch8 always brings 'public' with it, so
+# the constant has to be written back on every rebuild.
+self_check(TARGET + "/src/Config/Init/InitializationHandlerConfig.php",
+           STRUCTURE_FIND,
+           "\\1'client'")
+
 self_check(TARGET + "/src", CLIENT_FIND, "/public/client/")
 self_check(TARGET + "/src", ROOT_RESTORE, "/public/\\1/")
 self_check(TARGET + "/src", "AmpConfig::get_web_path\\(\\)", "AmpConfig::get_web_path('/client')")
-self_check(TARGET + "/src", "getWebPath\\(\\)", "getWebPath('/client')")
+self_check(TARGET + "/src", DECLARATION_SKIP + "getWebPath\\(\\)", "getWebPath('/client')")
 
 self_check(TARGET + "/src", ROOT_URL_RESTORE, "\\1() . \\2/\\3/")
 
@@ -200,7 +215,7 @@ self_check(TARGET + "/public/client/templates", CLIENT_FIND, "/public/client/")
 self_check(TARGET + "/public/client/templates", ROOT_RESTORE, "/public/\\1/")
 self_check(TARGET + "/public/client/templates", "\\<img src\\=\"\\./(client/)*images/", "<img src=\"./client/images/")
 self_check(TARGET + "/public/client/templates", "AmpConfig::get_web_path\\(\\)", "AmpConfig::get_web_path('/client')")
-self_check(TARGET + "/public/client/templates", "getWebPath\\(\\)", "getWebPath('/client')")
+self_check(TARGET + "/public/client/templates", DECLARATION_SKIP + "getWebPath\\(\\)", "getWebPath('/client')")
 
 # mod_rewrite targets in the play/ and rest/ .htaccess. image.php and play/
 # answer from /client/ now; /server/ and rest's own index.php did not move.

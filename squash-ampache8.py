@@ -34,6 +34,9 @@ TARGET = sys.argv[2] if len(sys.argv) > 2 else "./ampache-squashed8"
 # of ../ is matched loosely so the correct depth can be written back over it.
 INIT_FIND = r"__DIR__ \. '(?:/\.\.)*/src/Config/"
 
+# the STRUCTURE constant, matched on its final value so a re-run is a no-op
+STRUCTURE_FIND = r"(const (?:string )?STRUCTURE\s*=\s*)'(?:public|client|squashed)'"
+
 # __DIR__ paths that reach out of the web root into the repository root.
 # ./templates is one level below the root, so they all collapse to '/../'.
 # Sibling references such as '/../dist/' and '/../lib/' are deliberately not
@@ -136,6 +139,13 @@ for entry in sorted(os.listdir(SOURCE)):
 
 # ./lib/javascript/search-data.php, ./admin/*, ./m/index.php, ./oidc/index.php
 # and the root pages are all handled by the loop above.
+
+# AmpConfig::get('structure') is read at runtime to pick the release zip and the
+# web root, and the copy from ampache-patch8 always brings 'public' with it, so
+# the constant has to be written back on every rebuild.
+self_check(TARGET + "/src/Config/Init/InitializationHandlerConfig.php",
+           STRUCTURE_FIND,
+           "\\1'squashed'")
 
 self_check(TARGET + "/src", "/public/", "/")
 
