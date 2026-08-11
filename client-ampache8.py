@@ -269,6 +269,10 @@ self_check(TARGET + "/src/Module/Authentication/Oidc/OidcClientFactory.php",
            "getWebPath\\('/client'\\) \\. self::CALLBACK_PATH",
            "getWebPath() . self::CALLBACK_PATH")
 
+self_check(TARGET + "/src/Gui/Install/InstallConfigView.php",
+           WEB_PATH_GUESS_FIND,
+           WEB_PATH_GUESS_REPLACE)
+
 # public/client/templates gained a level. Fix the repo-root paths before
 # rewriting "public/", otherwise '/../../public/client/' gets counted twice.
 self_check(TARGET + "/public/client/templates", ROOT_FIND, "__DIR__ . '/../../../\\1")
