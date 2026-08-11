@@ -35,6 +35,7 @@ nothing - if it does, the branch is not what the transform produces.
 import codecs
 import os
 import re
+import subprocess
 import sys
 
 SOURCE = sys.argv[1] if len(sys.argv) > 1 else "./ampache-patch8/public"
@@ -77,6 +78,24 @@ STRUCTURE_FIND = r"(const (?:string )?STRUCTURE\s*=\s*)'(?:public|client|squashe
 # such as '/../dist/' and '/../lib/' are deliberately not matched: they still
 # resolve inside public/client/ after the move.
 ROOT_FIND = r"__DIR__ \. '(?:/\.\.)+/(vendor|config|resources|public)(?=[/'])"
+
+# the installer's web path field. Upstream guesses it from the directory of the
+# running script, which is the web root there but /client here, so the guess was
+# written into the config as web_path and every url got the segment twice. The
+# optional docblock is what makes a second run a no-op: it matches the method
+# this rule already produced as readily as the upstream one.
+WEB_PATH_GUESS_FIND = (r"(?:    /\*\*\n(?:     \*.*\n)*     \*/\n)?"
+                       r"    public function getWebPathGuess\(\): string\n"
+                       r"    \{\n(?:.*\n)*?    \}")
+
+WEB_PATH_GUESS_REPLACE = """    /**
+     * The config stores the base path that every url appends /client to, and install.php is served from /client
+     * itself, so the running script says nothing about the base and a subdirectory install has to type it here.
+     */
+    public function getWebPathGuess(): string
+    {
+        return (string) ($_REQUEST['web_path'] ?? '');
+    }"""
 
 
 def self_check(folder, find, replace):
@@ -128,6 +147,17 @@ def php_files(path):
     return sorted(found)
 
 
+def tracked_files(path):
+    """Every path git tracks in the checkout at path, or None when it is not one."""
+    try:
+        result = subprocess.run(["git", "-C", path, "ls-files", "-z"],
+                                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, check=True)
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+    return {name for name in result.stdout.decode("utf-8").split("\0") if name}
+
+
 def destination(name):
     """Where ampache-patch8/public/<name> ends up in the client layout."""
     if name in ROOT_ENTRIES:
@@ -172,6 +202,37 @@ def report_stale(repo, source):
     for filename in php_files(os.path.join(repo, "public")):
         if os.path.relpath(filename, repo) not in expected:
             print("STALE: " + filename + " no longer exists in " + source)
+
+    report_stale_tracked(repo, source)
+
+
+def upstream_path(name):
+    """Where a client-layout file is expected to live in the upstream branch."""
+    if name.startswith("public/client/"):
+        return "public/" + name[len("public/client/"):]
+    return name
+
+
+def report_stale_tracked(repo, source):
+    """Warn about anything else git still tracks here that upstream has dropped.
+
+    The page sweep above only looks at .php under the web root, so images,
+    javascript, dotfiles and src/ classes that were deleted upstream survive
+    every rebuild unnoticed - the build only ever copies, it never deletes.
+    Comparing the two indexes rather than the two working trees keeps a
+    part-rebuilt tree quiet: files copied in but not committed are untracked,
+    so a new upstream file is never mistaken for a stale local one.
+    """
+    upstream = tracked_files(os.path.dirname(os.path.abspath(source)))
+    downstream = tracked_files(repo)
+    if upstream is None or downstream is None:
+        print("NOTE: not a git checkout, skipped the tracked-file comparison")
+
+        return
+
+    for name in sorted(downstream):
+        if upstream_path(name) not in upstream:
+            print("STALE: " + os.path.join(repo, name) + " no longer exists in " + source)
 
 
 # src/ always sits at the repository root, so every page under public/ wants a

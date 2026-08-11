@@ -25,6 +25,7 @@ nothing - if it does, the branch is not what the transform produces.
 import codecs
 import os
 import re
+import subprocess
 import sys
 
 SOURCE = sys.argv[1] if len(sys.argv) > 1 else "./ampache-patch8/public"
@@ -93,6 +94,17 @@ def php_files(path):
     return sorted(found)
 
 
+def tracked_files(path):
+    """Every path git tracks in the checkout at path, or None when it is not one."""
+    try:
+        result = subprocess.run(["git", "-C", path, "ls-files", "-z"],
+                                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, check=True)
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+    return {name for name in result.stdout.decode("utf-8").split("\0") if name}
+
+
 def fix_init_depth(repo, relpath):
     """Point src/Config/ requires at the real depth of the file below the repo.
 
@@ -130,6 +142,31 @@ def report_stale(repo, source):
                     print("STALE: " + filename + " no longer exists in " + source)
         elif name.endswith(".php") and os.path.isfile(target) and is_page(target):
             print("STALE: " + target + " no longer exists in " + source)
+
+    report_stale_tracked(repo, source)
+
+
+def report_stale_tracked(repo, source):
+    """Warn about anything else git still tracks here that upstream has dropped.
+
+    The page sweep above only looks at .php pages, so images, javascript and
+    dotfiles that were deleted upstream survive every rebuild unnoticed - the
+    build only ever copies, it never deletes. Comparing the two indexes rather
+    than the two working trees keeps a part-rebuilt tree quiet: files copied in
+    but not committed are untracked, so a new upstream file is never mistaken
+    for a stale local one. The flattening means a root file is upstream's
+    public/<name> or its repository-root namesake, and either one will do.
+    """
+    upstream = tracked_files(os.path.dirname(os.path.abspath(source)))
+    downstream = tracked_files(repo)
+    if upstream is None or downstream is None:
+        print("NOTE: not a git checkout, skipped the tracked-file comparison")
+
+        return
+
+    for name in sorted(downstream):
+        if name not in upstream and "public/" + name not in upstream:
+            print("STALE: " + os.path.join(repo, name) + " no longer exists in " + source)
 
 
 # public/<anything> is copied to the repository root, so rewrite the requires
