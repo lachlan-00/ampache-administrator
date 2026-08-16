@@ -1,8 +1,46 @@
 #!/usr/bin/env python3
 
+"""Rewrite ampache-patch7 paths for the flattened 'squashed7' layout.
+
+build_ampache-squashed7.sh copies ampache-patch7/public/* to the repository
+root, so everything that assumed a public/ web root loses one directory level.
+
+Every rewrite below is idempotent: it targets the final value instead of
+nudging the current one, so re-running this on a tree that was not refreshed
+from ampache-patch7 is safe. The old relative rewrites ("add one ../") did
+corrupt the tree when they ran twice.
+
+The list of files to touch is derived from ampache-patch7/public rather than
+hard-coded, so new pages are picked up automatically and removed ones
+(channel.php, captcha/, ...) simply stop being processed.
+
+Usage: squash-ampache7.py [source-public-dir] [target-repo]
+
+Both default to the working copies next to this script.
+"""
+
 import codecs
 import os
 import re
+import subprocess
+import sys
+
+SOURCE = sys.argv[1] if len(sys.argv) > 1 else "./ampache-patch7/public"
+TARGET = sys.argv[2] if len(sys.argv) > 2 else "./ampache-squashed7"
+
+# "$dic = require __DIR__ . '/../src/Config/Init.php';" and friends. The number
+# of ../ is matched loosely so the correct depth can be written back over it.
+INIT_FIND = r"__DIR__ \. '(?:/\.\.)*/src/Config/"
+
+# the STRUCTURE constant, matched on its final value so a re-run is a no-op
+STRUCTURE_FIND = r"(const (?:string )?STRUCTURE\s*=\s*)'(?:public|client|squashed)'"
+
+# __DIR__ paths that reach out of the web root into the repository root.
+# ./templates is one level below the root, so they all collapse to '/../'.
+# Sibling references such as '/../dist/' and '/../lib/' are deliberately not
+# matched: templates/../dist is still correct after the move.
+ROOT_FIND = r"__DIR__ \. '(?:/\.\.)+/(vendor|config|resources|public)(?=[/'])"
+
 
 def self_check(folder, find, replace):
     if os.path.isfile(folder):
@@ -13,9 +51,10 @@ def self_check(folder, find, replace):
 
         newdata = re.sub(find, replace, filedata)
 
-        f = codecs.open(folder, 'w', encoding="utf-8")
-        f.write(newdata)
-        f.close()
+        if newdata != filedata:
+            f = codecs.open(folder, 'w', encoding="utf-8")
+            f.write(newdata)
+            f.close()
     elif os.path.isdir(folder):
         print("DIR " + folder)
         for files in os.listdir(folder):
@@ -24,7 +63,7 @@ def self_check(folder, find, replace):
                 self_check(filename, find, replace)
             elif os.path.isfile(filename):
                 extension = os.path.splitext(filename)[-1]
-                if extension == ".php" or extension == ".json" or extension == ".sh":
+                if extension == ".php" or extension == ".phtml" or extension == ".json" or extension == ".sh":
                     print("Reading " + extension + ": " + filename)
                     f = codecs.open(filename, 'r', encoding="utf-8")
                     filedata = f.read()
@@ -32,76 +71,122 @@ def self_check(folder, find, replace):
 
                     newdata = re.sub(find, replace, filedata)
 
-                    f = codecs.open(filename, 'w', encoding="utf-8")
-                    f.write(newdata)
-                    f.close()
+                    if newdata != filedata:
+                        f = codecs.open(filename, 'w', encoding="utf-8")
+                        f.write(newdata)
+                        f.close()
 
-self_check("./ampache-squashed7/lib/javascript/search-data.php", "\$dic = require __DIR__ \. '/\.\./\.\./\.\./src/Config/Init\.php';", "$dic = require __DIR__ . '/../../src/Config/Init.php';")
 
-self_check("./ampache-squashed7/src", "/public/", "/")
-self_check("./ampache-squashed7/templates", "/public/", "/")
-self_check("./ampache-squashed7/templates", "/\.\./\.\./", "/../")
+def php_files(path):
+    """Every .php file at or below path."""
+    if os.path.isfile(path):
+        return [path] if path.endswith(".php") else []
+    if not os.path.isdir(path):
+        return []
+    found = []
+    for dirpath, dirnames, filenames in os.walk(path):
+        for name in sorted(filenames):
+            if name.endswith(".php"):
+                found.append(os.path.join(dirpath, name))
+    return sorted(found)
 
-self_check("./ampache-squashed7/albums.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/logout.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/show_get.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/artists.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/lostpassword.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/smartplaylist.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/arts.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/mashup.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/song.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/batch.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/now_playing.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/stats.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/broadcast.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/phpinfo.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/stream.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/browse.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/playlist.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/test.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/channel.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/podcast_episode.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/tvshow_seasons.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/cookie_disclaimer.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/podcast.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/tvshows.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/democratic.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/preferences.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/update.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/error.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/pvmsg.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/upload.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/graph.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/radio.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/util.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/image.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/random.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/video.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/index.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/register.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/waveform.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/install.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/rss.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/web_player_embedded.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/labels.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/search.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/web_player.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/localplay.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/share.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/login.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
-self_check("./ampache-squashed7/shout.php", "__DIR__ \. '/\.\./", "__DIR__ . '/")
 
-self_check("./ampache-squashed7/composer.json", "public/lib", "lib")
-self_check("./ampache-squashed7/package.json", "public/lib", "lib")
-self_check("./ampache-squashed7/locale/base/gather-messages.sh", "public/lib", "lib")
+def tracked_files(path):
+    """Every path git tracks in the checkout at path, or None when it is not one."""
+    try:
+        result = subprocess.run(["git", "-C", path, "ls-files", "-z"],
+                                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, check=True)
+    except (OSError, subprocess.CalledProcessError):
+        return None
 
-self_check("./ampache-squashed7/admin", "\$dic = require __DIR__ \. '/\.\./\.\./src/Config/Init\.php';", "$dic = require __DIR__ . '/../src/Config/Init.php';")
-self_check("./ampache-squashed7/captcha", "\$dic = require __DIR__ \. '/\.\./\.\./src/Config/Init\.php';", "$dic = require __DIR__ . '/../src/Config/Init.php';")
-self_check("./ampache-squashed7/daap", "\$dic = require __DIR__ \. '/\.\./\.\./src/Config/Init\.php';", "$dic = require __DIR__ . '/../src/Config/Init.php';")
-self_check("./ampache-squashed7/play", "\$dic = require __DIR__ \. '/\.\./\.\./src/Config/Init\.php';", "$dic = require __DIR__ . '/../src/Config/Init.php';")
-self_check("./ampache-squashed7/rest", "\$dic = require __DIR__ \. '/\.\./\.\./src/Config/Init\.php';", "$dic = require __DIR__ . '/../src/Config/Init.php';")
-self_check("./ampache-squashed7/server", "\$dic = require __DIR__ \. '/\.\./\.\./src/Config/Init\.php';", "$dic = require __DIR__ . '/../src/Config/Init.php';")
-self_check("./ampache-squashed7/upnp", "\$dic = require __DIR__ \. '/\.\./\.\./src/Config/Init\.php';", "$dic = require __DIR__ . '/../src/Config/Init.php';")
-self_check("./ampache-squashed7/webdav", "\$dic = require __DIR__ \. '/\.\./\.\./src/Config/Init\.php';", "$dic = require __DIR__ . '/../src/Config/Init.php';")
+    return {name for name in result.stdout.decode("utf-8").split("\0") if name}
 
+
+def fix_init_depth(repo, relpath):
+    """Point src/Config/ requires at the real depth of the file below the repo.
+
+    src/ always sits at the repository root, so the correct number of ../ is
+    simply how deep the file ended up. That makes this self-correcting no
+    matter what the file currently says.
+    """
+    for filename in php_files(os.path.join(repo, relpath)):
+        parent = os.path.relpath(os.path.dirname(filename), repo)
+        depth = 0 if parent == os.curdir else len(parent.split(os.sep))
+        self_check(filename, INIT_FIND, "__DIR__ . '" + ("/.." * depth) + "/src/Config/")
+
+
+def is_page(filename):
+    """A web-root page bootstraps the container; rector.php and friends do not."""
+    f = codecs.open(filename, 'r', encoding="utf-8")
+    filedata = f.read()
+    f.close()
+
+    return "src/Config/Init.php" in filedata or "src/Config/Bootstrap.php" in filedata
+
+
+def report_stale(repo, source):
+    """Warn about web-root pages the upstream branch no longer ships.
+
+    These are never refreshed by the build, so they keep whatever paths they
+    had and quietly rot. Left for a human to delete rather than removed here.
+    """
+    for name in sorted(os.listdir(repo)):
+        target = os.path.join(repo, name)
+        if os.path.exists(os.path.join(source, name)):
+            for filename in php_files(target):
+                mirror = os.path.join(source, os.path.relpath(filename, repo))
+                if not os.path.exists(mirror):
+                    print("STALE: " + filename + " no longer exists in " + source)
+        elif name.endswith(".php") and os.path.isfile(target) and is_page(target):
+            print("STALE: " + target + " no longer exists in " + source)
+
+    report_stale_tracked(repo, source)
+
+
+def report_stale_tracked(repo, source):
+    """Warn about anything else git still tracks here that upstream has dropped.
+
+    The page sweep above only looks at .php pages, so images, javascript and
+    dotfiles that were deleted upstream survive every rebuild unnoticed - the
+    build only ever copies, it never deletes. Comparing the two indexes rather
+    than the two working trees keeps a part-rebuilt tree quiet: files copied in
+    but not committed are untracked, so a new upstream file is never mistaken
+    for a stale local one. The flattening means a root file is upstream's
+    public/<name> or its repository-root namesake, and either one will do.
+    """
+    upstream = tracked_files(os.path.dirname(os.path.abspath(source)))
+    downstream = tracked_files(repo)
+    if upstream is None or downstream is None:
+        print("NOTE: not a git checkout, skipped the tracked-file comparison")
+
+        return
+
+    for name in sorted(downstream):
+        if name not in upstream and "public/" + name not in upstream:
+            print("STALE: " + os.path.join(repo, name) + " no longer exists in " + source)
+
+
+# public/<anything> is copied to the repository root, so rewrite the requires
+# in every page that came across to match where it landed.
+for entry in sorted(os.listdir(SOURCE)):
+    fix_init_depth(TARGET, entry)
+
+# AmpConfig::get('structure') is read at runtime to pick the release zip and the
+# web root, and the copy from ampache-patch7 always brings 'public' with it, so
+# the constant has to be written back on every rebuild.
+self_check(TARGET + "/src/Config/Init/InitializationHandlerConfig.php",
+           STRUCTURE_FIND,
+           "\\1'squashed'")
+
+self_check(TARGET + "/src", "/public/", "/")
+
+# ./templates lost a level too. Fix the repo-root paths before dropping
+# "public/", otherwise '/../../public/' has nothing left to match on.
+self_check(TARGET + "/templates", ROOT_FIND, "__DIR__ . '/../\\1")
+self_check(TARGET + "/templates", "/public/", "/")
+
+self_check(TARGET + "/composer.json", "public/lib", "lib")
+self_check(TARGET + "/package.json", "public/lib", "lib")
+self_check(TARGET + "/locale/base/gather-messages.sh", "public/lib", "lib")
+
+report_stale(TARGET, SOURCE)
