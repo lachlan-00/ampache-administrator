@@ -8,7 +8,7 @@ fi
 START=$(date)
 
 # Ampache 8 is PHP 8.5+ only, so php8.5 is the only zip the release publishes.
-if [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
+if [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "client" ] || [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
   RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-patch8/src/Config/Init/InitializationHandlerConfig.php`
   status=$(curl --head --silent --location --output /dev/null --write-out '%{http_code}' https://github.com/ampache/ampache/releases/download/${RELEASEVERSION}/ampache-${RELEASEVERSION}_all_php8.5.zip)
   if [ "$status" != "200" ]; then
