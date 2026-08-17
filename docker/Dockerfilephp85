@@ -6,7 +6,7 @@ ARG PHPVERSION=8.5
 
 RUN     sh -c 'echo "Types: deb\n# http://snapshot.debian.org/archive/debian/20230612T000000Z\nURIs: http://deb.debian.org/debian\nSuites: stable stable-updates\nComponents: main contrib non-free\nSigned-By: /usr/share/keyrings/debian-archive-keyring.gpg\n\nTypes: deb\n# http://snapshot.debian.org/archive/debian-security/20230612T000000Z\nURIs: http://deb.debian.org/debian-security\nSuites: stable-security\nComponents: main\nSigned-By: /usr/share/keyrings/debian-archive-keyring.gpg\n" > /etc/apt/sources.list.d/debian.sources' \
     &&  apt-get -q -q update \
-    &&  apt-get -q -q -y install --no-install-recommends wget lsb-release ca-certificates curl libdvd-pkg extrepo \
+    &&  apt-get -q -q -y install --no-install-recommends wget lsb-release ca-certificates curl extrepo \
     &&  extrepo enable sury \
     &&  apt-get update \
     &&  apt-get -q -q -y install --no-install-recommends \
@@ -57,9 +57,6 @@ RUN     sh -c 'echo "Types: deb\n# http://snapshot.debian.org/archive/debian/202
           vorbis-tools \
           zip \
           unzip \
-    &&  update-alternatives --set php /usr/bin/php8.5 \
-    &&  update-alternatives --set phpize /usr/bin/phpize8.5 \
-    &&  update-alternatives --set php-config /usr/bin/php-config8.5 \
     &&  phpenmod -v 8.5 xml \
     &&  rm -rf /var/www/html/* /etc/apache2/sites-enabled/* /var/lib/apt/lists/* \
     &&  mkdir -p /var/log/ampache \
@@ -73,15 +70,10 @@ RUN     sh -c 'echo "Types: deb\n# http://snapshot.debian.org/archive/debian/202
     &&  a2enmod rewrite \
     &&  sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
     &&  locale-gen \
-    &&  pecl install xdebug \
-    &&  echo "zend_extension=$(find /usr/lib/php/ -name xdebug.so)" > /etc/php/8.5/apache2/conf.d/xdebug.ini \
-    &&  echo "xdebug.remote_enable=on" >> /etc/php/8.5/apache2/conf.d/xdebug.ini \
-    &&  echo "xdebug.remote_autostart=off" >> /etc/php/8.5/apache2/conf.d/xdebug.ini \
     &&  wget -q -O /usr/local/bin/composer https://getcomposer.org/download/latest-stable/composer.phar \
     &&  chmod +x /usr/local/bin/composer \
     &&  apt-get -qq purge \
           extrepo \
-          libdvd-pkg \
           lsb-release \
           unzip \
           wget \
