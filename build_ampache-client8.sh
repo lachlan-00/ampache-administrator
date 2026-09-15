@@ -33,6 +33,9 @@ fi
 if [ ! -d $AMPACHEDIR/ampache-client8/public/client/play ]; then
   mkdir $AMPACHEDIR/ampache-client8/public/client/play
 fi
+if [ ! -d $AMPACHEDIR/ampache-client8/public/jellyfin ]; then
+  mkdir $AMPACHEDIR/ampache-client8/public/jellyfin
+fi
 if [ ! -d $AMPACHEDIR/ampache-client8/public/client/images ]; then
   mkdir $AMPACHEDIR/ampache-client8/public/client/images
 fi
@@ -64,6 +67,7 @@ cp -fv $AMPACHEDIR/ampache-$RELEASEBRANCH/public/*.php $AMPACHEDIR/ampache-clien
 cp -fv $AMPACHEDIR/ampache-$RELEASEBRANCH/public/.htaccess.dist $AMPACHEDIR/ampache-client8/public/
 cp -rfv $AMPACHEDIR/ampache-$RELEASEBRANCH/public/admin/. $AMPACHEDIR/ampache-client8/public/admin/
 cp -rfv $AMPACHEDIR/ampache-$RELEASEBRANCH/public/daap/. $AMPACHEDIR/ampache-client8/public/daap/
+cp -rfv $AMPACHEDIR/ampache-$RELEASEBRANCH/public/jellyfin/. $AMPACHEDIR/ampache-client8/public/jellyfin/
 cp -rfv $AMPACHEDIR/ampache-$RELEASEBRANCH/public/oidc/. $AMPACHEDIR/ampache-client8/public/oidc/
 cp -rfv $AMPACHEDIR/ampache-$RELEASEBRANCH/public/rest/. $AMPACHEDIR/ampache-client8/public/rest/
 cp -rfv $AMPACHEDIR/ampache-$RELEASEBRANCH/public/server/. $AMPACHEDIR/ampache-client8/public/server/

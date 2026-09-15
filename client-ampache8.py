@@ -43,7 +43,7 @@ TARGET = sys.argv[2] if len(sys.argv) > 2 else "./ampache-client8"
 
 # entries of ampache-patch8/public that stay at the web root; everything else
 # is served from public/client/
-ROOT_ENTRIES = ("admin", "daap", "oidc", "rest", "server", "upnp", "webdav")
+ROOT_ENTRIES = ("admin", "daap", "jellyfin", "oidc", "rest", "server", "upnp", "webdav")
 
 # "$dic = require __DIR__ . '/../src/Config/Init.php';" and friends. The number
 # of ../ is matched loosely so the correct depth can be written back over it.
