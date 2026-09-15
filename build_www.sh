@@ -206,9 +206,6 @@ done
 copy_file docs/openapi.json static/openapi.json
 copy_file docs/openapi-6.json static/openapi-6.json
 
-# translators grab the current template from the site, so it goes out with the build
-copy_file locale/base/messages.pot static/messages.pot
-
 if [ "$DOCSCHANGED" = "1" ]; then
   echo "ampache.org-docs has uncommitted changes from ampache-develop, commit them so the deployed site keeps them"
 fi
