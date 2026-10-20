@@ -8439,7 +8439,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-player.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=player&offset=0&limit=0&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=player&filter={self.songid}&type=song&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-folders.bru
@@ -9564,7 +9564,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-player.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=player&offset=0&limit=0&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=player&filter={self.songid}&type=song&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-folders.bru
