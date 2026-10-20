@@ -1,5 +1,7 @@
 
 *.pyc
+.env
+.idea/*
 ampache-*_all*.zip
 ampache/
 ampache-*/
@@ -47,3 +49,4 @@ MusicBrainz/
 AmpacheApi-bruno/
 nohup.out
 /Captcha
+node_modules/

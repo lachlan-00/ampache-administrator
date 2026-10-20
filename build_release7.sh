@@ -171,6 +171,7 @@ find . -name "*.map.1" -exec rm {} \;
 # php 8.2
 cd $AMPACHEDIR/releases/7/php82
 rm -rf vendor/* public/lib/components/*
+php8.2 $COMPOSERPATH update
 php8.2 $COMPOSERPATH install || exit 1
 npm install || exit 1
 npm run build || exit 1
@@ -179,6 +180,7 @@ find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php82_squashed
 rm -rf vendor/* ./lib/components/* ./docker/
+php8.2 $COMPOSERPATH update
 php8.2 $COMPOSERPATH install || exit 1
 npm install || exit 1
 npm run build || exit 1
@@ -187,6 +189,7 @@ find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php82_client
 rm -rf vendor/* public/client/lib/components/*
+php8.2 $COMPOSERPATH update
 php8.2 $COMPOSERPATH install || exit 1
 npm install || exit 1
 npm run build || exit 1
@@ -196,6 +199,7 @@ find . -name "*.map.1" -exec rm {} \;
 # php 8.3
 cd $AMPACHEDIR/releases/7/php83
 rm -rf vendor/* public/lib/components/*
+php8.2 $COMPOSERPATH update
 php8.3 $COMPOSERPATH install || exit 1
 npm install || exit 1
 npm run build || exit 1
@@ -204,6 +208,7 @@ find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php83_squashed
 rm -rf vendor/* ./lib/components/* ./docker/
+php8.2 $COMPOSERPATH update
 php8.3 $COMPOSERPATH install || exit 1
 npm install || exit 1
 npm run build || exit 1
@@ -212,6 +217,7 @@ find . -name "*.map.1" -exec rm {} \;
 
 cd $AMPACHEDIR/releases/7/php83_client
 rm -rf vendor/* public/client/lib/components/*
+php8.2 $COMPOSERPATH update
 php8.3 $COMPOSERPATH install || exit 1
 npm install || exit 1
 npm run build || exit 1

@@ -176,6 +176,39 @@ echo "Testing $RELEASEVERSION php85_client $DEMOPASSWORD"
 echo "python3 $AMPACHEDIR/python/build_all8.py http://${LOCALIP}:${PORTCLIENT} $DEMOPASSWORD"
 python3 $AMPACHEDIR/python/build_all8.py http://${LOCALIP}:${PORTCLIENT} $DEMOPASSWORD admin 1 $APIVERSION 8
 
+# Run the Playwright UI smoke test against each structure
+#
+# The python harness above only exercises the API, so it never notices a broken template, a 404'd asset
+# or a JS error on the actual rendered page -- the kind of regression that has hit squashed/client on UI
+# changes. This drives a real headless browser through login, then crawls every page reachable from the
+# real #header/#sidebar links (including clicking the AJAX-only home/preferences/admin tabs to reveal
+# their content), using each structure's own real admin password (not the API auth key $DEMOPASSWORD
+# above).
+#
+# client's user-facing pages live under /client; its admin/rest/play/etc. infra stays at the web root,
+# which the crawl follows correctly since it filters by origin rather than by path prefix.
+
+if [ ! -d $AMPACHEDIR/playwright/node_modules ]; then
+  (cd $AMPACHEDIR/playwright && npm install)
+fi
+
+PLAYWRIGHTFAILS=0
+
+echo
+echo "Testing $RELEASEVERSION ampache85 UI"
+node $AMPACHEDIR/playwright/release-smoke.js "http://${LOCALIP}:${PORTPUBLIC}" php85 admin "$AMPACHEPASSWORD" || PLAYWRIGHTFAILS=$((PLAYWRIGHTFAILS+1))
+
+echo
+echo "Testing $RELEASEVERSION ampache85_squashed UI"
+node $AMPACHEDIR/playwright/release-smoke.js "http://${LOCALIP}:${PORTSQUASHED}" php85_squashed admin "$AMPACHEPASSWORD" || PLAYWRIGHTFAILS=$((PLAYWRIGHTFAILS+1))
+
+echo
+echo "Testing $RELEASEVERSION php85_client UI"
+node $AMPACHEDIR/playwright/release-smoke.js "http://${LOCALIP}:${PORTCLIENT}/client" php85_client admin "$AMPACHEPASSWORD" || PLAYWRIGHTFAILS=$((PLAYWRIGHTFAILS+1))
+
+echo
+echo "PLAYWRIGHT UI SMOKE TEST: $PLAYWRIGHTFAILS structure(s) failed"
+
 echo "PRINT ERRORS"
 cat $AMPACHEDIR/docker/log/8*.log | grep Error
 
