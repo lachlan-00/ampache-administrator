@@ -644,7 +644,7 @@ class AmpacheRunner:
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (disabled)", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/create/user/xml-user_preference.bru
-            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=ajax_load&version={api_version}"
+            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=api_enable_6&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/create/user/xml-user_preferences.bru
@@ -1301,7 +1301,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-system_preference.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=api_enable_6&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache3/xml/xml-system_update.bru
@@ -1604,7 +1604,7 @@ class AmpacheRunner:
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (disabled)", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/create/user/json-user_preference.bru
-            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=ajax_load&version={api_version}"
+            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=api_enable_6&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/create/user/json-user_preferences.bru
@@ -2262,7 +2262,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-system_preference.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=api_enable_6&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/json/json-system_update.bru
@@ -2560,7 +2560,7 @@ class AmpacheRunner:
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (disabled)", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/create/user/xml-user_preference.bru
-            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=ajax_load&version={api_version}"
+            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=api_enable_6&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/create/user/xml-user_preferences.bru
@@ -3217,7 +3217,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-system_preference.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=api_enable_6&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache4/xml/xml-system_update.bru
@@ -3519,7 +3519,7 @@ class AmpacheRunner:
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (disabled)", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/create/user/json-user_preference.bru
-            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=ajax_load&version={api_version}"
+            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=api_enable_6&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/create/user/json-user_preferences.bru
@@ -4176,7 +4176,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-system_preference.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=api_enable_6&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/json/json-system_update.bru
@@ -4474,7 +4474,7 @@ class AmpacheRunner:
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (disabled)", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/create/user/xml-user_preference.bru
-            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=ajax_load&version={api_version}"
+            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=api_enable_6&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/create/user/xml-user_preferences.bru
@@ -5131,7 +5131,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-system_preference.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=api_enable_6&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache5/xml/xml-system_update.bru
@@ -5525,7 +5525,7 @@ class AmpacheRunner:
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (disabled)", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/user/json-user_preference.bru
-            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=ajax_load&version={api_version}"
+            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=api_enable_6&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/create/user/json-user_preferences.bru
@@ -6195,7 +6195,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-system_preference.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=api_enable_6&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/json/json-system_update.bru
@@ -6571,7 +6571,7 @@ class AmpacheRunner:
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (disabled)", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/create/user/xml-user_preference.bru
-            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=ajax_load&version={api_version}"
+            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=api_enable_6&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/create/user/xml-user_preferences.bru
@@ -7240,7 +7240,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-system_preference.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=api_enable_6&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/xml-system_update.bru
@@ -7734,7 +7734,7 @@ class AmpacheRunner:
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (disabled)", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/user/json-user_preference.bru
-            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=ajax_load&version={api_version}"
+            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=api_enable_6&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/user/json-user_preferences.bru
@@ -7810,6 +7810,9 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-advanced_search.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=advanced_search&operator=or&type=song&offset=0&limit=4&random=0&rule_1=artist&rule_1_operator=2&rule_1_input=A&rule_2=artist&rule_2_operator=2&rule_2_input=C&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song)", self.headers), api_format)
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-advanced_search.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=advanced_search&operator=and&type=song&offset=0&limit=4&random=0&rule_1=title&rule_1_operator=4&rule_1_input=A&rule_1_group=1&rule_2=title&rule_2_operator=4&rule_2_input=C&rule_2_group=1&group_1_operator=or&rule_3=artist&rule_3_operator=2&rule_3_input=A&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song, grouped)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-get_lyrics.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=get_lyrics&filter={self.songid}&version={api_version}"
@@ -8365,7 +8368,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-system_preference.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=api_enable_6&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-system_update.bru
@@ -8861,7 +8864,7 @@ class AmpacheRunner:
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (disabled)", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/user/xml-user_preference.bru
-            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=ajax_load&version={api_version}"
+            api_url = f"{URL}/server/{api_format}.server.php?action=user_preference&username={TEMPUSERNAME}_{api_format}&filter=api_enable_6&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/user/xml-user_preferences.bru
@@ -8936,6 +8939,9 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-advanced_search.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=advanced_search&operator=or&type=song&offset=0&limit=4&random=0&rule_1=artist&rule_1_operator=2&rule_1_input=A&rule_2=artist&rule_2_operator=2&rule_2_input=C&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song)", self.headers), api_format)
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-advanced_search.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=advanced_search&operator=and&type=song&offset=0&limit=4&random=0&rule_1=title&rule_1_operator=4&rule_1_input=A&rule_1_group=1&rule_2=title&rule_2_operator=4&rule_2_input=C&rule_2_group=1&group_1_operator=or&rule_3=artist&rule_3_operator=2&rule_3_input=A&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song, grouped)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-get_lyrics.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=get_lyrics&filter={self.songid}&version={api_version}"
@@ -9487,7 +9493,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-system_preference.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=ajax_load&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=system_preference&filter=api_enable_6&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-system_update.bru
@@ -9824,9 +9830,9 @@ class AmpacheRunner:
             else:
                 rest_call('PATCH', f'preferences/temp_pref_rest_{api_format}?value=1')
                 rest_call('DELETE', f'preferences/temp_pref_rest_{api_format}')
-            rest_call('GET', 'preferences/ajax_load')
+            rest_call('GET', 'preferences/api_enable_6')
             rest_call('GET', 'preferences?offset=0&limit=4')
-            rest_call('GET', 'system-preferences/ajax_load')
+            rest_call('GET', 'system-preferences/api_enable_6')
             rest_call('GET', 'system-preferences?offset=0&limit=4')
 
             # ------------------------------------------------------------------ register / scrobble
