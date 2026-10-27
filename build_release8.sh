@@ -17,6 +17,7 @@ ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./tests/* --exclude=./phpunit.xml --exclude=./
 ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./docs/openapi*.json --exclude=./docs/subsonic-rest-api-*.xsd.xml --exclude=./docs/templates/*"
 ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./resources/scripts/api-docs/* --exclude=./resources/scripts/tests/*"
 ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./resources/scripts/hooks/* --exclude=./resources/scripts/composer/*"
+ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./resources/git-hooks/*"
 ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./resources/scripts/crawl/* --exclude=./resources/licenseheader.txt"
 ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./resources/scripts/xss-probe/*"
 ZIPEXCLUDE="$ZIPEXCLUDE --exclude=./locale/base/*"
