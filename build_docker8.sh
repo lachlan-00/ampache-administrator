@@ -8,7 +8,7 @@ fi
 START=$(date)
 
 # Ampache 8 is PHP 8.5+ only, so php8.5 is the only zip the release publishes.
-if [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "client" ] || [ $BRANCH = "nosql" ] || [ $BRANCH = "all" ]; then
+if [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] || [ $BRANCH = "client" ] || [ $BRANCH = "nosql" ] || [ $BRANCH = "rootless" ] || [ $BRANCH = "nosql-rootless" ] || [ $BRANCH = "all" ]; then
   RELEASEVERSION=`grep -oP '[0-9]+\.[0-9]+\.[0-9]+' ./ampache-patch8/src/Config/Init/InitializationHandlerConfig.php`
   status=$(curl --head --silent --location --output /dev/null --write-out '%{http_code}' https://github.com/ampache/ampache/releases/download/${RELEASEVERSION}/ampache-${RELEASEVERSION}_all_php8.5.zip)
   if [ "$status" != "200" ]; then
@@ -44,6 +44,30 @@ if [ $BRANCH = "nosql" ] || [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] || 
   cd $AMPACHEDIR/docker/ampache-docker-nosql/ && git checkout nosql && git reset --hard origin/nosql && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:nosql8 -t ampache/ampache:nosql${RELEASEVERSION} -t ampache/ampache:nosql --push .
 fi
 
+# ROOTLESS
+if [ $BRANCH = "rootless" ] || [ $BRANCH = "all" ]; then
+  if [ ! -d $AMPACHEDIR/docker/ampache-docker-rootless/ ]; then
+    cd $AMPACHEDIR/docker && git clone -b rootless https://github.com/ampache/ampache-docker.git ampache-docker-rootless
+  fi
+  if [ ! -f $AMPACHEDIR/docker/ampache-docker-rootless/Dockerfile ]; then
+    rm -rf $AMPACHEDIR/docker/ampache-docker-rootless
+    cd $AMPACHEDIR/docker && git clone -b rootless https://github.com/ampache/ampache-docker.git ampache-docker-rootless
+  fi
+  cd $AMPACHEDIR/docker/ampache-docker-rootless/ && git checkout rootless && git reset --hard origin/rootless && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:rootless --push .
+fi
+
+# NOSQL ROOTLESS
+if [ $BRANCH = "nosql-rootless" ] || [ $BRANCH = "rootless" ] || [ $BRANCH = "all" ]; then
+  if [ ! -d $AMPACHEDIR/docker/ampache-docker-nosql-rootless/ ]; then
+    cd $AMPACHEDIR/docker && git clone -b nosql-rootless https://github.com/ampache/ampache-docker.git ampache-docker-nosql-rootless
+  fi
+  if [ ! -f $AMPACHEDIR/docker/ampache-docker-nosql-rootless/Dockerfile ]; then
+    rm -rf $AMPACHEDIR/docker/ampache-docker-nosql-rootless
+    cd $AMPACHEDIR/docker && git clone -b nosql-rootless https://github.com/ampache/ampache-docker.git ampache-docker-nosql-rootless
+  fi
+  cd $AMPACHEDIR/docker/ampache-docker-nosql-rootless/ && git checkout nosql-rootless && git reset --hard origin/nosql-rootless && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:nosql-rootless --push .
+fi
+
 # CLIENT
 if [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] ||  [ $BRANCH = "client" ] || [ $BRANCH = "all" ]; then
   if [ ! -d $AMPACHEDIR/docker/ampache-docker-client/ ]; then
@@ -58,14 +82,14 @@ fi
 
 # CLIENT NOSQL
 if [ $BRANCH = "nosql" ] || [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] ||  [ $BRANCH = "client" ] ||  [ $BRANCH = "all" ]; then
-  if [ ! -d $AMPACHEDIR/docker/ampache-docker-client-nosql/ ]; then
-    cd $AMPACHEDIR/docker && git clone -b client-nosql https://github.com/ampache/ampache-docker.git ampache-docker-client-nosql
+  if [ ! -d $AMPACHEDIR/docker/ampache-docker-nosql-client/ ]; then
+    cd $AMPACHEDIR/docker && git clone -b nosql-client https://github.com/ampache/ampache-docker.git ampache-docker-nosql-client
   fi
-  if [ ! -f $AMPACHEDIR/docker/ampache-docker-client-nosql/Dockerfile ]; then
-    rm -rf $AMPACHEDIR/docker/ampache-docker-client-nosql
-    cd $AMPACHEDIR/docker && git clone -b client-nosql https://github.com/ampache/ampache-docker.git ampache-docker-client-nosql
+  if [ ! -f $AMPACHEDIR/docker/ampache-docker-nosql-client/Dockerfile ]; then
+    rm -rf $AMPACHEDIR/docker/ampache-docker-nosql-client
+    cd $AMPACHEDIR/docker && git clone -b nosql-client https://github.com/ampache/ampache-docker.git ampache-docker-nosql-client
   fi
-  cd $AMPACHEDIR/docker/ampache-docker-client-nosql/ && git checkout client-nosql && git reset --hard origin/client-nosql && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:client-nosql -t ampache/ampache:client-nosql8 -t ampache/ampache:client-nosql${RELEASEVERSION} --push .
+  cd $AMPACHEDIR/docker/ampache-docker-nosql-client/ && git checkout nosql-client && git reset --hard origin/nosql-client && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:nosql-client -t ampache/ampache:nosql-client8 -t ampache/ampache:nosql-client${RELEASEVERSION} --push .
 fi
 
 # DEVELOP

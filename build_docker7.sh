@@ -57,14 +57,14 @@ fi
 
 # CLIENT NOSQL
 if [ $BRANCH = "nosql" ] || [ $BRANCH = "master" ] || [ $BRANCH = "stable" ] ||  [ $BRANCH = "client" ] ||  [ $BRANCH = "all" ]; then
-  if [ ! -d $AMPACHEDIR/docker/ampache-docker-client-nosql/ ]; then
-    cd $AMPACHEDIR/docker && git clone -b client-nosql https://github.com/ampache/ampache-docker.git ampache-docker-client-nosql
+  if [ ! -d $AMPACHEDIR/docker/ampache-docker-nosql-client/ ]; then
+    cd $AMPACHEDIR/docker && git clone -b nosql-client https://github.com/ampache/ampache-docker.git ampache-docker-nosql-client
   fi
-  if [ ! -f $AMPACHEDIR/docker/ampache-docker-client-nosql/Dockerfile ]; then
-    rm -rf $AMPACHEDIR/docker/ampache-docker-client-nosql
-    cd $AMPACHEDIR/docker && git clone -b client-nosql https://github.com/ampache/ampache-docker.git ampache-docker-client-nosql
+  if [ ! -f $AMPACHEDIR/docker/ampache-docker-nosql-client/Dockerfile ]; then
+    rm -rf $AMPACHEDIR/docker/ampache-docker-nosql-client
+    cd $AMPACHEDIR/docker && git clone -b nosql-client https://github.com/ampache/ampache-docker.git ampache-docker-nosql-client
   fi
-  cd $AMPACHEDIR/docker/ampache-docker-client-nosql/ && git checkout client-nosql && git reset --hard origin/client-nosql && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:client-nosql7 -t ampache/ampache:client-nosql${RELEASEVERSION} --push .
+  cd $AMPACHEDIR/docker/ampache-docker-nosql-client/ && git checkout nosql-client && git reset --hard origin/nosql-client && git pull && docker buildx build --no-cache --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=${RELEASEVERSION} -t ampache/ampache:nosql-client7 -t ampache/ampache:nosql-client${RELEASEVERSION} --push .
 fi
 
 # go home
