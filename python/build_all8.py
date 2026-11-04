@@ -6355,6 +6355,10 @@ class AmpacheRunner:
         self.ampache_connection.set_debug(True)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/0_setup/xml-handshake.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=handshake&user=notauser&auth=badkey&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (error)", {}), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/0_setup/xml-handshake.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=handshake&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
@@ -8540,6 +8544,10 @@ class AmpacheRunner:
         self.ampache_connection.set_debug(True)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/0_setup/xml-handshake.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=handshake&user=notauser&auth=badkey&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (error)", {}), api_format)
+
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/0_setup/xml-handshake.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=handshake&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
@@ -9334,6 +9342,10 @@ class AmpacheRunner:
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-localplay.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=localplay&command=status&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (status)", self.headers), api_format)
+
+            # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-localplay_songs.bru
+            api_url = f"{URL}/server/{api_format}.server.php?action=localplay_songs&version={api_version}"
+            response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-democratic.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=democratic&method=playlist&version={api_version}"
