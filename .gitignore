@@ -12,8 +12,10 @@ docker/ampache-docker-develop/
 docker/log/*
 docker/media/*
 docker/music/*
+docker/test/*
 docs/*
 python/.idea/*
+python/docs/*
 python/python3-ampache8/
 python/python3-ampache6/
 python/python3-ampache5/
