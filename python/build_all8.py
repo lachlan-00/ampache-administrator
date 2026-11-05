@@ -139,7 +139,8 @@ class AmpacheRunner:
         self.albumartistid = '43'
         self.shareid = '4'
         self.smartlistid = 'smart_20'
-        self.musiccatalogpath = urllib.parse.quote_plus('/media/music')
+        # not the real music path -- catalog_add/catalog_create reject a path already inside an existing catalog
+        self.musiccatalogpath = urllib.parse.quote_plus('/tmp')
         self.songtodeletename = 'ZZZ_DELETE_ME_TEST_SONG'
         self.songtodeleteid = ''
         self.smartlisttodeletename = urllib.parse.quote_plus('ZZZ_DELETE_ME_TEST_SMARTLIST')
@@ -231,8 +232,6 @@ class AmpacheRunner:
         for catalog in response['catalog']:
             if catalog['gather_types'] == 'music' and catalog['name'] != 'upload':
                 self.musiccatalogid = catalog['id']
-                if catalog.get('path'):
-                    self.musiccatalogpath = urllib.parse.quote_plus(catalog['path'])
                 continue
             if catalog['gather_types'] == 'podcast':
                 self.podcastcatalogid = catalog['id']
@@ -6541,9 +6540,6 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/create/user/xml-register.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=register&username=user&fullname=fullname&password=password98hf29hf2390h&email=user@ampache.dev&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (error)", self.headers), api_format)
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/create/user/xml-register.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=register&username={REGISTERUSERNAME}_{api_format}&fullname=fullname&password=password98hf29hf2390h&email={REGISTERUSERNAME}_{api_format}@email.com&version={api_version}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache6/xml/create/user/xml-user_create.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=user_create&username={TEMPUSERNAME}_{api_format}&password=b4aa92f0f88c335369e52058b5d432a5e1b40440663bd97e86d9a796899acaf9&email={TEMPUSERNAME}_{api_format}@gmail.com&disable=0&version={api_version}"
@@ -7528,6 +7524,10 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/playlist/json-playlist_add.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=playlist_add&filter={createdplaylist}&id={self.playlistid}&type=playlist&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/playlist/json-playlist_add.bru
+        # NOTE: playlist_remove below expects self.songid2 to actually be in the playlist
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_add&filter={createdplaylist}&id={self.songid2}&type=song&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/playlist/json-playlist_edit.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=playlist_edit&filter={createdplaylist}&name={EXAMPLEPLAYLISTNAME}_{api_format}&type=public&version={api_version}"
@@ -7552,7 +7552,15 @@ class AmpacheRunner:
         # NOTE: the API8 album_disk, collection and playlist folder methods have no Bruno collection to mirror yet
 
         # [GET]  album_disks
-        api_url = f"{URL}/server/{api_format}.server.php?action=album_disks&filter={self.albumid}&offset=0&limit=4&version={api_version}"
+        # self.albumid can go stale by this point (json-pass update_from_tags/catalog clean may have
+        # reorganized it), so re-resolve a currently-valid album id rather than trust the setup-time one.
+        self.ampache_connection.set_debug(False)
+        api_url = f"{URL}/server/{api_format}.server.php?action=albums&offset=0&limit=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, "albums", self.headers), api_format)
+        self.ampache_connection.set_debug(True)
+        albumdiskalbumid = self.first_item(response['album'])['id']
+
+        api_url = f"{URL}/server/{api_format}.server.php?action=album_disks&filter={albumdiskalbumid}&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] album_disks
@@ -7815,7 +7823,7 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=advanced_search&operator=or&type=song&offset=0&limit=4&random=0&rule_1=artist&rule_1_operator=2&rule_1_input=A&rule_2=artist&rule_2_operator=2&rule_2_input=C&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song)", self.headers), api_format)
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-advanced_search.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=advanced_search&operator=and&type=song&offset=0&limit=4&random=0&rule_1=title&rule_1_operator=4&rule_1_input=A&rule_1_group=1&rule_2=title&rule_2_operator=4&rule_2_input=C&rule_2_group=1&group_1_operator=or&rule_3=artist&rule_3_operator=2&rule_3_input=A&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=advanced_search&operator=and&type=song&offset=0&limit=4&random=0&rule_1=title&rule_1_operator=2&rule_1_input=T&rule_1_group=1&rule_2=title&rule_2_operator=2&rule_2_input=I&rule_2_group=1&group_1_operator=or&rule_3=artist&rule_3_operator=2&rule_3_input=C&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song, grouped)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-get_lyrics.bru
@@ -7961,7 +7969,8 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=catalog_add&name=ZZZ_DELETE_ME_TEST_CATALOG_{api_format}&path={self.musiccatalogpath}&type=local&media_type=music&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
         try:
-            createdcatalog = response['id']
+            # catalog_add's json response is a flat catalog object, xml's is a catalogs() list envelope
+            createdcatalog = response['id'] if 'id' in response else self.first_item(response['catalog'])['id']
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/catalog/json-catalog_delete.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=catalog_delete&filter={createdcatalog}&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -7972,7 +7981,8 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=catalog_create&name=ZZZ_DELETE_ME_TEST_CATALOG2_{api_format}&path={self.musiccatalogpath}&type=local&media_type=music&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
         try:
-            createdcatalog2 = response['id']
+            # catalog_create's json response is a flat catalog object, xml's is a catalogs() list envelope
+            createdcatalog2 = response['id'] if 'id' in response else self.first_item(response['catalog'])['id']
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/create/catalog/json-catalog_delete.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=catalog_delete&filter={createdcatalog2}&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (create alias)", self.headers), api_format)
@@ -8096,6 +8106,9 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-index.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=index&type=song&include=0&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song)", self.headers), api_format)
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-index.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=index&type=song&include=1&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-index.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=index&type=song_artist&include=0&offset=0&limit=4&version={api_version}"
@@ -8404,7 +8417,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-url_to_song.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=url_to_song&url={URL}%2Fplay%2Findex.php%3Fssid%3Deeb9f1b8058248a7d583f479f518bb34%28type%3Dsong%28oid%3D{self.songid}%28uid%3D4%28player%3Dapi%28name%3DSynthetic%20-%20BrownSmoke.wma&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=url_to_song&url={URL}%2Fplay%2Findex.php%3Fssid%3Deeb9f1b8058248a7d583f479f518bb34%26type%3Dsong%26oid%3D{self.songid}%26uid%3D4%26player%3Dapi%26name%3DSynthetic%20-%20BrownSmoke.wma&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-user.bru
@@ -8439,7 +8452,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-get_external_metadata.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=get_external_metadata&offset=0&limit=0&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=get_external_metadata&filter={self.songid}&type=song&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/json/json-player.bru
@@ -8468,6 +8481,17 @@ class AmpacheRunner:
                         os.remove(os.path.join(root, file))
 
         self.ampache_connection.set_debug_path(docpath)
+
+        # self.albumid can be stale here -- the json pass above ran update_from_tags/catalog clean
+        # against it, which can reorganize or orphan the album it pointed at.
+        self.ampache_connection.set_debug(False)
+        api_url = f"{URL}/server/{api_format}.server.php?action=albums&offset=0&limit=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, "albums", self.headers), api_format)
+        self.ampache_connection.set_debug(True)
+        try:
+            self.albumid = self.first_item(response['album'])['id']
+        except (KeyError, IndexError, TypeError):
+            pass
 
         # do all the bad stuff first
 
@@ -8656,6 +8680,10 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/playlist/xml-playlist_add.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=playlist_add&filter={createdplaylist}&id={self.playlistid}&type=playlist&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/playlist/xml-playlist_add.bru
+        # NOTE: playlist_remove below expects self.songid2 to actually be in the playlist
+        api_url = f"{URL}/server/{api_format}.server.php?action=playlist_add&filter={createdplaylist}&id={self.songid2}&type=song&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/playlist/xml-playlist_edit.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=playlist_edit&filter={createdplaylist}&name={EXAMPLEPLAYLISTNAME}_{api_format}&type=public&version={api_version}"
@@ -8680,7 +8708,15 @@ class AmpacheRunner:
         # NOTE: the API8 album_disk, collection and playlist folder methods have no Bruno collection to mirror yet
 
         # [GET]  album_disks
-        api_url = f"{URL}/server/{api_format}.server.php?action=album_disks&filter={self.albumid}&offset=0&limit=4&version={api_version}"
+        # self.albumid can go stale by this point (json-pass update_from_tags/catalog clean may have
+        # reorganized it), so re-resolve a currently-valid album id rather than trust the setup-time one.
+        self.ampache_connection.set_debug(False)
+        api_url = f"{URL}/server/{api_format}.server.php?action=albums&offset=0&limit=1&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, "albums", self.headers), api_format)
+        self.ampache_connection.set_debug(True)
+        albumdiskalbumid = self.first_item(response['album'])['id']
+
+        api_url = f"{URL}/server/{api_format}.server.php?action=album_disks&filter={albumdiskalbumid}&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [VARS] album_disks
@@ -8842,9 +8878,6 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/user/xml-register.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=register&username=user&fullname=fullname&password=password98hf29hf2390h&email=user@ampache.dev&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (error)", self.headers), api_format)
-        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/user/xml-register.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=register&username={REGISTERUSERNAME}_{api_format}&fullname=fullname&password=password98hf29hf2390h&email={REGISTERUSERNAME}_{api_format}@email.com&version={api_version}"
-        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/user/xml-user_create.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=user_create&username={TEMPUSERNAME}_{api_format}&password=b4aa92f0f88c335389e52058b5d432a5e1b40440883bd97e88d9a798899acaf9&email={TEMPUSERNAME}_{api_format}@gmail.com&disable=0&version={api_version}"
@@ -8948,7 +8981,7 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=advanced_search&operator=or&type=song&offset=0&limit=4&random=0&rule_1=artist&rule_1_operator=2&rule_1_input=A&rule_2=artist&rule_2_operator=2&rule_2_input=C&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song)", self.headers), api_format)
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-advanced_search.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=advanced_search&operator=and&type=song&offset=0&limit=4&random=0&rule_1=title&rule_1_operator=4&rule_1_input=A&rule_1_group=1&rule_2=title&rule_2_operator=4&rule_2_input=C&rule_2_group=1&group_1_operator=or&rule_3=artist&rule_3_operator=2&rule_3_input=A&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=advanced_search&operator=and&type=song&offset=0&limit=4&random=0&rule_1=title&rule_1_operator=2&rule_1_input=T&rule_1_group=1&rule_2=title&rule_2_operator=2&rule_2_input=I&rule_2_group=1&group_1_operator=or&rule_3=artist&rule_3_operator=2&rule_3_input=C&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song, grouped)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-get_lyrics.bru
@@ -9094,7 +9127,8 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=catalog_add&name=ZZZ_DELETE_ME_TEST_CATALOG_{api_format}&path={self.musiccatalogpath}&type=local&media_type=music&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
         try:
-            createdcatalog = response['id']
+            # catalog_add's json response is a flat catalog object, xml's is a catalogs() list envelope
+            createdcatalog = response['id'] if 'id' in response else self.first_item(response['catalog'])['id']
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/catalog/xml-catalog_delete.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=catalog_delete&filter={createdcatalog}&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
@@ -9105,7 +9139,8 @@ class AmpacheRunner:
         api_url = f"{URL}/server/{api_format}.server.php?action=catalog_create&name=ZZZ_DELETE_ME_TEST_CATALOG2_{api_format}&path={self.musiccatalogpath}&type=local&media_type=music&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
         try:
-            createdcatalog2 = response['id']
+            # catalog_create's json response is a flat catalog object, xml's is a catalogs() list envelope
+            createdcatalog2 = response['id'] if 'id' in response else self.first_item(response['catalog'])['id']
             # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/create/catalog/xml-catalog_delete.bru
             api_url = f"{URL}/server/{api_format}.server.php?action=catalog_delete&filter={createdcatalog2}&version={api_version}"
             response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (create alias)", self.headers), api_format)
@@ -9229,6 +9264,9 @@ class AmpacheRunner:
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-index.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=index&type=song&include=0&offset=0&limit=4&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song)", self.headers), api_format)
+        # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-index.bru
+        api_url = f"{URL}/server/{api_format}.server.php?action=index&type=song&include=1&offset=0&limit=4&version={api_version}"
+        response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)} (song with include)", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-index.bru
         api_url = f"{URL}/server/{api_format}.server.php?action=index&type=song_artist&include=0&offset=0&limit=4&version={api_version}"
@@ -9537,7 +9575,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-url_to_song.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=url_to_song&url={URL}%2Fplay%2Findex.php%3Fssid%3Deeb9f1b8058248a7d583f479f518bb34%28type%3Dsong%28oid%3D{self.songid}%28uid%3D4%28player%3Dapi%28name%3DSynthetic%20-%20BrownSmoke.wma&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=url_to_song&url={URL}%2Fplay%2Findex.php%3Fssid%3Deeb9f1b8058248a7d583f479f518bb34%26type%3Dsong%26oid%3D{self.songid}%26uid%3D4%26player%3Dapi%26name%3DSynthetic%20-%20BrownSmoke.wma&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-user.bru
@@ -9572,7 +9610,7 @@ class AmpacheRunner:
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-get_external_metadata.bru
-        api_url = f"{URL}/server/{api_format}.server.php?action=get_external_metadata&offset=0&limit=0&version={api_version}"
+        api_url = f"{URL}/server/{api_format}.server.php?action=get_external_metadata&filter={self.songid}&type=song&version={api_version}"
         response = self.parse_response(self.ampache_connection.fetch_url(api_url, api_format, f"{re.search(r'[?&]action=([^&]+)', api_url).group(1)}", self.headers), api_format)
 
         # [GET]  /opt/nextcloud/clientsync/Documents/Bruno/Ampache API/ampache/ampache8/xml/xml-player.bru
